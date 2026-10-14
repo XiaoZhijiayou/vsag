@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <atomic>
 #include <cstring>
+#include <functional>
 #include <limits>
 #include <shared_mutex>
 #include <string>
@@ -464,6 +465,18 @@ public:
 
     [[nodiscard]] virtual const uint8_t*
     GetCodesById(InnerIdType id, bool& need_release) const = 0;
+
+    // Variable-length document records remain valid for the duration of the callback.
+    virtual void
+    VisitCodes(const InnerIdType* ids,
+               uint64_t count,
+               const std::function<void(InnerIdType, const uint8_t*)>& visitor) const {
+        for (uint64_t i = 0; i < count; ++i) {
+            auto codes = AcquireCodesById(ids[i]);
+            CHECK_ARGUMENT(codes, "failed to read record for token scoring");
+            visitor(ids[i], codes.Data());
+        }
+    }
 
     [[nodiscard]] FlattenCodesLease
     AcquireCodesById(InnerIdType id) const {
