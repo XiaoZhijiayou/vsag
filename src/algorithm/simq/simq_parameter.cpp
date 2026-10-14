@@ -29,6 +29,8 @@ static constexpr const char* SIMQ_SPLIT_START_IDX = "split_start_idx";
 static constexpr const char* SIMQ_RANDOM_SEED = "random_seed";
 static constexpr const char* SIMQ_COARSE_K = "coarse_k";
 static constexpr const char* SIMQ_RERANK_K = "rerank_k";
+static constexpr const char* SIMQ_BUILD_HGRAPH_EF_SEARCH = "build_hgraph_ef_search";
+static constexpr const char* SIMQ_SEARCH_HGRAPH_EF_SEARCH = "search_hgraph_ef_search";
 static constexpr const char* SIMQ_SPLIT_DELAY_SECONDS = "split_delay_seconds";
 static constexpr const char* SIMQ_QUANTIZATION_TYPE = "quantization_type";
 
@@ -54,6 +56,12 @@ SIMQParameter::FromJson(const JsonType& json) {
     if (json.Contains(SIMQ_RERANK_K)) {
         rerank_k = json[SIMQ_RERANK_K].GetInt();
     }
+    if (json.Contains(SIMQ_BUILD_HGRAPH_EF_SEARCH)) {
+        build_hgraph_ef_search = json[SIMQ_BUILD_HGRAPH_EF_SEARCH].GetInt();
+    }
+    if (json.Contains(SIMQ_SEARCH_HGRAPH_EF_SEARCH)) {
+        search_hgraph_ef_search = json[SIMQ_SEARCH_HGRAPH_EF_SEARCH].GetInt();
+    }
     if (json.Contains(SIMQ_SPLIT_DELAY_SECONDS)) {
         split_delay_seconds = json[SIMQ_SPLIT_DELAY_SECONDS].GetFloat();
     }
@@ -61,6 +69,39 @@ SIMQParameter::FromJson(const JsonType& json) {
         quantization_type = json[SIMQ_QUANTIZATION_TYPE].GetString();
     }
 
+    if (json.Contains("reassign_after_build")) {
+        reassign_after_build = json["reassign_after_build"].GetBool();
+    }
+    if (json.Contains("rebuild_after_reassign")) {
+        rebuild_after_reassign = json["rebuild_after_reassign"].GetBool();
+    }
+    CHECK_ARGUMENT(not rebuild_after_reassign or reassign_after_build,
+                   "simq: rebuild_after_reassign requires reassign_after_build");
+    if (json.Contains("update_center_on_insert")) {
+        update_center_on_insert = json["update_center_on_insert"].GetBool();
+    }
+    for (auto entry : {std::make_pair("center_update_interval", &center_update_interval),
+                       std::make_pair("clustering_batch_size", &clustering_batch_size),
+                       std::make_pair("center_hgraph_mode", &center_hgraph_mode),
+                       std::make_pair("final_center_mode", &final_center_mode)}) {
+        if (json.Contains(entry.first))
+            *entry.second = json[entry.first].GetInt();
+    }
+    if (json.Contains("fast_online_build")) {
+        fast_online_build = json["fast_online_build"].GetBool();
+    }
+    CHECK_ARGUMENT(
+        not fast_online_build or (update_center_on_insert and center_update_interval == 1 and
+                                  clustering_batch_size == 1 and center_hgraph_mode == 1 and
+                                  final_center_mode == 1 and not reassign_after_build),
+        "simq: fast_online_build requires online means, batch/interval=1, graph mode=1, "
+        "final mean and no reassignment");
+    CHECK_ARGUMENT(center_hgraph_mode >= -1 and center_hgraph_mode <= 5,
+                   "simq: center_hgraph_mode must be in [-1, 5]");
+    CHECK_ARGUMENT(center_update_interval > 0, "simq: center_update_interval must be positive");
+    CHECK_ARGUMENT(clustering_batch_size >= 0, "simq: clustering_batch_size must be nonnegative");
+    CHECK_ARGUMENT(final_center_mode >= -1 and final_center_mode <= 1,
+                   "simq: final_center_mode must be -1, 0 or 1");
     bool valid_init_cluster_ratio = init_cluster_ratio > 0.0F and init_cluster_ratio <= 1.0F;
     CHECK_ARGUMENT(valid_init_cluster_ratio, "simq: init_cluster_ratio must be in (0, 1]");
     CHECK_ARGUMENT(max_cluster_size > 1, "simq: max_cluster_size must be > 1");
@@ -68,6 +109,8 @@ SIMQParameter::FromJson(const JsonType& json) {
     CHECK_ARGUMENT(valid_split_start_idx, "simq: split_start_idx must be in (1, max_cluster_size)");
     CHECK_ARGUMENT(coarse_k > 0, "simq: coarse_k must be > 0");
     CHECK_ARGUMENT(rerank_k > 0, "simq: rerank_k must be > 0");
+    CHECK_ARGUMENT(build_hgraph_ef_search > 0, "simq: build_hgraph_ef_search must be > 0");
+    CHECK_ARGUMENT(search_hgraph_ef_search > 0, "simq: search_hgraph_ef_search must be > 0");
     CHECK_ARGUMENT(split_delay_seconds >= 0.0, "simq: split_delay_seconds must be >= 0");
 
     CHECK_ARGUMENT(json.Contains(BASE_CODES_KEY),
@@ -89,12 +132,22 @@ SIMQParameter::ToJson() const {
     CHECK_ARGUMENT(base_codes_param != nullptr, "simq: base_codes_param is not initialized");
     JsonType json = InnerIndexParameter::ToJson();
     json[TYPE_KEY].SetString(INDEX_SIMQ);
+    json["reassign_after_build"].SetBool(reassign_after_build);
+    json["rebuild_after_reassign"].SetBool(rebuild_after_reassign);
+    json["update_center_on_insert"].SetBool(update_center_on_insert);
+    json["center_update_interval"].SetInt(center_update_interval);
+    json["clustering_batch_size"].SetInt(clustering_batch_size);
+    json["final_center_mode"].SetInt(final_center_mode);
+    json["center_hgraph_mode"].SetInt(center_hgraph_mode);
+    json["fast_online_build"].SetBool(fast_online_build);
     json[SIMQ_INIT_CLUSTER_RATIO].SetFloat(init_cluster_ratio);
     json[SIMQ_MAX_CLUSTER_SIZE].SetInt(max_cluster_size);
     json[SIMQ_SPLIT_START_IDX].SetInt(split_start_idx);
     json[SIMQ_RANDOM_SEED].SetInt(random_seed);
     json[SIMQ_COARSE_K].SetInt(coarse_k);
     json[SIMQ_RERANK_K].SetInt(rerank_k);
+    json[SIMQ_BUILD_HGRAPH_EF_SEARCH].SetInt(build_hgraph_ef_search);
+    json[SIMQ_SEARCH_HGRAPH_EF_SEARCH].SetInt(search_hgraph_ef_search);
     json[SIMQ_SPLIT_DELAY_SECONDS].SetDouble(split_delay_seconds);
     json[SIMQ_QUANTIZATION_TYPE].SetString(quantization_type);
     json[BASE_CODES_KEY].SetJson(base_codes_param->ToJson());
@@ -128,6 +181,11 @@ SIMQSearchParameters::FromJson(const std::string& json_string) {
     }
     if (simq_params.Contains(SIMQ_RERANK_K)) {
         obj.rerank_k = simq_params[SIMQ_RERANK_K].GetInt();
+    }
+    if (simq_params.Contains(SIMQ_SEARCH_HGRAPH_EF_SEARCH)) {
+        obj.search_hgraph_ef_search = simq_params[SIMQ_SEARCH_HGRAPH_EF_SEARCH].GetInt();
+        CHECK_ARGUMENT(obj.search_hgraph_ef_search > 0,
+                       "simq: search_hgraph_ef_search must be > 0");
     }
     return obj;
 }
