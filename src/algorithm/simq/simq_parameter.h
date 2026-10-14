@@ -41,9 +41,21 @@ public:
     int64_t split_start_idx{32};     // index within sorted cluster where new cluster begins
     int64_t random_seed{42};
 
+    bool reassign_after_build{true};
+    bool rebuild_after_reassign{true};
+    bool update_center_on_insert{true};
+    int64_t center_update_interval{1};
+    int64_t clustering_batch_size{1};
+    int64_t final_center_mode{1};
+    int64_t center_hgraph_mode{1};
+
     // Search parameters (index-level defaults, overridable per-query)
     int64_t coarse_k{8};    // clusters searched per query token
     int64_t rerank_k{100};  // docs reranked with exact MaxSim
+
+    // Independent HGraph widths for cluster assignment and query routing.
+    int64_t build_hgraph_ef_search{100};
+    int64_t search_hgraph_ef_search{100};
 
     // Token-vector quantization: "fp32" (default), "fp16", "bf16",
     // "sq8_uniform", or "int8".  Controls the storage format of multi-vector
@@ -63,8 +75,9 @@ DEFINE_POINTER(SIMQParameter);
 
 class SIMQSearchParameters : public IndexSearchParameter {
 public:
-    int64_t coarse_k{-1};  // -1 means use index default
-    int64_t rerank_k{-1};  // -1 means use index default
+    int64_t coarse_k{-1};                 // -1 means use index default
+    int64_t rerank_k{-1};                 // -1 means use index default
+    int64_t search_hgraph_ef_search{-1};  // -1 means use index default
 
     static SIMQSearchParameters
     FromJson(const std::string& json_string);
