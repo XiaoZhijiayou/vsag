@@ -25,6 +25,7 @@
 #include "algorithm/pyramid/pyramid.h"
 #include "algorithm/pyramid/pyramid_zparameters.h"
 #include "algorithm/simq/simq.h"
+#include "algorithm/simq/simq_strategy.h"
 #include "algorithm/sindi/sindi.h"
 #include "algorithm/sindi_v2/sindi_v2.h"
 #include "common.h"
@@ -116,6 +117,25 @@ create_warp_index(JsonType& parsed_params, const IndexCommonParam& index_common_
 
 tl::expected<std::shared_ptr<Index>, Error>
 create_simq_index(JsonType& parsed_params, const IndexCommonParam& index_common_params) {
+    auto experimental = get_index_param_or_empty(parsed_params);
+    if (experimental.Contains("experimental_strategy")) {
+        CHECK_ARGUMENT(experimental["experimental_strategy"].GetString() == "v9",
+                       "this branch provides SIMQ strategy v9");
+        experimental.GetInnerJson()->erase("experimental_strategy");
+        if (not experimental.Contains("initial_center_mode")) {
+            experimental["initial_center_mode"].SetString("doc_mean");
+        }
+        if (not experimental.Contains("update_center_on_insert")) {
+            experimental["update_center_on_insert"].SetBool(false);
+        }
+        if (not experimental.Contains("final_center_mode")) {
+            experimental["final_center_mode"].SetInt(0);
+        }
+        if (not experimental.Contains("clustering_batch_size")) {
+            experimental["clustering_batch_size"].SetInt(10000);
+        }
+        return {std::make_shared<IndexImpl<SIMQStrategyIndex>>(experimental, index_common_params)};
+    }
     return create_index_impl_with_param_log<SIMQ>(
         "created a simq index", parsed_params, index_common_params);
 }

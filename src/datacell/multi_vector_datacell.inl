@@ -396,4 +396,55 @@ MultiVectorDataCell<QuantTmpl, IOTmpl>::GetMemoryUsage() const {
     return memory;
 }
 
+template <typename QuantTmpl, typename IOTmpl>
+void
+MultiVectorDataCell<QuantTmpl, IOTmpl>::VisitCodes(
+    const InnerIdType* ids,
+    uint64_t count,
+    const std::function<void(InnerIdType, const uint8_t*)>& visitor) const {
+    if (count == 0)
+        return;
+    CHECK_ARGUMENT(ids != nullptr, "MultiVectorDataCell visit ids are null");
+    std::shared_lock lock(mutex_);
+    // Bound temporary payload memory and I/O requests per batch.
+    constexpr uint64_t batch_size = 256;
+    for (uint64_t begin = 0; begin < count; begin += batch_size) {
+        const uint64_t n = std::min(batch_size, count - begin);
+        std::vector<uint64_t> offsets(n), sizes(n);
+        for (uint64_t i = 0; i < n; ++i) {
+            CHECK_ARGUMENT(ids[begin + i] < total_count_.load(std::memory_order_relaxed) and
+                               ids[begin + i] < token_counts_.size(),
+                           "MultiVectorDataCell visit id is out of range");
+        }
+        if (not layout_.Locations().MultiRead(
+                ids + begin, n, reinterpret_cast<uint8_t*>(offsets.data()), allocator_)) {
+            throw VsagException(ErrorType::READ_ERROR, "failed to read coarse document offsets");
+        }
+        uint64_t total = 0;
+        const uint64_t payload_size = layout_.Payload().GetByteSize();
+        for (uint64_t i = 0; i < n; ++i) {
+            sizes[i] =
+                GetMultiVectorRecordSize(token_counts_[ids[begin + i]], quantizer_->GetCodeSize());
+            CHECK_ARGUMENT(offsets[i] <= payload_size and sizes[i] <= payload_size - offsets[i],
+                           "MultiVectorDataCell visit record is out of range");
+            CHECK_ARGUMENT(sizes[i] <= std::numeric_limits<uint64_t>::max() - total,
+                           "MultiVectorDataCell visit byte count overflow");
+            total += sizes[i];
+        }
+        ByteBuffer buffer(total, allocator_);
+        if (buffer.data == nullptr) {
+            throw VsagException(ErrorType::NO_ENOUGH_MEMORY,
+                                "failed to allocate coarse code batch");
+        }
+        if (not layout_.Payload().MultiRead(offsets.data(), sizes.data(), n, buffer.data)) {
+            throw VsagException(ErrorType::READ_ERROR, "failed to read coarse document batch");
+        }
+        uint64_t cursor = 0;
+        for (uint64_t i = 0; i < n; ++i) {
+            visitor(ids[begin + i], buffer.data + cursor);
+            cursor += sizes[i];
+        }
+    }
+}
+
 }  // namespace vsag

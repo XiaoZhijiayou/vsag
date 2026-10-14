@@ -18,6 +18,7 @@
 #include "flatten_interface.h"
 #include "io/memory_block_io/memory_block_io.h"
 #include "layout/variable_record_layout.h"
+#include "multi_vector_code_reader.h"
 #include "quantization/multi_vector_computer.h"
 #include "quantization/quantizer.h"
 #include "token_code_interface.h"
@@ -27,7 +28,9 @@
 namespace vsag {
 
 template <typename QuantTmpl, typename IOTmpl>
-class MultiVectorDataCell : public FlattenInterface, public TokenCodeInterface {
+class MultiVectorDataCell : public FlattenInterface,
+                            public TokenCodeInterface,
+                            public MultiVectorCodeReader {
 public:
     MultiVectorDataCell() = default;
 
@@ -41,6 +44,11 @@ public:
           const InnerIdType* idx,
           InnerIdType id_count,
           QueryContext* ctx = nullptr) override;
+
+    void
+    VisitCodes(const InnerIdType* ids,
+               uint64_t count,
+               const std::function<void(InnerIdType, const uint8_t*)>& visitor) const override;
 
     ComputerInterfacePtr
     FactoryComputer(const void* query) override;
