@@ -29,6 +29,8 @@ static constexpr const char* SIMQ_SPLIT_START_IDX = "split_start_idx";
 static constexpr const char* SIMQ_RANDOM_SEED = "random_seed";
 static constexpr const char* SIMQ_COARSE_K = "coarse_k";
 static constexpr const char* SIMQ_RERANK_K = "rerank_k";
+static constexpr const char* SIMQ_BUILD_HGRAPH_EF_SEARCH = "build_hgraph_ef_search";
+static constexpr const char* SIMQ_SEARCH_HGRAPH_EF_SEARCH = "search_hgraph_ef_search";
 static constexpr const char* SIMQ_SPLIT_DELAY_SECONDS = "split_delay_seconds";
 static constexpr const char* SIMQ_QUANTIZATION_TYPE = "quantization_type";
 
@@ -54,6 +56,27 @@ SIMQParameter::FromJson(const JsonType& json) {
     if (json.Contains(SIMQ_RERANK_K)) {
         rerank_k = json[SIMQ_RERANK_K].GetInt();
     }
+    if (json.Contains(SIMQ_BUILD_HGRAPH_EF_SEARCH)) {
+        build_hgraph_ef_search = json[SIMQ_BUILD_HGRAPH_EF_SEARCH].GetInt();
+    }
+    if (json.Contains(SIMQ_SEARCH_HGRAPH_EF_SEARCH)) {
+        search_hgraph_ef_search = json[SIMQ_SEARCH_HGRAPH_EF_SEARCH].GetInt();
+    }
+    if (json.Contains("init_hgraph_max_degree")) {
+        init_hgraph_max_degree = json["init_hgraph_max_degree"].GetInt();
+    }
+    if (json.Contains("init_hgraph_ef_construction")) {
+        init_hgraph_ef_construction = json["init_hgraph_ef_construction"].GetInt();
+    }
+    if (json.Contains("final_hgraph_max_degree")) {
+        final_hgraph_max_degree = json["final_hgraph_max_degree"].GetInt();
+    }
+    if (json.Contains("final_hgraph_ef_construction")) {
+        final_hgraph_ef_construction = json["final_hgraph_ef_construction"].GetInt();
+    }
+    if (json.Contains("initial_center_mode")) {
+        initial_center_mode = json["initial_center_mode"].GetString();
+    }
     if (json.Contains(SIMQ_SPLIT_DELAY_SECONDS)) {
         split_delay_seconds = json[SIMQ_SPLIT_DELAY_SECONDS].GetFloat();
     }
@@ -61,6 +84,8 @@ SIMQParameter::FromJson(const JsonType& json) {
         quantization_type = json[SIMQ_QUANTIZATION_TYPE].GetString();
     }
 
+    CHECK_ARGUMENT(initial_center_mode == "token" or initial_center_mode == "doc_token",
+                   "simq: initial_center_mode must be token or doc_token");
     bool valid_init_cluster_ratio = init_cluster_ratio > 0.0F and init_cluster_ratio <= 1.0F;
     CHECK_ARGUMENT(valid_init_cluster_ratio, "simq: init_cluster_ratio must be in (0, 1]");
     CHECK_ARGUMENT(max_cluster_size > 1, "simq: max_cluster_size must be > 1");
@@ -68,6 +93,14 @@ SIMQParameter::FromJson(const JsonType& json) {
     CHECK_ARGUMENT(valid_split_start_idx, "simq: split_start_idx must be in (1, max_cluster_size)");
     CHECK_ARGUMENT(coarse_k > 0, "simq: coarse_k must be > 0");
     CHECK_ARGUMENT(rerank_k > 0, "simq: rerank_k must be > 0");
+    CHECK_ARGUMENT(build_hgraph_ef_search > 0, "simq: build_hgraph_ef_search must be > 0");
+    CHECK_ARGUMENT(search_hgraph_ef_search > 0, "simq: search_hgraph_ef_search must be > 0");
+    CHECK_ARGUMENT(init_hgraph_max_degree > 0, "simq: init_hgraph_max_degree must be > 0");
+    CHECK_ARGUMENT(init_hgraph_ef_construction > 0,
+                   "simq: init_hgraph_ef_construction must be > 0");
+    CHECK_ARGUMENT(final_hgraph_max_degree > 0, "simq: final_hgraph_max_degree must be > 0");
+    CHECK_ARGUMENT(final_hgraph_ef_construction > 0,
+                   "simq: final_hgraph_ef_construction must be > 0");
     CHECK_ARGUMENT(split_delay_seconds >= 0.0, "simq: split_delay_seconds must be >= 0");
 
     CHECK_ARGUMENT(json.Contains(BASE_CODES_KEY),
@@ -95,6 +128,13 @@ SIMQParameter::ToJson() const {
     json[SIMQ_RANDOM_SEED].SetInt(random_seed);
     json[SIMQ_COARSE_K].SetInt(coarse_k);
     json[SIMQ_RERANK_K].SetInt(rerank_k);
+    json[SIMQ_BUILD_HGRAPH_EF_SEARCH].SetInt(build_hgraph_ef_search);
+    json[SIMQ_SEARCH_HGRAPH_EF_SEARCH].SetInt(search_hgraph_ef_search);
+    json["init_hgraph_max_degree"].SetInt(init_hgraph_max_degree);
+    json["init_hgraph_ef_construction"].SetInt(init_hgraph_ef_construction);
+    json["final_hgraph_max_degree"].SetInt(final_hgraph_max_degree);
+    json["final_hgraph_ef_construction"].SetInt(final_hgraph_ef_construction);
+    json["initial_center_mode"].SetString(initial_center_mode);
     json[SIMQ_SPLIT_DELAY_SECONDS].SetDouble(split_delay_seconds);
     json[SIMQ_QUANTIZATION_TYPE].SetString(quantization_type);
     json[BASE_CODES_KEY].SetJson(base_codes_param->ToJson());
@@ -128,6 +168,11 @@ SIMQSearchParameters::FromJson(const std::string& json_string) {
     }
     if (simq_params.Contains(SIMQ_RERANK_K)) {
         obj.rerank_k = simq_params[SIMQ_RERANK_K].GetInt();
+    }
+    if (simq_params.Contains(SIMQ_SEARCH_HGRAPH_EF_SEARCH)) {
+        obj.search_hgraph_ef_search = simq_params[SIMQ_SEARCH_HGRAPH_EF_SEARCH].GetInt();
+        CHECK_ARGUMENT(obj.search_hgraph_ef_search > 0,
+                       "simq: search_hgraph_ef_search must be > 0");
     }
     return obj;
 }

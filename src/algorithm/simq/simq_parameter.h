@@ -45,6 +45,18 @@ public:
     int64_t coarse_k{8};    // clusters searched per query token
     int64_t rerank_k{100};  // docs reranked with exact MaxSim
 
+    // Independent HGraph widths for cluster assignment and query routing.
+    int64_t build_hgraph_ef_search{100};
+    int64_t search_hgraph_ef_search{100};
+
+    int64_t init_hgraph_max_degree{32};
+    int64_t init_hgraph_ef_construction{50};
+    int64_t final_hgraph_max_degree{32};
+    int64_t final_hgraph_ef_construction{50};
+
+    // Token seeds selected either uniformly over tokens or once per sampled document.
+    std::string initial_center_mode{"doc_token"};
+
     // Token-vector quantization: "fp32" (default), "fp16", "bf16",
     // "sq8_uniform", or "int8".  Controls the storage format of multi-vector
     // token data in MultiVectorDataCell; smaller formats reduce memory at the
@@ -63,8 +75,9 @@ DEFINE_POINTER(SIMQParameter);
 
 class SIMQSearchParameters : public IndexSearchParameter {
 public:
-    int64_t coarse_k{-1};  // -1 means use index default
-    int64_t rerank_k{-1};  // -1 means use index default
+    int64_t coarse_k{-1};                 // -1 means use index default
+    int64_t rerank_k{-1};                 // -1 means use index default
+    int64_t search_hgraph_ef_search{-1};  // -1 means use index default
 
     static SIMQSearchParameters
     FromJson(const std::string& json_string);
