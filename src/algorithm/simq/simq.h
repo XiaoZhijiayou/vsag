@@ -127,26 +127,35 @@ private:
                     const FilterPtr& filter,
                     int64_t limited_size) const;
     void
-    run_clustering(const uint8_t* token_codes,
+    run_clustering(const float* flat_vecs,
                    const Vector<InnerIdType>& vec_to_doc,
                    int64_t num_vecs,
                    int64_t dim);
 
     void
-    build_rep_hgraph(const uint8_t* token_codes, int64_t dim);
+    build_rep_hgraph(const float* flat_vecs, int64_t dim);
 
     std::vector<std::pair<InnerIdType, float>>
     coarse_search(const float* query_tokens,
                   uint32_t query_token_count,
                   int64_t coarse_k,
+                  int64_t hgraph_ef_search,
                   uint64_t* coarse_dist_cmp = nullptr,
-                  uint64_t* coarse_probe_count = nullptr) const;
+                  uint64_t* coarse_probe_count = nullptr,
+                  bool token_max = false,
+                  uint64_t* coarse_token_dist_cmp = nullptr) const;
+
+    void
+    ensure_cluster_token_members() const;
 
     void
     serialize_rep_hgraph(StreamWriter& writer) const;
 
     void
     deserialize_rep_hgraph(StreamReader& reader);
+
+    void
+    split_cluster_incremental(InnerIdType cluster_idx);
 
     void
     flush_pending_splits();
@@ -162,7 +171,6 @@ private:
     std::shared_ptr<TokenCodeInterface> token_codes_;
     std::string quantization_type_{"fp32"};
     std::string representative_quantization_type_{"fp32"};
-
     IndexCommonParam common_param_;
     int64_t num_clusters_{0};
 
@@ -175,6 +183,10 @@ private:
 
     // Per-cluster doc-ID lists; mutable for incremental Add.
     Vector<Vector<InnerIdType>> cluster_lists_;
+    // Derived cache, rebuilt from serialized token metadata. Graphs remain unchanged.
+    mutable Vector<Vector<InnerIdType>> cluster_token_members_;
+    mutable bool cluster_token_members_valid_{false};
+    mutable std::mutex cluster_token_members_mutex_;
 
     std::shared_ptr<HGraph> rep_hgraph_{nullptr};
 
@@ -182,7 +194,8 @@ private:
 
     Vector<InnerIdType> vec_to_cluster_;
 
-    // Token-level metadata for precise split: maps global token_id → doc inner_id / offset / dist
+    // Token-level metadata for precise split: maps global token_id → doc inner_id
+    // / offset / dist
     Vector<InnerIdType> token_to_doc_;
     Vector<uint32_t> token_to_offset_;
     Vector<float> token_to_dist_;
@@ -207,6 +220,42 @@ private:
     int64_t random_seed_{42};
     int64_t default_coarse_k_{8};
     int64_t default_rerank_k_{100};
+    bool reassign_after_build_{false};
+    bool rebuild_after_reassign_{false};
+    uint64_t final_graph_build_count_{0};
+    uint64_t second_pass_split_count_{0};
+    uint64_t second_pass_token_count_{0};
+    std::vector<float> reassignment_centers_;
+
+    void
+    reinsert_tokens_with_splits(const float* flat_vecs, int64_t dim);
+    bool update_center_on_insert_{false};
+    int64_t center_update_interval_{1};
+    int64_t clustering_batch_size_{0};
+    int64_t final_center_mode_{-1};
+    int64_t center_hgraph_mode_{-1};
+    bool fast_online_build_{false};
+    int64_t route_window_size_{0};
+    int64_t route_candidate_count_{8};
+    uint64_t route_prefetched_count_{0};
+    uint64_t route_corrected_count_{0};
+    uint64_t route_fallback_count_{0};
+    uint64_t route_task_count_max_{0};
+    uint64_t route_split_candidate_count_{0};
+    double route_search_seconds_{0.0};
+    double route_insert_seconds_{0.0};
+
+    double fast_center_max_error_{0.0};
+    uint64_t center_sort_count_{0};
+    uint64_t center_hgraph_reinsert_count_{0};
+    uint64_t center_hgraph_deferred_count_{0};
+    uint64_t center_update_count_{0};
+    uint64_t reassigned_token_count_{0};
+    uint64_t reassignment_overflow_clusters_{0};
+    void
+    reassign_tokens(const float* flat_vecs, int64_t dim);
+    int64_t build_hgraph_ef_search_{100};
+    int64_t default_search_hgraph_ef_search_{100};
 
     uint64_t resize_increase_count_bit_{10};
 
