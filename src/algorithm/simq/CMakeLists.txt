@@ -17,8 +17,6 @@
 set (SIMQ_SRCS
         simq.cpp
         simq_parameter.cpp
-        simq_strategy.cpp
-        simq_strategy_parameter.cpp
 )
 
 add_library (simq OBJECT ${SIMQ_SRCS})

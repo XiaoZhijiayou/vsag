@@ -25,7 +25,6 @@
 #include "algorithm/pyramid/pyramid.h"
 #include "algorithm/pyramid/pyramid_zparameters.h"
 #include "algorithm/simq/simq.h"
-#include "algorithm/simq/simq_strategy.h"
 #include "algorithm/sindi/sindi.h"
 #include "algorithm/sindi_v2/sindi_v2.h"
 #include "common.h"
@@ -117,37 +116,6 @@ create_warp_index(JsonType& parsed_params, const IndexCommonParam& index_common_
 
 tl::expected<std::shared_ptr<Index>, Error>
 create_simq_index(JsonType& parsed_params, const IndexCommonParam& index_common_params) {
-    auto experimental = get_index_param_or_empty(parsed_params);
-    if (experimental.Contains("experimental_strategy")) {
-        CHECK_ARGUMENT(experimental["experimental_strategy"].GetString() == "v7",
-                       "this branch provides SIMQ strategy v7");
-        experimental.GetInnerJson()->erase("experimental_strategy");
-        if (not experimental.Contains("update_center_on_insert")) {
-            experimental["update_center_on_insert"].SetBool(true);
-        }
-        if (not experimental.Contains("clustering_batch_size")) {
-            experimental["clustering_batch_size"].SetInt(1);
-        }
-        if (not experimental.Contains("center_update_interval")) {
-            experimental["center_update_interval"].SetInt(1);
-        }
-        if (not experimental.Contains("center_hgraph_mode")) {
-            experimental["center_hgraph_mode"].SetInt(1);
-        }
-        if (not experimental.Contains("final_center_mode")) {
-            experimental["final_center_mode"].SetInt(1);
-        }
-        if (not experimental.Contains("route_window_size")) {
-            experimental["route_window_size"].SetInt(64);
-        }
-        if (not experimental.Contains("route_candidate_count")) {
-            experimental["route_candidate_count"].SetInt(8);
-        }
-        if (not experimental.Contains("fast_online_build")) {
-            experimental["fast_online_build"].SetBool(false);
-        }
-        return {std::make_shared<IndexImpl<SIMQStrategyIndex>>(experimental, index_common_params)};
-    }
     return create_index_impl_with_param_log<SIMQ>(
         "created a simq index", parsed_params, index_common_params);
 }
