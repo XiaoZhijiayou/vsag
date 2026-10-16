@@ -212,7 +212,7 @@ public:
     Fit(const float* vecs, int64_t num_vecs, int64_t dim);
 
     int64_t token_insert_thread_count{0};
-    uint64_t center_update_count_{0};
+    std::atomic<uint64_t> center_update_count_{0};
     uint64_t center_hgraph_reinsert_count_{0};
     uint64_t center_hgraph_deferred_count_{0};
     std::vector<int> cluster_centers_;
@@ -250,7 +250,7 @@ private:
     void
     rebuild_center_sum(int cid);
     void
-    insert_token(int vid, int nearest);
+    insert_token(int vid, int nearest, bool allow_split = true);
     bool update_center_on_insert_;
     int64_t center_update_interval_;
     int64_t clustering_batch_size_;
@@ -356,6 +356,9 @@ HGraphDynamicClustering::sorted_insert(std::vector<ClusterMemberEntry>& members,
 
 void
 HGraphDynamicClustering::rebuild_center_sum(int cid) {
+    // All map entries are created before workers start or during an exclusive split.
+    updated_centers_.try_emplace(cid, vecs_ + cid * dim_, vecs_ + (cid + 1) * dim_);
+    pending_updates_.try_emplace(cid, 0);
     auto& sum = center_sums_[cid];
     sum.assign(dim_, 0.0);
     for (const auto& member : clusters_.at(cid)) {
@@ -367,7 +370,7 @@ HGraphDynamicClustering::rebuild_center_sum(int cid) {
 }
 
 void
-HGraphDynamicClustering::insert_token(int vid, int nearest) {
+HGraphDynamicClustering::insert_token(int vid, int nearest, bool allow_split) {
     CHECK_ARGUMENT(vid >= 0 and vid < num_vecs_ and clusters_.count(nearest) != 0,
                    "simq: invalid token assignment");
     const float dist = ip_distance(vid, nearest);
@@ -377,10 +380,10 @@ HGraphDynamicClustering::insert_token(int vid, int nearest) {
     for (int64_t d = 0; d < dim_; ++d) {
         sum[d] += vecs_[vid * dim_ + d];
     }
-    if (update_center_on_insert_ and ++pending_updates_[nearest] >= center_update_interval_) {
+    if (update_center_on_insert_ and ++pending_updates_.at(nearest) >= center_update_interval_) {
         refresh_center(nearest, true);
     }
-    if (static_cast<int>(clusters_.at(nearest).size()) > max_cluster_size_) {
+    if (allow_split and static_cast<int>(clusters_.at(nearest).size()) > max_cluster_size_) {
         split_cluster(nearest, dim_);
     }
 }
@@ -397,7 +400,7 @@ HGraphDynamicClustering::refresh_center(int cid, bool in_graph, bool force_reins
     }
     auto& members = clusters_.at(cid);
     CHECK_ARGUMENT(not members.empty(), "simq: cannot update an empty cluster");
-    auto& mean = updated_centers_[cid];
+    auto& mean = updated_centers_.at(cid);
     const auto& sum = center_sums_.at(cid);
     mean.resize(dim_);
     for (int64_t d = 0; d < dim_; ++d) {
@@ -457,12 +460,22 @@ HGraphDynamicClustering::refresh_center(int cid, bool in_graph, bool force_reins
     }
     if (not in_graph and center_hgraph_mode_ == 5)
         graph_anchor_centers_[cid] = mean;
-    pending_updates_[cid] = 0;
+    pending_updates_.at(cid) = 0;
     ++center_update_count_;
 }
 
 void
 HGraphDynamicClustering::split_cluster(int old_center_id, int64_t /*dim*/) {
+    // The caller holds the exclusive graph lock (or there is only one worker).
+    // HGraph's own Add acquires neighbor locks internally; temporarily remove
+    // extra vector read locking to avoid recursive acquisition of those locks.
+    hgraph_->SetClusterVectorNodeLocks(false);
+    struct RestoreVectorLocks {
+        HGraph* graph;
+        ~RestoreVectorLocks() {
+            graph->SetClusterVectorNodeLocks(true);
+        }
+    } restore{hgraph_.get()};
     auto it = clusters_.find(old_center_id);
     if (it == clusters_.end()) {
         return;  // Cluster not found
@@ -554,7 +567,10 @@ HGraphDynamicClustering::Fit(const float* vecs, int64_t num_vecs, int64_t dim) {
         rebuild_center_sum(cid);
     }
 
+    CHECK_ARGUMENT(center_hgraph_mode_ <= 1,
+                   "V2-3 supports node-vector overwrite, not remove/reinsert modes");
     build_hgraph(init_centers, dim);
+    hgraph_->SetClusterVectorNodeLocks(true);
 
     const auto insertion_start = std::chrono::steady_clock::now();
     const int64_t first = num_init;
@@ -582,17 +598,21 @@ HGraphDynamicClustering::Fit(const float* vecs, int64_t num_vecs, int64_t dim) {
                             }
                             const int vid = all_indices[pos];
                             int nearest;
+                            bool overflow = false;
                             {
-                                // Protect all routing state, including cluster-label lookup.
-                                std::shared_lock<std::shared_mutex> read_lock(graph_mutex);
+                                std::shared_lock<std::shared_mutex> graph_read(graph_mutex);
                                 nearest = find_nearest_cluster(vid);
+                                // Reuse the HGraph node's existing PointsMutex write lock.
+                                auto node_write = hgraph_->AcquireClusterNodeWriteLock(nearest);
+                                insert_token(vid, nearest, false);
+                                overflow = clusters_.at(nearest).size() > max_cluster_size_;
                             }
-                            {
-                                // Release the read lock before taking the write lock.
-                                // Another token may commit in between: this is deliberately
-                                // asynchronous routing, not serial-V2-equivalent assignment.
-                                std::unique_lock<std::shared_mutex> write_lock(graph_mutex);
-                                insert_token(vid, nearest);
+                            if (overflow) {
+                                // Release both read/node locks before acquiring graph write.
+                                std::unique_lock<std::shared_mutex> graph_write(graph_mutex);
+                                if (clusters_.at(nearest).size() > max_cluster_size_) {
+                                    split_cluster(nearest, dim_);
+                                }
                             }
                         }
                     } catch (...) {
