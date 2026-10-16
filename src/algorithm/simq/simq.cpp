@@ -211,7 +211,6 @@ public:
     void
     Fit(const float* vecs, int64_t num_vecs, int64_t dim);
 
-    int64_t token_insert_thread_count{0};
     std::atomic<uint64_t> center_update_count_{0};
     uint64_t center_hgraph_reinsert_count_{0};
     uint64_t center_hgraph_deferred_count_{0};
@@ -574,11 +573,10 @@ HGraphDynamicClustering::Fit(const float* vecs, int64_t num_vecs, int64_t dim) {
 
     const auto insertion_start = std::chrono::steady_clock::now();
     const int64_t first = num_init;
-    const int64_t requested =
-        token_insert_thread_count > 0 ? token_insert_thread_count : build_thread_count_;
+    const int64_t requested = build_thread_count_;
     const int64_t workers = std::max<int64_t>(
         1, std::min<int64_t>({requested, build_thread_count_, num_vecs_ - first}));
-    if (workers > 1 and thread_pool_) {
+    if (workers > 1) {
         // A dedicated VSAG pool avoids nested HGraph Add work blocking on the
         // same saturated pool while this worker holds the graph write lock.
         auto insertion_pool = SafeThreadPool::FactoryDefaultThreadPool();
@@ -682,7 +680,6 @@ SIMQ::SIMQ(const SIMQParameterPtr& param, const IndexCommonParam& common_param)
     reassign_after_build_ = param->reassign_after_build;
     rebuild_after_reassign_ = param->rebuild_after_reassign;
     update_center_on_insert_ = param->update_center_on_insert;
-    token_insert_thread_count_ = param->token_insert_thread_count;
     center_update_interval_ = param->center_update_interval;
     clustering_batch_size_ = param->clustering_batch_size;
     final_center_mode_ = param->final_center_mode;
@@ -804,7 +801,6 @@ SIMQ::run_clustering(const float* flat_vecs,
                                        center_hgraph_mode_,
                                        common_param_,
                                        this->thread_pool_);
-    clustering.token_insert_thread_count = token_insert_thread_count_;
     clustering.Fit(flat_vecs, num_vecs, dim);
     center_update_count_ = clustering.center_update_count_;
     center_hgraph_reinsert_count_ = clustering.center_hgraph_reinsert_count_;
@@ -2342,7 +2338,6 @@ SIMQ::Deserialize(StreamReader& reader) {
         reassign_after_build_ = tmp_param.reassign_after_build;
         rebuild_after_reassign_ = tmp_param.rebuild_after_reassign;
         update_center_on_insert_ = tmp_param.update_center_on_insert;
-        token_insert_thread_count_ = tmp_param.token_insert_thread_count;
         center_update_interval_ = tmp_param.center_update_interval;
         clustering_batch_size_ = tmp_param.clustering_batch_size;
         final_center_mode_ = tmp_param.final_center_mode;
@@ -2524,7 +2519,6 @@ SIMQ::GetStats() const {
     stats["second_pass_batch_size"].SetInt(rebuild_after_reassign_ ? 10000 : 0);
     stats["final_graph_node_count"].SetUint64(rep_hgraph_ ? rep_hgraph_->GetNumElements() : 0);
     stats["update_center_on_insert"].SetBool(update_center_on_insert_);
-    stats["token_insert_thread_count"].SetInt(token_insert_thread_count_);
     stats["center_update_interval"].SetInt(center_update_interval_);
     stats["clustering_batch_size"].SetInt(clustering_batch_size_);
     stats["final_center_mode"].SetInt(final_center_mode_);
@@ -2600,9 +2594,9 @@ SIMQ::CheckAndMappingExternalParam(const JsonType& external_param,
                    key == "search_hgraph_ef_search" || key == "quantization_type" ||
                    key == "reassign_after_build" || key == "rebuild_after_reassign" ||
                    key == "update_center_on_insert" || key == "center_update_interval" ||
-                   key == "token_insert_thread_count" || key == "clustering_batch_size" ||
-                   key == "final_center_mode" || key == "center_hgraph_mode" ||
-                   key == BUILD_THREAD_COUNT_KEY || key == "split_delay_seconds") {
+                   key == "clustering_batch_size" || key == "final_center_mode" ||
+                   key == "center_hgraph_mode" || key == BUILD_THREAD_COUNT_KEY ||
+                   key == "split_delay_seconds") {
             inner_json[key].SetJson(value);
         } else {
             throw VsagException(ErrorType::INVALID_ARGUMENT,

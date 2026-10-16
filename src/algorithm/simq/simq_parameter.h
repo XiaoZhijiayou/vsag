@@ -44,8 +44,6 @@ public:
     bool reassign_after_build{false};
     bool rebuild_after_reassign{false};
     bool update_center_on_insert{true};
-    // Zero uses build_thread_count; positive values cap token-insertion workers.
-    int64_t token_insert_thread_count{0};
     int64_t center_update_interval{1};
     int64_t clustering_batch_size{1};
     int64_t final_center_mode{1};
