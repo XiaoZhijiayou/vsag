@@ -557,8 +557,70 @@ HGraphDynamicClustering::Fit(const float* vecs, int64_t num_vecs, int64_t dim) {
 
     const auto insertion_start = std::chrono::steady_clock::now();
     const int64_t first = num_init;
-    const int64_t workers = 1;
-    {
+    const int64_t requested = build_thread_count_;
+    const int64_t workers = std::max<int64_t>(
+        1, std::min<int64_t>({requested, build_thread_count_, num_vecs_ - first}));
+    if (workers > 1) {
+        // A dedicated VSAG pool avoids nested HGraph Add work blocking on the
+        // same saturated pool while this worker holds the graph write lock.
+        auto insertion_pool = SafeThreadPool::FactoryDefaultThreadPool();
+        insertion_pool->SetPoolSize(workers);
+        std::shared_mutex graph_mutex;
+        std::atomic<int64_t> next{first};
+        std::atomic<bool> stop{false};
+        std::vector<std::future<void>> futures;
+        try {
+            for (int64_t t = 0; t < workers; ++t) {
+                futures.push_back(insertion_pool->GeneralEnqueue([&]() {
+                    try {
+                        while (not stop.load(std::memory_order_relaxed)) {
+                            const int64_t pos = next.fetch_add(1, std::memory_order_relaxed);
+                            if (pos >= num_vecs_) {
+                                break;
+                            }
+                            const int vid = all_indices[pos];
+                            int nearest;
+                            {
+                                // Protect all routing state, including cluster-label lookup.
+                                std::shared_lock<std::shared_mutex> read_lock(graph_mutex);
+                                nearest = find_nearest_cluster(vid);
+                            }
+                            {
+                                // Release the read lock before taking the write lock.
+                                // Another token may commit in between: this is deliberately
+                                // asynchronous routing, not serial-V2-equivalent assignment.
+                                std::unique_lock<std::shared_mutex> write_lock(graph_mutex);
+                                insert_token(vid, nearest);
+                            }
+                        }
+                    } catch (...) {
+                        stop.store(true, std::memory_order_relaxed);
+                        throw;
+                    }
+                }));
+            }
+        } catch (...) {
+            stop.store(true, std::memory_order_relaxed);
+            for (auto& future : futures) {
+                future.wait();
+            }
+            throw;
+        }
+        // Drain every worker before any captured build state can be destroyed.
+        std::exception_ptr error;
+        for (auto& future : futures) {
+            try {
+                future.get();
+            } catch (...) {
+                if (not error) {
+                    error = std::current_exception();
+                }
+            }
+        }
+        if (error) {
+            std::rethrow_exception(error);
+        }
+    } else {
         for (int64_t pos = first; pos < num_vecs_; ++pos) {
             const int vid = all_indices[pos];
             insert_token(vid, find_nearest_cluster(vid));
