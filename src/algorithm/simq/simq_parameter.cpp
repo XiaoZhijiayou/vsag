@@ -82,6 +82,7 @@ SIMQParameter::FromJson(const JsonType& json) {
     }
     for (auto entry : {std::make_pair("center_update_interval", &center_update_interval),
                        std::make_pair("clustering_batch_size", &clustering_batch_size),
+                       std::make_pair("token_insert_thread_count", &token_insert_thread_count),
                        std::make_pair("center_hgraph_mode", &center_hgraph_mode),
                        std::make_pair("final_center_mode", &final_center_mode)}) {
         if (json.Contains(entry.first))
@@ -89,6 +90,8 @@ SIMQParameter::FromJson(const JsonType& json) {
     }
     CHECK_ARGUMENT(center_hgraph_mode >= -1 and center_hgraph_mode <= 5,
                    "simq: center_hgraph_mode must be in [-1, 5]");
+    CHECK_ARGUMENT(token_insert_thread_count >= 0,
+                   "simq: token_insert_thread_count must be nonnegative");
     CHECK_ARGUMENT(center_update_interval > 0, "simq: center_update_interval must be positive");
     CHECK_ARGUMENT(clustering_batch_size >= 0, "simq: clustering_batch_size must be nonnegative");
     CHECK_ARGUMENT(final_center_mode >= -1 and final_center_mode <= 1,
@@ -126,6 +129,7 @@ SIMQParameter::ToJson() const {
     json["reassign_after_build"].SetBool(reassign_after_build);
     json["rebuild_after_reassign"].SetBool(rebuild_after_reassign);
     json["update_center_on_insert"].SetBool(update_center_on_insert);
+    json["token_insert_thread_count"].SetInt(token_insert_thread_count);
     json["center_update_interval"].SetInt(center_update_interval);
     json["clustering_batch_size"].SetInt(clustering_batch_size);
     json["final_center_mode"].SetInt(final_center_mode);

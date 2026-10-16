@@ -211,6 +211,7 @@ public:
     void
     Fit(const float* vecs, int64_t num_vecs, int64_t dim);
 
+    int64_t token_insert_thread_count{0};
     uint64_t center_update_count_{0};
     uint64_t center_hgraph_reinsert_count_{0};
     uint64_t center_hgraph_deferred_count_{0};
@@ -244,6 +245,12 @@ private:
     std::unordered_map<int, int64_t> graph_pending_updates_;
     std::unordered_map<int, std::vector<float>> graph_anchor_centers_;
     std::unordered_map<int, std::vector<float>> updated_centers_;
+    // Build-only state: never serialized or used by query-time routing.
+    std::unordered_map<int, std::vector<double>> center_sums_;
+    void
+    rebuild_center_sum(int cid);
+    void
+    insert_token(int vid, int nearest);
     bool update_center_on_insert_;
     int64_t center_update_interval_;
     int64_t clustering_batch_size_;
@@ -348,6 +355,37 @@ HGraphDynamicClustering::sorted_insert(std::vector<ClusterMemberEntry>& members,
 }
 
 void
+HGraphDynamicClustering::rebuild_center_sum(int cid) {
+    auto& sum = center_sums_[cid];
+    sum.assign(dim_, 0.0);
+    for (const auto& member : clusters_.at(cid)) {
+        const auto* vector = vecs_ + member.vec_id * dim_;
+        for (int64_t d = 0; d < dim_; ++d) {
+            sum[d] += vector[d];
+        }
+    }
+}
+
+void
+HGraphDynamicClustering::insert_token(int vid, int nearest) {
+    CHECK_ARGUMENT(vid >= 0 and vid < num_vecs_ and clusters_.count(nearest) != 0,
+                   "simq: invalid token assignment");
+    const float dist = ip_distance(vid, nearest);
+    sorted_insert(clusters_.at(nearest), static_cast<InnerIdType>(vid), dist);
+    vec_to_cluster_[vid] = nearest;
+    auto& sum = center_sums_.at(nearest);
+    for (int64_t d = 0; d < dim_; ++d) {
+        sum[d] += vecs_[vid * dim_ + d];
+    }
+    if (update_center_on_insert_ and ++pending_updates_[nearest] >= center_update_interval_) {
+        refresh_center(nearest, true);
+    }
+    if (static_cast<int>(clusters_.at(nearest).size()) > max_cluster_size_) {
+        split_cluster(nearest, dim_);
+    }
+}
+
+void
 HGraphDynamicClustering::refresh_center(int cid, bool in_graph, bool force_reinsert) {
     std::vector<float> previous;
     if (center_hgraph_mode_ >= 3) {
@@ -360,15 +398,10 @@ HGraphDynamicClustering::refresh_center(int cid, bool in_graph, bool force_reins
     auto& members = clusters_.at(cid);
     CHECK_ARGUMENT(not members.empty(), "simq: cannot update an empty cluster");
     auto& mean = updated_centers_[cid];
-    mean.assign(dim_, 0.0F);
-    for (const auto& member : members) {
-        const auto* vector = vecs_ + member.vec_id * dim_;
-        for (int64_t d = 0; d < dim_; ++d) {
-            mean[d] += vector[d];
-        }
-    }
-    for (auto& value : mean) {
-        value /= static_cast<float>(members.size());
+    const auto& sum = center_sums_.at(cid);
+    mean.resize(dim_);
+    for (int64_t d = 0; d < dim_; ++d) {
+        mean[d] = static_cast<float>(sum[d] / static_cast<double>(members.size()));
     }
     for (auto& member : members) {
         member.distance = ip_distance(member.vec_id, cid);
@@ -477,6 +510,9 @@ HGraphDynamicClustering::split_cluster(int old_center_id, int64_t /*dim*/) {
 
     clusters_[new_center_id] = std::move(new_cluster);
     cluster_centers_.push_back(new_center_id);
+    // Splitting changes membership; rebuild both sums before publishing either mean.
+    rebuild_center_sum(old_center_id);
+    rebuild_center_sum(new_center_id);
     if (update_center_on_insert_) {
         refresh_center(old_center_id, true, true);
         refresh_center(new_center_id, false);
@@ -515,91 +551,88 @@ HGraphDynamicClustering::Fit(const float* vecs, int64_t num_vecs, int64_t dim) {
     for (int cid : init_centers) {
         clusters_[cid] = {{static_cast<InnerIdType>(cid), 0.0F}};
         vec_to_cluster_[cid] = cid;
+        rebuild_center_sum(cid);
     }
 
     build_hgraph(init_centers, dim);
 
-    const int64_t batch_size = clustering_batch_size_ > 0 ? clustering_batch_size_
-                                                          : (update_center_on_insert_ ? 1 : 10000);
-    const int64_t num_threads = std::max<int64_t>(1, build_thread_count_);
-
-    auto remaining_it = all_indices.begin() + num_init;
-
-    while (remaining_it != all_indices.end()) {
-        auto batch_end = remaining_it;
-        int64_t count = 0;
-        while (batch_end != all_indices.end() && count < batch_size) {
-            ++batch_end;
-            ++count;
-        }
-
-        if (count == 0) {
-            break;
-        }
-
-        std::vector<std::pair<int, int>> batch_assignments(count);  // (vid, nearest_cid)
-
-        if (num_threads > 1 && count > 100 && thread_pool_) {
-            std::vector<std::future<void>> futures;
-            const int64_t chunk_size = (count + num_threads - 1) / num_threads;
-
-            for (int64_t t = 0; t < num_threads; ++t) {
-                const int64_t start = t * chunk_size;
-                const int64_t end = std::min(start + chunk_size, count);
-                if (start >= count) {
-                    break;
-                }
-
-                futures.push_back(thread_pool_->GeneralEnqueue([&, t, start, end]() {
-                    for (int64_t i = start; i < end; ++i) {
-                        int vid = *(remaining_it + i);
-                        int nearest = find_nearest_cluster(vid);
-                        batch_assignments[i] = {vid, nearest};
+    const auto insertion_start = std::chrono::steady_clock::now();
+    const int64_t first = num_init;
+    const int64_t requested =
+        token_insert_thread_count > 0 ? token_insert_thread_count : build_thread_count_;
+    const int64_t workers = std::max<int64_t>(
+        1, std::min<int64_t>({requested, build_thread_count_, num_vecs_ - first}));
+    if (workers > 1 and thread_pool_) {
+        // A dedicated VSAG pool avoids nested HGraph Add work blocking on the
+        // same saturated pool while this worker holds the graph write lock.
+        auto insertion_pool = SafeThreadPool::FactoryDefaultThreadPool();
+        insertion_pool->SetPoolSize(workers);
+        std::shared_mutex graph_mutex;
+        std::atomic<int64_t> next{first};
+        std::atomic<bool> stop{false};
+        std::vector<std::future<void>> futures;
+        try {
+            for (int64_t t = 0; t < workers; ++t) {
+                futures.push_back(insertion_pool->GeneralEnqueue([&]() {
+                    try {
+                        while (not stop.load(std::memory_order_relaxed)) {
+                            const int64_t pos = next.fetch_add(1, std::memory_order_relaxed);
+                            if (pos >= num_vecs_) {
+                                break;
+                            }
+                            const int vid = all_indices[pos];
+                            int nearest;
+                            {
+                                // Protect all routing state, including cluster-label lookup.
+                                std::shared_lock<std::shared_mutex> read_lock(graph_mutex);
+                                nearest = find_nearest_cluster(vid);
+                            }
+                            {
+                                // Release the read lock before taking the write lock.
+                                // Another token may commit in between: this is deliberately
+                                // asynchronous routing, not serial-V2-equivalent assignment.
+                                std::unique_lock<std::shared_mutex> write_lock(graph_mutex);
+                                insert_token(vid, nearest);
+                            }
+                        }
+                    } catch (...) {
+                        stop.store(true, std::memory_order_relaxed);
+                        throw;
                     }
                 }));
             }
-
-            for (auto& f : futures) {
-                f.get();
+        } catch (...) {
+            stop.store(true, std::memory_order_relaxed);
+            for (auto& future : futures) {
+                future.wait();
             }
-        } else {
-            for (int64_t i = 0; i < count; ++i) {
-                int vid = *(remaining_it + i);
-                int nearest = find_nearest_cluster(vid);
-                batch_assignments[i] = {vid, nearest};
+            throw;
+        }
+        // Drain every worker before any captured build state can be destroyed.
+        std::exception_ptr error;
+        for (auto& future : futures) {
+            try {
+                future.get();
+            } catch (...) {
+                if (not error) {
+                    error = std::current_exception();
+                }
             }
         }
-
-        for (const auto& [vid, nearest] : batch_assignments) {
-            if (vid < 0 || vid >= num_vecs_) {
-                continue;  // Invalid vector ID
-            }
-            if (nearest < 0 || nearest >= num_vecs_) {
-                continue;  // Invalid cluster ID
-            }
-            if (clusters_.find(nearest) == clusters_.end()) {
-                continue;  // Invalid cluster ID
-            }
-
-            float dist = ip_distance(vid, nearest);
-            sorted_insert(clusters_[nearest], static_cast<InnerIdType>(vid), dist);
-            vec_to_cluster_[vid] = nearest;
-            if (update_center_on_insert_ and
-                ++pending_updates_[nearest] >= center_update_interval_) {
-                refresh_center(nearest, true);
-            }
-
-            if (static_cast<int>(clusters_[nearest].size()) > max_cluster_size_) {
-                split_cluster(nearest, dim);
-            }
+        if (error) {
+            std::rethrow_exception(error);
         }
-
-        remaining_it = batch_end;
-        if ((remaining_it - all_indices.begin()) % 100000 == 0) {
-            std::cerr << "SIMQ_INSERTED " << (remaining_it - all_indices.begin()) << "/"
-                      << num_vecs_ << " updates=" << center_update_count_ << std::endl;
+    } else {
+        for (int64_t pos = first; pos < num_vecs_; ++pos) {
+            const int vid = all_indices[pos];
+            insert_token(vid, find_nearest_cluster(vid));
         }
     }
+    const double insertion_seconds =
+        std::chrono::duration<double>(std::chrono::steady_clock::now() - insertion_start).count();
+    std::cerr << "SIMQ_TOKEN_INSERT_PROFILE threads=" << workers << " tokens=" << num_vecs_ - first
+              << " seconds=" << insertion_seconds << " center_updates=" << center_update_count_
+              << std::endl;
 }
 
 }  // anonymous namespace
@@ -629,6 +662,7 @@ SIMQ::SIMQ(const SIMQParameterPtr& param, const IndexCommonParam& common_param)
     reassign_after_build_ = param->reassign_after_build;
     rebuild_after_reassign_ = param->rebuild_after_reassign;
     update_center_on_insert_ = param->update_center_on_insert;
+    token_insert_thread_count_ = param->token_insert_thread_count;
     center_update_interval_ = param->center_update_interval;
     clustering_batch_size_ = param->clustering_batch_size;
     final_center_mode_ = param->final_center_mode;
@@ -750,6 +784,7 @@ SIMQ::run_clustering(const float* flat_vecs,
                                        center_hgraph_mode_,
                                        common_param_,
                                        this->thread_pool_);
+    clustering.token_insert_thread_count = token_insert_thread_count_;
     clustering.Fit(flat_vecs, num_vecs, dim);
     center_update_count_ = clustering.center_update_count_;
     center_hgraph_reinsert_count_ = clustering.center_hgraph_reinsert_count_;
@@ -2287,6 +2322,7 @@ SIMQ::Deserialize(StreamReader& reader) {
         reassign_after_build_ = tmp_param.reassign_after_build;
         rebuild_after_reassign_ = tmp_param.rebuild_after_reassign;
         update_center_on_insert_ = tmp_param.update_center_on_insert;
+        token_insert_thread_count_ = tmp_param.token_insert_thread_count;
         center_update_interval_ = tmp_param.center_update_interval;
         clustering_batch_size_ = tmp_param.clustering_batch_size;
         final_center_mode_ = tmp_param.final_center_mode;
@@ -2468,6 +2504,7 @@ SIMQ::GetStats() const {
     stats["second_pass_batch_size"].SetInt(rebuild_after_reassign_ ? 10000 : 0);
     stats["final_graph_node_count"].SetUint64(rep_hgraph_ ? rep_hgraph_->GetNumElements() : 0);
     stats["update_center_on_insert"].SetBool(update_center_on_insert_);
+    stats["token_insert_thread_count"].SetInt(token_insert_thread_count_);
     stats["center_update_interval"].SetInt(center_update_interval_);
     stats["clustering_batch_size"].SetInt(clustering_batch_size_);
     stats["final_center_mode"].SetInt(final_center_mode_);
@@ -2543,9 +2580,9 @@ SIMQ::CheckAndMappingExternalParam(const JsonType& external_param,
                    key == "search_hgraph_ef_search" || key == "quantization_type" ||
                    key == "reassign_after_build" || key == "rebuild_after_reassign" ||
                    key == "update_center_on_insert" || key == "center_update_interval" ||
-                   key == "clustering_batch_size" || key == "final_center_mode" ||
-                   key == "center_hgraph_mode" || key == BUILD_THREAD_COUNT_KEY ||
-                   key == "split_delay_seconds") {
+                   key == "token_insert_thread_count" || key == "clustering_batch_size" ||
+                   key == "final_center_mode" || key == "center_hgraph_mode" ||
+                   key == BUILD_THREAD_COUNT_KEY || key == "split_delay_seconds") {
             inner_json[key].SetJson(value);
         } else {
             throw VsagException(ErrorType::INVALID_ARGUMENT,

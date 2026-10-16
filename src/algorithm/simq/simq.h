@@ -221,6 +221,7 @@ private:
     void
     reinsert_tokens_with_splits(const float* flat_vecs, int64_t dim);
     bool update_center_on_insert_{false};
+    int64_t token_insert_thread_count_{0};
     int64_t center_update_interval_{1};
     int64_t clustering_batch_size_{0};
     int64_t final_center_mode_{-1};
