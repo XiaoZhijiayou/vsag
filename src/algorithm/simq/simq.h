@@ -127,13 +127,13 @@ private:
                     const FilterPtr& filter,
                     int64_t limited_size) const;
     void
-    run_clustering(const uint8_t* token_codes,
+    run_clustering(const float* flat_vecs,
                    const Vector<InnerIdType>& vec_to_doc,
                    int64_t num_vecs,
                    int64_t dim);
 
     void
-    build_rep_hgraph(const uint8_t* token_codes, int64_t dim);
+    build_rep_hgraph(const float* flat_vecs, int64_t dim);
 
     std::vector<std::pair<InnerIdType, float>>
     coarse_search(const float* query_tokens,
@@ -149,6 +149,9 @@ private:
     deserialize_rep_hgraph(StreamReader& reader);
 
     void
+    split_cluster_incremental(InnerIdType cluster_idx);
+
+    void
     flush_pending_splits();
 
     void
@@ -162,7 +165,6 @@ private:
     std::shared_ptr<TokenCodeInterface> token_codes_;
     std::string quantization_type_{"fp32"};
     std::string representative_quantization_type_{"fp32"};
-
     IndexCommonParam common_param_;
     int64_t num_clusters_{0};
 
@@ -182,7 +184,8 @@ private:
 
     Vector<InnerIdType> vec_to_cluster_;
 
-    // Token-level metadata for precise split: maps global token_id → doc inner_id / offset / dist
+    // Token-level metadata for precise split: maps global token_id → doc inner_id
+    // / offset / dist
     Vector<InnerIdType> token_to_doc_;
     Vector<uint32_t> token_to_offset_;
     Vector<float> token_to_dist_;
@@ -207,6 +210,8 @@ private:
     int64_t random_seed_{42};
     int64_t default_coarse_k_{8};
     int64_t default_rerank_k_{100};
+    uint64_t final_graph_build_count_{0};
+    uint64_t center_update_count_{0};
 
     uint64_t resize_increase_count_bit_{10};
 
