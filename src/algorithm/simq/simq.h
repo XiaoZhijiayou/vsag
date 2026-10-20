@@ -130,10 +130,12 @@ private:
     run_clustering(const uint8_t* token_codes,
                    const Vector<InnerIdType>& vec_to_doc,
                    int64_t num_vecs,
-                   int64_t dim);
+                   int64_t dim,
+                   const std::vector<InnerIdType>& seeds = {},
+                   std::shared_ptr<HGraph> routing_graph = nullptr);
 
-    void
-    build_rep_hgraph(const uint8_t* token_codes, int64_t dim);
+    std::vector<InnerIdType>
+    build_rep_hgraph(const uint8_t* token_codes, int64_t dim, bool token_labels = false);
 
     std::vector<std::pair<InnerIdType, float>>
     coarse_search(const float* query_tokens,

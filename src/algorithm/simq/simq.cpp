@@ -199,7 +199,11 @@ public:
     ~HGraphDynamicClustering() = default;
 
     void
-    Fit(const uint8_t* codes, int64_t num_vecs, int64_t dim);
+    Fit(const uint8_t* codes,
+        int64_t num_vecs,
+        int64_t dim,
+        const std::vector<InnerIdType>& seeds,
+        std::shared_ptr<HGraph> routing_graph);
 
     std::vector<int> cluster_centers_;
     std::unordered_map<int, std::vector<ClusterMemberEntry>> clusters_;
@@ -376,7 +380,11 @@ HGraphDynamicClustering::split_cluster(int old_center_id, int64_t /*dim*/) {
 }
 
 void
-HGraphDynamicClustering::Fit(const uint8_t* codes, int64_t num_vecs, int64_t dim) {
+HGraphDynamicClustering::Fit(const uint8_t* codes,
+                             int64_t num_vecs,
+                             int64_t dim,
+                             const std::vector<InnerIdType>& seeds,
+                             std::shared_ptr<HGraph> routing_graph) {
     codes_ = codes;
     code_size_ = storage_->GetQuantizerCodeSize();
     num_vecs_ = num_vecs;
@@ -392,6 +400,25 @@ HGraphDynamicClustering::Fit(const uint8_t* codes, int64_t num_vecs, int64_t dim
     std::shuffle(all_indices.begin(), all_indices.end(), rng);
 
     std::vector<int> init_centers(all_indices.begin(), all_indices.begin() + num_init);
+    if (routing_graph != nullptr) {
+        CHECK_ARGUMENT(not seeds.empty(), "SIMQ second pass requires representative tokens");
+        std::vector<bool> is_seed(num_vecs, false);
+        init_centers.clear();
+        for (const auto tid : seeds) {
+            CHECK_ARGUMENT(tid < num_vecs and not is_seed[tid],
+                           "SIMQ second-pass seeds must be unique valid token IDs");
+            is_seed[tid] = true;
+            init_centers.push_back(static_cast<int>(tid));
+        }
+        // Preserve the V1 shuffle order for all non-representative tokens.
+        all_indices.erase(
+            std::remove_if(
+                all_indices.begin(), all_indices.end(), [&](int tid) { return is_seed[tid]; }),
+            all_indices.end());
+        all_indices.insert(all_indices.begin(), init_centers.begin(), init_centers.end());
+        num_init = static_cast<int>(init_centers.size());
+        hgraph_ = std::move(routing_graph);
+    }
 
     cluster_centers_ = init_centers;
     for (int cid : init_centers) {
@@ -399,7 +426,9 @@ HGraphDynamicClustering::Fit(const uint8_t* codes, int64_t num_vecs, int64_t dim
         vec_to_cluster_[cid] = cid;
     }
 
-    build_hgraph(init_centers, dim);
+    if (hgraph_ == nullptr) {
+        build_hgraph(init_centers, dim);
+    }
 
     const int64_t batch_size = 10000;  // Process 10k tokens per batch
     const int64_t num_threads = std::max<int64_t>(1, build_thread_count_);
@@ -473,6 +502,20 @@ HGraphDynamicClustering::Fit(const uint8_t* codes, int64_t num_vecs, int64_t dim
 
         remaining_it = batch_end;
     }
+    std::vector<bool> assigned(num_vecs, false);
+    uint64_t member_count = 0;
+    for (const auto& [cid, members] : clusters_) {
+        CHECK_ARGUMENT(not members.empty(), "SIMQ two-pass build produced an empty cluster");
+        for (const auto& member : members) {
+            CHECK_ARGUMENT(member.vec_id < num_vecs and not assigned[member.vec_id] and
+                               vec_to_cluster_[member.vec_id] == cid,
+                           "SIMQ two-pass token membership is inconsistent");
+            assigned[member.vec_id] = true;
+            ++member_count;
+        }
+    }
+    CHECK_ARGUMENT(member_count == static_cast<uint64_t>(num_vecs),
+                   "SIMQ two-pass build lost tokens");
 }
 
 }  // anonymous namespace
@@ -586,7 +629,19 @@ SIMQ::Build(const DatasetPtr& data) {
         token_codes_->EncodeToken(token, encoded_tokens.data() + tid * code_size);
     }
     run_clustering(encoded_tokens.data(), vec_to_doc, static_cast<int64_t>(total_vecs), mv_dim);
+    const auto seeds = build_rep_hgraph(encoded_tokens.data(), mv_dim, true);
+    logger::info("[SIMQ V5] first pass complete: {} tokens, {} representative seeds",
+                 total_vecs,
+                 seeds.size());
+    run_clustering(encoded_tokens.data(),
+                   vec_to_doc,
+                   static_cast<int64_t>(total_vecs),
+                   mv_dim,
+                   seeds,
+                   std::move(rep_hgraph_));
     build_rep_hgraph(encoded_tokens.data(), mv_dim);
+    logger::info(
+        "[SIMQ V5] second pass complete: {} tokens, {} final clusters", total_vecs, num_clusters_);
 
     return {};
 }
@@ -595,7 +650,9 @@ void
 SIMQ::run_clustering(const uint8_t* token_codes,
                      const Vector<InnerIdType>& vec_to_doc,
                      int64_t num_vecs,
-                     int64_t dim) {
+                     int64_t dim,
+                     const std::vector<InnerIdType>& seeds,
+                     std::shared_ptr<HGraph> routing_graph) {
     HGraphDynamicClustering clustering(init_cluster_ratio_,
                                        max_cluster_size_,
                                        split_start_idx_,
@@ -605,7 +662,7 @@ SIMQ::run_clustering(const uint8_t* token_codes,
                                        this->thread_pool_,
                                        mv_codes_,
                                        quantization_type_);
-    clustering.Fit(token_codes, num_vecs, dim);
+    clustering.Fit(token_codes, num_vecs, dim, seeds, std::move(routing_graph));
 
     auto nc = static_cast<int64_t>(clustering.cluster_centers_.size());
     num_clusters_ = nc;
@@ -622,6 +679,7 @@ SIMQ::run_clustering(const uint8_t* token_codes,
         cluster_doc_sets[static_cast<uint64_t>(center_to_idx.at(cid))].insert(vec_to_doc[v]);
     }
 
+    cluster_lists_.clear();
     cluster_lists_.resize(static_cast<uint64_t>(nc), Vector<InnerIdType>(allocator_));
     for (int idx = 0; idx < nc; ++idx) {
         for (InnerIdType doc_id : cluster_doc_sets[static_cast<uint64_t>(idx)]) {
@@ -647,8 +705,8 @@ SIMQ::run_clustering(const uint8_t* token_codes,
     }
 }
 
-void
-SIMQ::build_rep_hgraph(const uint8_t* token_codes, int64_t dim) {
+std::vector<InnerIdType>
+SIMQ::build_rep_hgraph(const uint8_t* token_codes, int64_t dim, bool token_labels) {
     const auto cluster_count = static_cast<uint64_t>(num_clusters_);
     std::vector<std::vector<InnerIdType>> members(cluster_count);
     for (uint64_t tid = 0; tid < vec_to_cluster_.size(); ++tid) {
@@ -730,7 +788,8 @@ SIMQ::build_rep_hgraph(const uint8_t* token_codes, int64_t dim) {
         std::vector<float> scratch(count * dim);
         std::vector<int64_t> labels(count);
         for (uint64_t i = 0; i < count; ++i) {
-            labels[i] = static_cast<int64_t>(static_cast<uint64_t>(offset + i));
+            labels[i] = token_labels ? static_cast<int64_t>(representatives[offset + i])
+                                     : static_cast<int64_t>(offset + i);
             mv_codes_->Decode(token_codes + representatives[offset + i] * code_size,
                               scratch.data() + i * dim);
         }
@@ -746,6 +805,7 @@ SIMQ::build_rep_hgraph(const uint8_t* token_codes, int64_t dim) {
             rep_hgraph_->Add(ds);
         }
     }
+    return representatives;
 }
 
 static void
