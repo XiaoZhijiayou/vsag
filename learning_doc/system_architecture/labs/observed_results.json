@@ -1,0 +1,633 @@
+{
+  "source_commit": "fd363937",
+  "observed_on": "2026-09-10",
+  "platform": "macOS 26.3.2 arm64",
+  "library_build": "Debug, deployment target 26.3",
+  "scope": "Functional teaching example on six vectors; not a performance benchmark.",
+  "initialization_capabilities": {
+    "neon": "dist_support:Y platform:Y using:Y",
+    "sve": "dist_support:Y platform:N using:N",
+    "avx_family": "using:N"
+  },
+  "runs": [
+    {
+      "index": "brute_force",
+      "mode": "reasoning",
+      "exit_code": 0,
+      "cases": [
+        {
+          "name": "plain",
+          "results": [
+            {
+              "label": 9001,
+              "distance": 0.0
+            },
+            {
+              "label": 305,
+              "distance": 1.0
+            },
+            {
+              "label": 101,
+              "distance": 2.0
+            }
+          ],
+          "statistics": {
+            "complete": true,
+            "dist_cmp": 6,
+            "distance_evaluations": 8,
+            "distance_evaluations_by_backend": {
+              "bf16": 0,
+              "binary": 0,
+              "fp16": 0,
+              "fp32": 8,
+              "int8": 0,
+              "pq": 0,
+              "pq_fastscan": 0,
+              "rabitq": 0,
+              "sparse_fp16": 0,
+              "sparse_fp32": 0,
+              "sparse_sq8": 0,
+              "sq4": 0,
+              "sq4_uniform": 0,
+              "sq8": 0,
+              "sq8_uniform": 0,
+              "unknown": 0
+            },
+            "distance_evaluations_by_phase": {
+              "approximate": 8,
+              "rerank": 0,
+              "routing": 0
+            },
+            "hops": 0,
+            "io_cnt": 0,
+            "io_time_ms": 0,
+            "is_timeout": false,
+            "parallel_search_fallback_count": 0,
+            "query_computer_count": 0,
+            "rabitq_filter_count": 0,
+            "rabitq_filter_fallback_full_count": 0,
+            "rabitq_full_count": 0,
+            "rabitq_reorder_fallback_full_count": 0,
+            "rabitq_reorder_hint_full_count": 0,
+            "reorder_candidate_count": 0,
+            "reorder_distance_count": 0,
+            "reorder_lower_bound_probe_count": 0
+          },
+          "reasoning": {
+            "expected_analysis": {
+              "missed_targets": [],
+              "summary": "2/2 expected labels found, 0 missed"
+            }
+          }
+        },
+        {
+          "name": "exclude-305",
+          "results": [
+            {
+              "label": 9001,
+              "distance": 0.0
+            },
+            {
+              "label": 101,
+              "distance": 2.0
+            },
+            {
+              "label": 42,
+              "distance": 4.0
+            }
+          ],
+          "statistics": {
+            "complete": true,
+            "dist_cmp": 5,
+            "distance_evaluations": 7,
+            "distance_evaluations_by_backend": {
+              "bf16": 0,
+              "binary": 0,
+              "fp16": 0,
+              "fp32": 7,
+              "int8": 0,
+              "pq": 0,
+              "pq_fastscan": 0,
+              "rabitq": 0,
+              "sparse_fp16": 0,
+              "sparse_fp32": 0,
+              "sparse_sq8": 0,
+              "sq4": 0,
+              "sq4_uniform": 0,
+              "sq8": 0,
+              "sq8_uniform": 0,
+              "unknown": 0
+            },
+            "distance_evaluations_by_phase": {
+              "approximate": 7,
+              "rerank": 0,
+              "routing": 0
+            },
+            "hops": 0,
+            "io_cnt": 0,
+            "io_time_ms": 0,
+            "is_timeout": false,
+            "parallel_search_fallback_count": 0,
+            "query_computer_count": 0,
+            "rabitq_filter_count": 0,
+            "rabitq_filter_fallback_full_count": 0,
+            "rabitq_full_count": 0,
+            "rabitq_reorder_fallback_full_count": 0,
+            "rabitq_reorder_hint_full_count": 0,
+            "reorder_candidate_count": 0,
+            "reorder_distance_count": 0,
+            "reorder_lower_bound_probe_count": 0
+          },
+          "reasoning": {
+            "expected_analysis": {
+              "missed_targets": [
+                {
+                  "diagnosis": "filter_rejected",
+                  "filter_rejected": true,
+                  "inner_id": 1,
+                  "label": 305,
+                  "quantized_distance": 0.0,
+                  "reorder_evicted": false,
+                  "true_distance": 1.0,
+                  "visited_at_hop": -1,
+                  "was_evicted": false,
+                  "was_visited": true
+                }
+              ],
+              "summary": "1/2 expected labels found, 1 missed"
+            }
+          }
+        },
+        {
+          "name": "threshold-0.5",
+          "results": [
+            {
+              "label": 9001,
+              "distance": 0.0
+            }
+          ],
+          "statistics": {
+            "complete": true,
+            "dist_cmp": 6,
+            "distance_evaluations": 8,
+            "distance_evaluations_by_backend": {
+              "bf16": 0,
+              "binary": 0,
+              "fp16": 0,
+              "fp32": 8,
+              "int8": 0,
+              "pq": 0,
+              "pq_fastscan": 0,
+              "rabitq": 0,
+              "sparse_fp16": 0,
+              "sparse_fp32": 0,
+              "sparse_sq8": 0,
+              "sq4": 0,
+              "sq4_uniform": 0,
+              "sq8": 0,
+              "sq8_uniform": 0,
+              "unknown": 0
+            },
+            "distance_evaluations_by_phase": {
+              "approximate": 8,
+              "rerank": 0,
+              "routing": 0
+            },
+            "hops": 0,
+            "io_cnt": 0,
+            "io_time_ms": 0,
+            "is_timeout": false,
+            "parallel_search_fallback_count": 0,
+            "query_computer_count": 0,
+            "rabitq_filter_count": 0,
+            "rabitq_filter_fallback_full_count": 0,
+            "rabitq_full_count": 0,
+            "rabitq_reorder_fallback_full_count": 0,
+            "rabitq_reorder_hint_full_count": 0,
+            "reorder_candidate_count": 0,
+            "reorder_distance_count": 0,
+            "reorder_lower_bound_probe_count": 0
+          },
+          "reasoning": {
+            "expected_analysis": {
+              "missed_targets": [
+                {
+                  "diagnosis": "unknown",
+                  "filter_rejected": false,
+                  "inner_id": 1,
+                  "label": 305,
+                  "quantized_distance": 1.0,
+                  "reorder_evicted": false,
+                  "true_distance": 1.0,
+                  "visited_at_hop": 0,
+                  "was_evicted": false,
+                  "was_visited": true
+                }
+              ],
+              "summary": "1/2 expected labels found, 1 missed"
+            }
+          }
+        },
+        {
+          "name": "roundtrip",
+          "results": [
+            {
+              "label": 9001,
+              "distance": 0.0
+            },
+            {
+              "label": 305,
+              "distance": 1.0
+            },
+            {
+              "label": 101,
+              "distance": 2.0
+            }
+          ],
+          "statistics": {
+            "complete": true,
+            "dist_cmp": 6,
+            "distance_evaluations": 8,
+            "distance_evaluations_by_backend": {
+              "bf16": 0,
+              "binary": 0,
+              "fp16": 0,
+              "fp32": 8,
+              "int8": 0,
+              "pq": 0,
+              "pq_fastscan": 0,
+              "rabitq": 0,
+              "sparse_fp16": 0,
+              "sparse_fp32": 0,
+              "sparse_sq8": 0,
+              "sq4": 0,
+              "sq4_uniform": 0,
+              "sq8": 0,
+              "sq8_uniform": 0,
+              "unknown": 0
+            },
+            "distance_evaluations_by_phase": {
+              "approximate": 8,
+              "rerank": 0,
+              "routing": 0
+            },
+            "hops": 0,
+            "io_cnt": 0,
+            "io_time_ms": 0,
+            "is_timeout": false,
+            "parallel_search_fallback_count": 0,
+            "query_computer_count": 0,
+            "rabitq_filter_count": 0,
+            "rabitq_filter_fallback_full_count": 0,
+            "rabitq_full_count": 0,
+            "rabitq_reorder_fallback_full_count": 0,
+            "rabitq_reorder_hint_full_count": 0,
+            "reorder_candidate_count": 0,
+            "reorder_distance_count": 0,
+            "reorder_lower_bound_probe_count": 0
+          },
+          "reasoning": {
+            "expected_analysis": {
+              "missed_targets": [],
+              "summary": "2/2 expected labels found, 0 missed"
+            }
+          }
+        }
+      ],
+      "invalid_topk_error_type": 3
+    },
+    {
+      "index": "hgraph",
+      "mode": "reasoning",
+      "exit_code": 0,
+      "cases": [
+        {
+          "name": "plain",
+          "results": [
+            {
+              "label": 9001,
+              "distance": 0.0
+            },
+            {
+              "label": 305,
+              "distance": 1.0
+            },
+            {
+              "label": 101,
+              "distance": 2.0
+            }
+          ],
+          "statistics": {
+            "complete": true,
+            "dist_cmp": 6,
+            "distance_evaluations": 8,
+            "distance_evaluations_by_backend": {
+              "bf16": 0,
+              "binary": 0,
+              "fp16": 0,
+              "fp32": 8,
+              "int8": 0,
+              "pq": 0,
+              "pq_fastscan": 0,
+              "rabitq": 0,
+              "sparse_fp16": 0,
+              "sparse_fp32": 0,
+              "sparse_sq8": 0,
+              "sq4": 0,
+              "sq4_uniform": 0,
+              "sq8": 0,
+              "sq8_uniform": 0,
+              "unknown": 0
+            },
+            "distance_evaluations_by_phase": {
+              "approximate": 8,
+              "rerank": 0,
+              "routing": 0
+            },
+            "hops": 6,
+            "io_cnt": 0,
+            "io_time_ms": 0,
+            "is_timeout": false,
+            "mci_hybrid_route": "disabled",
+            "mci_hybrid_threshold": 0.05000000074505806,
+            "mci_hybrid_valid_ratio": 1.0,
+            "mci_raw_float_csr": false,
+            "mci_seed_count": 0,
+            "mci_seed_ratio": 0.10000000149011612,
+            "parallel_search_fallback_count": 0,
+            "query_computer_count": 1,
+            "rabitq_filter_count": 0,
+            "rabitq_filter_fallback_full_count": 0,
+            "rabitq_full_count": 0,
+            "rabitq_reorder_fallback_full_count": 0,
+            "rabitq_reorder_hint_full_count": 0,
+            "reorder_candidate_count": 0,
+            "reorder_distance_count": 0,
+            "reorder_lower_bound_probe_count": 0
+          },
+          "reasoning": {
+            "expected_analysis": {
+              "missed_targets": [],
+              "summary": "2/2 expected labels found, 0 missed"
+            }
+          }
+        },
+        {
+          "name": "exclude-305",
+          "results": [
+            {
+              "label": 9001,
+              "distance": 0.0
+            },
+            {
+              "label": 101,
+              "distance": 2.0
+            },
+            {
+              "label": 42,
+              "distance": 4.0
+            }
+          ],
+          "statistics": {
+            "complete": true,
+            "dist_cmp": 6,
+            "distance_evaluations": 8,
+            "distance_evaluations_by_backend": {
+              "bf16": 0,
+              "binary": 0,
+              "fp16": 0,
+              "fp32": 8,
+              "int8": 0,
+              "pq": 0,
+              "pq_fastscan": 0,
+              "rabitq": 0,
+              "sparse_fp16": 0,
+              "sparse_fp32": 0,
+              "sparse_sq8": 0,
+              "sq4": 0,
+              "sq4_uniform": 0,
+              "sq8": 0,
+              "sq8_uniform": 0,
+              "unknown": 0
+            },
+            "distance_evaluations_by_phase": {
+              "approximate": 8,
+              "rerank": 0,
+              "routing": 0
+            },
+            "hops": 6,
+            "io_cnt": 0,
+            "io_time_ms": 0,
+            "is_timeout": false,
+            "mci_hybrid_route": "disabled",
+            "mci_hybrid_threshold": 0.05000000074505806,
+            "mci_hybrid_valid_ratio": 0.8333333134651184,
+            "mci_raw_float_csr": false,
+            "mci_seed_count": 0,
+            "mci_seed_ratio": 0.10000000149011612,
+            "parallel_search_fallback_count": 0,
+            "query_computer_count": 1,
+            "rabitq_filter_count": 0,
+            "rabitq_filter_fallback_full_count": 0,
+            "rabitq_full_count": 0,
+            "rabitq_reorder_fallback_full_count": 0,
+            "rabitq_reorder_hint_full_count": 0,
+            "reorder_candidate_count": 0,
+            "reorder_distance_count": 0,
+            "reorder_lower_bound_probe_count": 0
+          },
+          "reasoning": {
+            "expected_analysis": {
+              "missed_targets": [
+                {
+                  "diagnosis": "filter_rejected",
+                  "filter_rejected": true,
+                  "inner_id": 1,
+                  "label": 305,
+                  "quantized_distance": 1.0,
+                  "reorder_evicted": false,
+                  "true_distance": 1.0,
+                  "visited_at_hop": 1,
+                  "was_evicted": false,
+                  "was_visited": true
+                }
+              ],
+              "summary": "1/2 expected labels found, 1 missed"
+            }
+          }
+        },
+        {
+          "name": "threshold-0.5",
+          "results": [
+            {
+              "label": 9001,
+              "distance": 0.0
+            }
+          ],
+          "statistics": {
+            "complete": true,
+            "dist_cmp": 6,
+            "distance_evaluations": 8,
+            "distance_evaluations_by_backend": {
+              "bf16": 0,
+              "binary": 0,
+              "fp16": 0,
+              "fp32": 8,
+              "int8": 0,
+              "pq": 0,
+              "pq_fastscan": 0,
+              "rabitq": 0,
+              "sparse_fp16": 0,
+              "sparse_fp32": 0,
+              "sparse_sq8": 0,
+              "sq4": 0,
+              "sq4_uniform": 0,
+              "sq8": 0,
+              "sq8_uniform": 0,
+              "unknown": 0
+            },
+            "distance_evaluations_by_phase": {
+              "approximate": 8,
+              "rerank": 0,
+              "routing": 0
+            },
+            "hops": 6,
+            "io_cnt": 0,
+            "io_time_ms": 0,
+            "is_timeout": false,
+            "mci_hybrid_route": "disabled",
+            "mci_hybrid_threshold": 0.05000000074505806,
+            "mci_hybrid_valid_ratio": 1.0,
+            "mci_raw_float_csr": false,
+            "mci_seed_count": 0,
+            "mci_seed_ratio": 0.10000000149011612,
+            "parallel_search_fallback_count": 0,
+            "query_computer_count": 1,
+            "rabitq_filter_count": 0,
+            "rabitq_filter_fallback_full_count": 0,
+            "rabitq_full_count": 0,
+            "rabitq_reorder_fallback_full_count": 0,
+            "rabitq_reorder_hint_full_count": 0,
+            "reorder_candidate_count": 0,
+            "reorder_distance_count": 0,
+            "reorder_lower_bound_probe_count": 0
+          },
+          "reasoning": {
+            "expected_analysis": {
+              "missed_targets": [
+                {
+                  "diagnosis": "unknown",
+                  "filter_rejected": false,
+                  "inner_id": 1,
+                  "label": 305,
+                  "quantized_distance": 1.0,
+                  "reorder_evicted": false,
+                  "true_distance": 1.0,
+                  "visited_at_hop": 1,
+                  "was_evicted": false,
+                  "was_visited": true
+                }
+              ],
+              "summary": "1/2 expected labels found, 1 missed"
+            }
+          }
+        },
+        {
+          "name": "roundtrip",
+          "results": [
+            {
+              "label": 9001,
+              "distance": 0.0
+            },
+            {
+              "label": 305,
+              "distance": 1.0
+            },
+            {
+              "label": 101,
+              "distance": 2.0
+            }
+          ],
+          "statistics": {
+            "complete": true,
+            "dist_cmp": 6,
+            "distance_evaluations": 8,
+            "distance_evaluations_by_backend": {
+              "bf16": 0,
+              "binary": 0,
+              "fp16": 0,
+              "fp32": 8,
+              "int8": 0,
+              "pq": 0,
+              "pq_fastscan": 0,
+              "rabitq": 0,
+              "sparse_fp16": 0,
+              "sparse_fp32": 0,
+              "sparse_sq8": 0,
+              "sq4": 0,
+              "sq4_uniform": 0,
+              "sq8": 0,
+              "sq8_uniform": 0,
+              "unknown": 0
+            },
+            "distance_evaluations_by_phase": {
+              "approximate": 8,
+              "rerank": 0,
+              "routing": 0
+            },
+            "hops": 6,
+            "io_cnt": 0,
+            "io_time_ms": 0,
+            "is_timeout": false,
+            "mci_hybrid_route": "disabled",
+            "mci_hybrid_threshold": 0.05000000074505806,
+            "mci_hybrid_valid_ratio": 1.0,
+            "mci_raw_float_csr": false,
+            "mci_seed_count": 0,
+            "mci_seed_ratio": 0.10000000149011612,
+            "parallel_search_fallback_count": 0,
+            "query_computer_count": 1,
+            "rabitq_filter_count": 0,
+            "rabitq_filter_fallback_full_count": 0,
+            "rabitq_full_count": 0,
+            "rabitq_reorder_fallback_full_count": 0,
+            "rabitq_reorder_hint_full_count": 0,
+            "reorder_candidate_count": 0,
+            "reorder_distance_count": 0,
+            "reorder_lower_bound_probe_count": 0
+          },
+          "reasoning": {
+            "expected_analysis": {
+              "missed_targets": [],
+              "summary": "2/2 expected labels found, 0 missed"
+            }
+          }
+        }
+      ],
+      "invalid_topk_error_type": 3
+    }
+  ],
+  "debugger_observation": {
+    "breakpoint": "vsag::HGraph::SearchWithRequest",
+    "source_location": "src/algorithm/hgraph/hgraph_search.cpp:510",
+    "request_topk": 3,
+    "callers": [
+      "vsag::IndexImpl<vsag::HGraph>::SearchWithRequest",
+      "CheckResults",
+      "main"
+    ],
+    "status": "breakpoint hit and frame variable inspected"
+  },
+  "mark_remove_roundtrip": {
+    "scope": "Three FP32 L2 dim4 vectors; default BruteForce and HGraph parameters in the linked reproduction; BinarySet roundtrip.",
+    "observed_behavior": "The logically deleted label becomes visible after loading a fresh index. This is a reproduced baseline behavior, not a correctness pass.",
+    "output": [
+      "brute_force marked count=2 removed=1 exists9007=0 results=101:1,205:4,",
+      "brute_force restored count=3 removed=0 exists9007=1 results=9007:0,101:1,205:4,",
+      "hgraph marked count=2 removed=1 exists9007=0 results=101:1,205:4,",
+      "hgraph restored count=3 removed=0 exists9007=1 results=9007:0,101:1,205:4,"
+    ],
+    "program": "verify_mark_remove_roundtrip.cpp",
+    "exit_code": 0
+  }
+}

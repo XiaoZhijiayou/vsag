@@ -1,0 +1,70 @@
+[2026-09-10 19:27:55.619] [info] 
+====vsag start init====
+running on 
+instance spec: 14C24G
+cpu sse >> dist_support:N + platform:N = using:N
+cpu avx >> dist_support:N + platform:N = using:N
+cpu avx2 >> dist_support:N + platform:N = using:N
+cpu avx512f >> dist_support:N + platform:N = using:N
+cpu avx512dq >> dist_support:N + platform:N = using:N
+cpu avx512bw >> dist_support:N + platform:N = using:N
+cpu avx512vl >> dist_support:N + platform:N = using:N
+cpu avx512vpopcntdq >> dist_support:N + platform:N = using:N
+cpu neon >> dist_support:Y + platform:Y = using:Y
+cpu sve >> dist_support:Y + platform:N = using:N
+====vsag init done====
+[2026-09-10 19:27:55.625] [info] 
+====vsag start init====
+running on 
+instance spec: 14C24G
+cpu sse >> dist_support:N + platform:N = using:N
+cpu avx >> dist_support:N + platform:N = using:N
+cpu avx2 >> dist_support:N + platform:N = using:N
+cpu avx512f >> dist_support:N + platform:N = using:N
+cpu avx512dq >> dist_support:N + platform:N = using:N
+cpu avx512bw >> dist_support:N + platform:N = using:N
+cpu avx512vl >> dist_support:N + platform:N = using:N
+cpu avx512vpopcntdq >> dist_support:N + platform:N = using:N
+cpu neon >> dist_support:Y + platform:Y = using:Y
+cpu sve >> dist_support:Y + platform:N = using:N
+====vsag init done====
+[2026-09-10 19:27:55.631] [debug] created an ivf index
+index=ivf elements=6
+plain rows=1 results=3
+  label=9001 distance=0
+  label=305 distance=1
+  label=101 distance=2
+exclude-305 rows=1 results=3
+  label=9001 distance=0
+  label=101 distance=2
+  label=42 distance=4
+threshold-0.5 rows=1 results=1
+  label=9001 distance=0
+[2026-09-10 19:27:55.646] [debug] serial magic: vsag0000
+[2026-09-10 19:27:55.650] [debug] serial metadata: {"_update_time":"1970-01-01 00:00:00","basic_info":{"data_type":0,"dim":4,"extra_info_size":0,"index_param":"{\n    \"buckets_params\": {\n        \"buckets_count\": 2,\n        \"io_params\": {\n            \"type\": \"memory_io\"\n        },\n        \"quantization_params\": {\n            \"hold_molds\": false,\n            \"type\": \"fp32\"\n        },\n        \"use_residual\": false\n    },\n    \"buckets_per_data\": 1,\n    \"build_thread_count\": 1,\n    \"graph_build_threshold\": 0,\n    \"label_remap_type\": \"pg\",\n    \"partition_strategy\": {\n        \"ivf_train_type\": \"random\",\n        \"partition_strategy_type\": \"ivf\",\n        \"route_ef_construction\": 300,\n        \"route_max_degree\": 64,\n        \"use_route_graph\": false\n    },\n    \"precise_codes_layout\": \"flat\",\n    \"reorder_source\": \"precise\",\n    \"store_raw_vector\": false,\n    \"train_sample_count\": 512,\n    \"type\": \"ivf\",\n    \"use_attribute_filter\": false,\n    \"use_reorder\": false\n}","is_trained":true,"metric":0,"total_elements":6,"use_reorder":false},"datacell_offsets":{"bucket":0,"label_table":274,"partition_strategy":197},"datacell_sizes":{"bucket":197,"label_table":56,"partition_strategy":77}}
+[2026-09-10 19:27:55.653] [debug] serial checksum: 0x1bc9ee3c
+[2026-09-10 19:27:55.656] [debug] serial length_of_footer: 1266
+[2026-09-10 19:27:55.659] [debug] serial cigam: 0000gasv
+[2026-09-10 19:27:55.663] [debug] serial magic: vsag0000
+[2026-09-10 19:27:55.666] [debug] serial metadata: {"_update_time":"1970-01-01 00:00:00","basic_info":{"data_type":0,"dim":4,"extra_info_size":0,"index_param":"{\n    \"buckets_params\": {\n        \"buckets_count\": 2,\n        \"io_params\": {\n            \"type\": \"memory_io\"\n        },\n        \"quantization_params\": {\n            \"hold_molds\": false,\n            \"type\": \"fp32\"\n        },\n        \"use_residual\": false\n    },\n    \"buckets_per_data\": 1,\n    \"build_thread_count\": 1,\n    \"graph_build_threshold\": 0,\n    \"label_remap_type\": \"pg\",\n    \"partition_strategy\": {\n        \"ivf_train_type\": \"random\",\n        \"partition_strategy_type\": \"ivf\",\n        \"route_ef_construction\": 300,\n        \"route_max_degree\": 64,\n        \"use_route_graph\": false\n    },\n    \"precise_codes_layout\": \"flat\",\n    \"reorder_source\": \"precise\",\n    \"store_raw_vector\": false,\n    \"train_sample_count\": 512,\n    \"type\": \"ivf\",\n    \"use_attribute_filter\": false,\n    \"use_reorder\": false\n}","is_trained":true,"metric":0,"total_elements":6,"use_reorder":false},"datacell_offsets":{"bucket":0,"label_table":274,"partition_strategy":197},"datacell_sizes":{"bucket":197,"label_table":56,"partition_strategy":77}}
+[2026-09-10 19:27:55.669] [debug] serial checksum: 0x1bc9ee3c
+[2026-09-10 19:27:55.672] [debug] serial length_of_footer: 1266
+[2026-09-10 19:27:55.675] [debug] serial cigam: 0000gasv
+[2026-09-10 19:27:55.678] [info] ivf Serialize cost 32.134ms
+[2026-09-10 19:27:55.680] [debug] created an ivf index
+[2026-09-10 19:27:55.682] [debug] parse with v0.11 version format
+[2026-09-10 19:27:55.682] [debug] deserial cigam: 0000gasv
+[2026-09-10 19:27:55.683] [debug] deserial length: 1266
+[2026-09-10 19:27:55.684] [debug] deserial magic: vsag0000
+[2026-09-10 19:27:55.684] [debug] deserial checksum: 0x1bc9ee3c
+[2026-09-10 19:27:55.685] [debug] parse with new version format
+[2026-09-10 19:27:55.686] [debug] datacell_offsets: {"bucket":0,"label_table":274,"partition_strategy":197}
+[2026-09-10 19:27:55.687] [debug] datacell_sizes: {"bucket":197,"label_table":56,"partition_strategy":77}
+[2026-09-10 19:27:55.688] [debug] ReadFuncStreamReader io count (6) in deserialize process
+[2026-09-10 19:27:55.688] [info] ivf Deserialize cost 6.448ms
+roundtrip rows=1 results=3
+  label=9001 distance=0
+  label=305 distance=1
+  label=101 distance=2
+OBSERVED: topk=0 accepted, results=0
+PASS: four answer checks; topk=0 behavior recorded separately

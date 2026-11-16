@@ -1,0 +1,78 @@
+(lldb) target create "/tmp/vsag-trace-ivf"
+Current executable set to '/tmp/vsag-trace-ivf' (arm64).
+(lldb) breakpoint set -r 'FP32Quantizer.*ComputeDistImpl'
+Breakpoint 1: 6 locations.
+(lldb) run
+[2026-09-10 19:28:10.033] [info] 
+====vsag start init====
+running on 
+instance spec: 14C24G
+cpu sse >> dist_support:N + platform:N = using:N
+cpu avx >> dist_support:N + platform:N = using:N
+cpu avx2 >> dist_support:N + platform:N = using:N
+cpu avx512f >> dist_support:N + platform:N = using:N
+cpu avx512dq >> dist_support:N + platform:N = using:N
+cpu avx512bw >> dist_support:N + platform:N = using:N
+cpu avx512vl >> dist_support:N + platform:N = using:N
+cpu avx512vpopcntdq >> dist_support:N + platform:N = using:N
+cpu neon >> dist_support:Y + platform:Y = using:Y
+cpu sve >> dist_support:Y + platform:N = using:N
+====vsag init done====
+[2026-09-10 19:28:10.035] [info] 
+====vsag start init====
+running on 
+instance spec: 14C24G
+cpu sse >> dist_support:N + platform:N = using:N
+cpu avx >> dist_support:N + platform:N = using:N
+cpu avx2 >> dist_support:N + platform:N = using:N
+cpu avx512f >> dist_support:N + platform:N = using:N
+cpu avx512dq >> dist_support:N + platform:N = using:N
+cpu avx512bw >> dist_support:N + platform:N = using:N
+cpu avx512vl >> dist_support:N + platform:N = using:N
+cpu avx512vpopcntdq >> dist_support:N + platform:N = using:N
+cpu neon >> dist_support:Y + platform:Y = using:Y
+cpu sve >> dist_support:Y + platform:N = using:N
+====vsag init done====
+[2026-09-10 19:28:10.035] [debug] created an ivf index
+index=ivf elements=6
+Process 17053 launched: '/tmp/vsag-trace-ivf' (arm64)
+Process 17053 stopped
+* thread #1, queue = 'com.apple.main-thread', stop reason = breakpoint 1.1
+    frame #0: 0x0000000105f865c0 libvsag.1.0.dylib`vsag::FP32Quantizer<(vsag::MetricType)0>::ComputeDistImpl(this=0x0000000ca6800b08, computer=0x0000000100ad0498, codes="", dists=0x0000000ca7004100) const at fp32_quantizer.cpp:182:18
+   179 	        }
+   180 	        *dists = 1.0F - similarity;
+   181 	    } else if (metric == MetricType::METRIC_TYPE_L2SQR) {
+-> 182 	        *dists = FP32ComputeL2Sqr(reinterpret_cast<const float*>(codes),
+    	                 ^
+   183 	                                  reinterpret_cast<const float*>(computer.buf_),
+   184 	                                  this->dim_);
+   185 	    } else {
+Target 0: (vsag-trace-ivf) stopped.
+(lldb) bt
+* thread #1, queue = 'com.apple.main-thread', stop reason = breakpoint 1.1
+  * frame #0: 0x0000000105f865c0 libvsag.1.0.dylib`vsag::FP32Quantizer<(vsag::MetricType)0>::ComputeDistImpl(this=0x0000000ca6800b08, computer=0x0000000100ad0498, codes="", dists=0x0000000ca7004100) const at fp32_quantizer.cpp:182:18
+    frame #1: 0x0000000105f86664 libvsag.1.0.dylib`vsag::FP32Quantizer<(vsag::MetricType)0>::ScanBatchDistImpl(this=0x0000000ca6800b08, computer=0x0000000100ad0498, count=5, codes="", dists=0x0000000ca7004100) const at fp32_quantizer.cpp:139:15
+    frame #2: 0x0000000106215954 libvsag.1.0.dylib`vsag::Quantizer<vsag::FP32Quantizer<(vsag::MetricType)0>>::ScanBatchDists(this=0x0000000ca6800b08, computer=0x0000000100ad0498, count=5, codes="", dists=0x0000000ca7004100) const at quantizer.h:235:23
+    frame #3: 0x00000001062158f0 libvsag.1.0.dylib`vsag::Computer<vsag::FP32Quantizer<(vsag::MetricType)0>>::ScanBatchDists(this=0x0000000100ad0498, count=5, codes="", dists=0x0000000ca7004100) at computer.h:70:21
+    frame #4: 0x00000001066125e4 libvsag.1.0.dylib`vsag::BucketDataCell<vsag::FP32Quantizer<(vsag::MetricType)0>, vsag::MemoryIO>::scan_bucket_by_id(this=0x0000000100ad1258, result_dists=0x0000000ca7004100, computer=0x0000000100ad0498, bucket_id=0x000000016fdfb9a4) at bucket_datacell.h:538:19
+    frame #5: 0x000000010660f17c libvsag.1.0.dylib`vsag::BucketDataCell<vsag::FP32Quantizer<(vsag::MetricType)0>, vsag::MemoryIO>::ScanBucketById(this=0x0000000100ad1258, result_dists=0x0000000ca7004100, computer=std::__1::shared_ptr<vsag::ComputerInterface>::element_type @ 0x0000000100ad0498 strong=1 weak=0, bucket_id=0x000000016fdfb9a4) at bucket_datacell.h:68:22
+    frame #6: 0x0000000107906298 libvsag.1.0.dylib`vsag::FlatBucketSearcher::Search(this=0x0000000100ad0348, bucket_id=0, bucket=std::__1::shared_ptr<vsag::BucketInterface>::element_type @ 0x0000000100ad1258 strong=1 weak=0, computer=std::__1::shared_ptr<vsag::ComputerInterface>::element_type @ 0x0000000100ad0498 strong=1 weak=0, param=0x000000016fdfcc48, thread_id=0, topk=3, buckets_per_data=1, heap=std::__1::shared_ptr<vsag::DistanceHeap>::element_type @ 0x0000000100ad09b8 strong=1 weak=0, dist=size=5, reasoning_ctx=0x0000000000000000) const at flat_bucket_searcher.cpp:43:13
+    frame #7: 0x00000001078f6620 libvsag.1.0.dylib`std::__1::shared_ptr<vsag::DistanceHeap> vsag::IVF::search<(vsag::InnerSearchMode)1>(std::__1::shared_ptr<vsag::Dataset> const&, vsag::InnerSearchParam const&, vsag::QueryContext&, vsag::ReasoningContext*) const::'lambda'(long long)::operator()(this=0x000000016fdfbc90, thread_id=0) const at ivf_search.cpp:260:31
+    frame #8: 0x00000001078ef72c libvsag.1.0.dylib`std::__1::shared_ptr<vsag::DistanceHeap> vsag::IVF::search<(vsag::InnerSearchMode)1>(this=0x0000000100ad0d18, query=std::__1::shared_ptr<vsag::Dataset>::element_type @ 0x0000000100acda38 strong=3 weak=1, param=0x000000016fdfcc48, ctx=0x000000016fdfc8b8, reasoning_ctx=0x0000000000000000) const at ivf_search.cpp:279:9
+    frame #9: 0x00000001078ed494 libvsag.1.0.dylib`vsag::IVF::SearchWithRequest(this=0x0000000100ad0d18, request=0x000000016fdfe650) const at ivf_search.cpp:768:32
+    frame #10: 0x0000000106088754 libvsag.1.0.dylib`vsag::IndexImpl<vsag::IVF>::SearchWithRequest(this=0x0000000100ad0228, request=0x000000016fdfe650) const at index_impl.h:560:9
+    frame #11: 0x0000000100002060 vsag-trace-ivf`(anonymous namespace)::CheckResults(index=std::__1::shared_ptr<vsag::Index>::element_type @ 0x0000000100ad0228 strong=1 weak=0, request=0x000000016fdfe650, title="plain", expected_ids=size=3, expected_distances=size=3, explain=false) at trace_ivf.cpp:46:39
+    frame #12: 0x0000000100000e70 vsag-trace-ivf`main(argc=1, argv=0x000000016fdfeeb0) at trace_ivf.cpp:124:9
+    frame #13: 0x0000000188ca9d54 dyld`start + 7184
+(lldb) frame variable
+(const vsag::FP32Quantizer<vsag::MetricType::METRIC_TYPE_L2SQR> *) this = 0x0000000ca6800b08
+(vsag::Computer<vsag::FP32Quantizer<vsag::MetricType::METRIC_TYPE_L2SQR> > &) computer = 0x0000000100ad0498: {
+  allocator_ = 0x0000000100acfef8
+  quantizer_ = 0x0000000ca6800b08
+  buf_ = 0x0000000100ac9060 ""
+  raw_query_ = size=0 {}
+}
+(const uint8_t *) codes = 0x0000000100ad0950 ""
+(float *) dists = 0x0000000ca7004100
+(lldb) process kill
+Process 17053 exited with status = 9 (0x00000009) killed

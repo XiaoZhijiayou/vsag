@@ -1,0 +1,2922 @@
+[
+  {
+    "name": "FlatBucketSearcher::Search",
+    "path": "src/algorithm/ivf/flat_bucket_searcher.cpp",
+    "line": 26,
+    "end": 138,
+    "page": "flat_bucket_searcher.md",
+    "anchor": "L26",
+    "sha256": "9730484df30a5c5343f17b79d21ae2022fcd99363b2a492dbab558d997c0ec9f",
+    "explicit_calls": 46
+  },
+  {
+    "name": "GNOIMIParameter::GNOIMIParameter",
+    "path": "src/algorithm/ivf/gno_imi_parameter.cpp",
+    "line": 25,
+    "end": 25,
+    "page": "gno_imi_parameter.md",
+    "anchor": "L25",
+    "sha256": "5f925c3f1d2b3800c2aa04f5225c691696b1aaaf3daf8a0dedb49827066d924a",
+    "explicit_calls": 0
+  },
+  {
+    "name": "GNOIMIParameter::FromJson",
+    "path": "src/algorithm/ivf/gno_imi_parameter.cpp",
+    "line": 27,
+    "end": 41,
+    "page": "gno_imi_parameter.md",
+    "anchor": "L27",
+    "sha256": "c344b1585d69fc33b609a56e522e9a182b6cebec471c4ebbd45cff24e93db22b",
+    "explicit_calls": 6
+  },
+  {
+    "name": "GNOIMIParameter::ToJson",
+    "path": "src/algorithm/ivf/gno_imi_parameter.cpp",
+    "line": 43,
+    "end": 49,
+    "page": "gno_imi_parameter.md",
+    "anchor": "L43",
+    "sha256": "7c1aacd3c64a7b8395cf7c3629bd1c218fb58b2d1a2a3d27ba2f63e51e448116",
+    "explicit_calls": 2
+  },
+  {
+    "name": "GNOIMIParameter::CheckCompatibility",
+    "path": "src/algorithm/ivf/gno_imi_parameter.cpp",
+    "line": 50,
+    "end": 56,
+    "page": "gno_imi_parameter.md",
+    "anchor": "L50",
+    "sha256": "0d55ae0b74b22a47eaf1de6e241f36a42abd1cf35ee1a16ac26474180e8f841e",
+    "explicit_calls": 3
+  },
+  {
+    "name": "matmul",
+    "path": "src/algorithm/ivf/gno_imi_partition.cpp",
+    "line": 40,
+    "end": 56,
+    "page": "gno_imi_partition.md",
+    "anchor": "L40",
+    "sha256": "8d29245d1cf9bbfcbdedb7ee722bb27c983c544a3a2154ad1626b46583d212f6",
+    "explicit_calls": 1
+  },
+  {
+    "name": "GNOIMIPartition::GNOIMIPartition",
+    "path": "src/algorithm/ivf/gno_imi_partition.cpp",
+    "line": 58,
+    "end": 86,
+    "page": "gno_imi_partition.md",
+    "anchor": "L58",
+    "sha256": "bf3ba3f1cd300492f0d65e67397e9cd8258cca66028be527cfed7283e15d29d3",
+    "explicit_calls": 11
+  },
+  {
+    "name": "GNOIMIPartition::Train",
+    "path": "src/algorithm/ivf/gno_imi_partition.cpp",
+    "line": 88,
+    "end": 199,
+    "page": "gno_imi_partition.md",
+    "anchor": "L88",
+    "sha256": "a21c86647f9e517e486651564db1f70368802aba589fe352d54c90eeffc7a0ac",
+    "explicit_calls": 76
+  },
+  {
+    "name": "GNOIMIPartition::ClassifyDatas",
+    "path": "src/algorithm/ivf/gno_imi_partition.cpp",
+    "line": 201,
+    "end": 219,
+    "page": "gno_imi_partition.md",
+    "anchor": "L201",
+    "sha256": "6f925ab9c463bf21844ec9e4df48d7232632f813936956335071b219713919b2",
+    "explicit_calls": 6
+  },
+  {
+    "name": "GNOIMIPartition::ClassifyDatasForSearch",
+    "path": "src/algorithm/ivf/gno_imi_partition.cpp",
+    "line": 221,
+    "end": 321,
+    "page": "gno_imi_partition.md",
+    "anchor": "L221",
+    "sha256": "233614dd7db18f7bee42a280283e132238e21c03addbc756de7df290e7bcb867",
+    "explicit_calls": 40
+  },
+  {
+    "name": "GNOIMIPartition::Serialize",
+    "path": "src/algorithm/ivf/gno_imi_partition.cpp",
+    "line": 323,
+    "end": 333,
+    "page": "gno_imi_partition.md",
+    "anchor": "L323",
+    "sha256": "06fdefa93880ff79621769ec3465061b3759039e759aa4c29e8b5f35b9f1133c",
+    "explicit_calls": 8
+  },
+  {
+    "name": "GNOIMIPartition::Deserialize",
+    "path": "src/algorithm/ivf/gno_imi_partition.cpp",
+    "line": 334,
+    "end": 344,
+    "page": "gno_imi_partition.md",
+    "anchor": "L334",
+    "sha256": "d857d706c67c6882f2af66eaf95a0c750f39b497a79f923243ef1dc77699593d",
+    "explicit_calls": 8
+  },
+  {
+    "name": "GNOIMIPartition::inner_classify_datas",
+    "path": "src/algorithm/ivf/gno_imi_partition.cpp",
+    "line": 346,
+    "end": 365,
+    "page": "gno_imi_partition.md",
+    "anchor": "L346",
+    "sha256": "7c6f4930b1ac6242d6a53ca0d3590ada0be82856dc01357c872b2641a4adfe54",
+    "explicit_calls": 7
+  },
+  {
+    "name": "GNOIMIPartition::inner_joint_classify_datas",
+    "path": "src/algorithm/ivf/gno_imi_partition.cpp",
+    "line": 367,
+    "end": 438,
+    "page": "gno_imi_partition.md",
+    "anchor": "L367",
+    "sha256": "4fb62b15c8c90d1a4fb0465a1a84c50409253e470141cf0355aac1df79a83615",
+    "explicit_calls": 25
+  },
+  {
+    "name": "GNOIMIPartition::GetCentroid",
+    "path": "src/algorithm/ivf/gno_imi_partition.cpp",
+    "line": 440,
+    "end": 454,
+    "page": "gno_imi_partition.md",
+    "anchor": "L440",
+    "sha256": "9d62256d6a644d3d0730ccd8862595ca02345377f801cc91551e42252a5bb40a",
+    "explicit_calls": 6
+  },
+  {
+    "name": "GraphBucketSearcher::GraphBucketSearcher",
+    "path": "src/algorithm/ivf/graph_bucket_searcher.cpp",
+    "line": 27,
+    "end": 34,
+    "page": "graph_bucket_searcher.md",
+    "anchor": "L27",
+    "sha256": "422bdad252548cdef212f6a2407eb63cff9dca02977ba0ffdb054a3a0ecb945a",
+    "explicit_calls": 0
+  },
+  {
+    "name": "GraphBucketSearcher::Search",
+    "path": "src/algorithm/ivf/graph_bucket_searcher.cpp",
+    "line": 36,
+    "end": 75,
+    "page": "graph_bucket_searcher.md",
+    "anchor": "L36",
+    "sha256": "35af43f9153f68b4a7d012e17b369f808502082f92fbc57951d24e04da28dca8",
+    "explicit_calls": 5
+  },
+  {
+    "name": "GraphBucketSearcher::search_graph",
+    "path": "src/algorithm/ivf/graph_bucket_searcher.cpp",
+    "line": 77,
+    "end": 145,
+    "page": "graph_bucket_searcher.md",
+    "anchor": "L77",
+    "sha256": "5c0c43416e07b56bfdaa9639d0b60dfd6049640a52844d4a1d9f1c9edf5e9aa0",
+    "explicit_calls": 21
+  },
+  {
+    "name": "make_precise_bucket_param",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 49,
+    "end": 57,
+    "page": "ivf.md",
+    "anchor": "L49",
+    "sha256": "ee6f1b3ead9687302168f4f09acf6500c6c7e58e04718e45a10042de1216f695",
+    "explicit_calls": 1
+  },
+  {
+    "name": "build_default_ivf_param",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 61,
+    "end": 108,
+    "page": "ivf.md",
+    "anchor": "L61",
+    "sha256": "91a327bca02b17bbf2fdd5863ea534b45f8552bcbd4999d72857245fe4212394",
+    "explicit_calls": 31
+  },
+  {
+    "name": "IVF::CheckAndMappingExternalParam",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 110,
+    "end": 219,
+    "page": "ivf.md",
+    "anchor": "L110",
+    "sha256": "9ce20f75b77540907ac1f3084b423347f4778ee806e1e0bbf99c1cc8f63229d5",
+    "explicit_calls": 44
+  },
+  {
+    "name": "IVF::IVF",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 221,
+    "end": 283,
+    "page": "ivf.md",
+    "anchor": "L221",
+    "sha256": "42043e0db89e08a1ce669bee1a012d55a30e9a67bf74507a1b77637de77a26e0",
+    "explicit_calls": 16
+  },
+  {
+    "name": "IVF::GetCodeByInnerId",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 285,
+    "end": 289,
+    "page": "ivf.md",
+    "anchor": "L285",
+    "sha256": "14c5eb3463cb029140a19b9732734025c2244a04cb730c0219156f4b9370de8c",
+    "explicit_calls": 2
+  },
+  {
+    "name": "IVF::GetNumElements",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 291,
+    "end": 294,
+    "page": "ivf.md",
+    "anchor": "L291",
+    "sha256": "28f3cac8155f7a568d1d6c692dafef05afc8b5199f24622b557a627eb8549cc3",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVF::Merge",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 296,
+    "end": 310,
+    "page": "ivf.md",
+    "anchor": "L296",
+    "sha256": "e3287ba508e4fd9ab4d4d3686059b0fc49a072bba2adfcc780ca641ec3669ff8",
+    "explicit_calls": 6
+  },
+  {
+    "name": "IVF::get_location",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 312,
+    "end": 319,
+    "page": "ivf.md",
+    "anchor": "L312",
+    "sha256": "23fb7544a24041cd57e416787546ecfa2c0236c8fbcdf1bac26615d98a26635f",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVF::ExportModel",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 321,
+    "end": 335,
+    "page": "ivf.md",
+    "anchor": "L321",
+    "sha256": "0589c514c6ab803482bbd135ed5d4d853f5201293177f3d5df990465fe15ad8c",
+    "explicit_calls": 5
+  },
+  {
+    "name": "IVF::merge_one_unit",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 337,
+    "end": 358,
+    "page": "ivf.md",
+    "anchor": "L337",
+    "sha256": "2a253f2b7e2767052afa81e744be064a67a4bd5aeb9648ca0088233533a6b479",
+    "explicit_calls": 12
+  },
+  {
+    "name": "IVF::check_merge_illegal",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 360,
+    "end": 399,
+    "page": "ivf.md",
+    "anchor": "L360",
+    "sha256": "cc7225a3359d19f2db13d196759df72a773bfa22666c54f845862f15b2074542",
+    "explicit_calls": 18
+  },
+  {
+    "name": "IVF::GetAttributeSetByInnerId",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 401,
+    "end": 405,
+    "page": "ivf.md",
+    "anchor": "L401",
+    "sha256": "d500de8d9fdbb64fd114a697d2403127f0bcb4e1d474cf0516fc794d334c2cc8",
+    "explicit_calls": 2
+  },
+  {
+    "name": "IVF::CalcDistancesById",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 407,
+    "end": 413,
+    "page": "ivf.md",
+    "anchor": "L407",
+    "sha256": "0679569b490c3b7e869c1725032d54c3a5c6fcc84343166ddf8c6c96ace8a365",
+    "explicit_calls": 1
+  },
+  {
+    "name": "IVF::CalDistanceById",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 415,
+    "end": 494,
+    "page": "ivf.md",
+    "anchor": "L415",
+    "sha256": "4fa8ca670eca15c861d825a49239cc3fd571f06eb188ad0b1fc156d9c7e77636",
+    "explicit_calls": 34
+  },
+  {
+    "name": "IVF::CalcDistanceById",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 496,
+    "end": 513,
+    "page": "ivf.md",
+    "anchor": "L496",
+    "sha256": "bbc65ce36dbb940252ece61167d254432ceabc571374f71954cce11ca9ec54da",
+    "explicit_calls": 6
+  },
+  {
+    "name": "IVF::GetVectorByInnerId",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 515,
+    "end": 519,
+    "page": "ivf.md",
+    "anchor": "L515",
+    "sha256": "39f13e18442f13cba1c4da94b6693180608dd89226ce55269a314fed061f58b5",
+    "explicit_calls": 2
+  },
+  {
+    "name": "calculate_percentile",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 521,
+    "end": 534,
+    "page": "ivf.md",
+    "anchor": "L521",
+    "sha256": "1edaa724f3f12c01d10d11176fd96b6f07c935719a68b3c0eac4846390aaceae",
+    "explicit_calls": 2
+  },
+  {
+    "name": "get_data_stats",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 536,
+    "end": 573,
+    "page": "ivf.md",
+    "anchor": "L536",
+    "sha256": "b539fea9573b116873ac093f1097529f63b4bfe3a7042770eb6866bf8be7235f",
+    "explicit_calls": 26
+  },
+  {
+    "name": "IVF::GetStats",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 575,
+    "end": 602,
+    "page": "ivf.md",
+    "anchor": "L575",
+    "sha256": "bfa55d30e5ebb4260253bbb639db8df8d1c6831ce4b723dba4b531b41692b412",
+    "explicit_calls": 18
+  },
+  {
+    "name": "IVF::AnalyzeIndexBySearch",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 604,
+    "end": 614,
+    "page": "ivf.md",
+    "anchor": "L604",
+    "sha256": "d8f813bdb5bf35a0339b0d459355823751b8ebbf9ec1197e4edc860977db29a8",
+    "explicit_calls": 6
+  },
+  {
+    "name": "IVF::cal_memory_usage",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 616,
+    "end": 637,
+    "page": "ivf.md",
+    "anchor": "L616",
+    "sha256": "275a90485cc4c622e0cfb331406c13bfb2998dbb24428580a025c405726e8f0c",
+    "explicit_calls": 9
+  },
+  {
+    "name": "IVF::GetMemoryUsage",
+    "path": "src/algorithm/ivf/ivf.cpp",
+    "line": 639,
+    "end": 650,
+    "page": "ivf.md",
+    "anchor": "L639",
+    "sha256": "f43c3696f45539e8c253f7652ca4db1d48a1c21776b540bc7c26877fc2301c3b",
+    "explicit_calls": 2
+  },
+  {
+    "name": "IVF::IVF",
+    "path": "src/algorithm/ivf/ivf.h",
+    "line": 70,
+    "end": 71,
+    "page": "ivf_h.md",
+    "anchor": "L70",
+    "sha256": "599e95ad63387b983dd0a905ff11b3d73a23b204dc08f7c49b0590364699bb3c",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVF::~IVF",
+    "path": "src/algorithm/ivf/ivf.h",
+    "line": 73,
+    "end": 73,
+    "page": "ivf_h.md",
+    "anchor": "L73",
+    "sha256": "b1798028c6dd3f9a15a562ccf80e790ce225f04ce06f4a117f21032ea3666e7a",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVF::Fork",
+    "path": "src/algorithm/ivf/ivf.h",
+    "line": 110,
+    "end": 113,
+    "page": "ivf_h.md",
+    "anchor": "L110",
+    "sha256": "d2ca3b31a1fb31f2e321ec670d50e611e3eca1d92fa87dff44f1ca52becaa988",
+    "explicit_calls": 1
+  },
+  {
+    "name": "IVF::GetIndexType",
+    "path": "src/algorithm/ivf/ivf.h",
+    "line": 121,
+    "end": 124,
+    "page": "ivf_h.md",
+    "anchor": "L121",
+    "sha256": "b8378bc88d548c72333feaff1c588b4e297dc8f5898eb22a6cd725a391476a83",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVF::GetName",
+    "path": "src/algorithm/ivf/ivf.h",
+    "line": 126,
+    "end": 129,
+    "page": "ivf_h.md",
+    "anchor": "L126",
+    "sha256": "8487be3f5966f09edf7c87e599e87e5f0266c58d250c3e49c591b24bd7066848",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVF::GetNumberRemoved",
+    "path": "src/algorithm/ivf/ivf.h",
+    "line": 134,
+    "end": 137,
+    "page": "ivf_h.md",
+    "anchor": "L134",
+    "sha256": "3c1eaf06921aed26759a727f4590dbc36c031f682098afb663559c2f1494825f",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVFBucketSearcher::~IVFBucketSearcher",
+    "path": "src/algorithm/ivf/ivf_bucket_searcher.h",
+    "line": 34,
+    "end": 34,
+    "page": "ivf_bucket_searcher_h.md",
+    "anchor": "L34",
+    "sha256": "4c8212aebcb3c789687384e8aff6edde4f6e0b7d8b62c84c7d92ff7578d02e4e",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVF::InitFeatures",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 38,
+    "end": 102,
+    "page": "ivf_build.md",
+    "anchor": "L38",
+    "sha256": "74645eba16d836b3d7743e9199fab3fbf24cb660e763a6eadcbd2a733f0b78b5",
+    "explicit_calls": 17
+  },
+  {
+    "name": "IVF::Build",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 104,
+    "end": 118,
+    "page": "ivf_build.md",
+    "anchor": "L104",
+    "sha256": "31c2da7cf22e2002d7d43345e3b8302e885ba9b45409fbee1a10950b0fce0e44",
+    "explicit_calls": 5
+  },
+  {
+    "name": "IVF::Train",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 120,
+    "end": 144,
+    "page": "ivf_build.md",
+    "anchor": "L120",
+    "sha256": "a28859d463f07a4ff9c04fb6e6124923b2cb0ab4047e0b9c2d6a1dd192a650a8",
+    "explicit_calls": 13
+  },
+  {
+    "name": "IVF::Add",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 146,
+    "end": 280,
+    "page": "ivf_build.md",
+    "anchor": "L146",
+    "sha256": "2042a949d471e3e06af79cd222ef035e452a10c302de54fc77483dcbbea12e9e",
+    "explicit_calls": 37
+  },
+  {
+    "name": "PairwiseBucketDistanceProvider::PairwiseBucketDistanceProvider",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 284,
+    "end": 288,
+    "page": "ivf_build.md",
+    "anchor": "L284",
+    "sha256": "8805e774596f79bca6ef656f7559b7a17904d803ebfa83512aead30aa8c13d6a",
+    "explicit_calls": 0
+  },
+  {
+    "name": "PairwiseBucketDistanceProvider::QueryDistance",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 290,
+    "end": 293,
+    "page": "ivf_build.md",
+    "anchor": "L290",
+    "sha256": "c41b9e5db551db5ad651ea5252700b655f56d8215678c2a9ffbcd3fdb4937fe1",
+    "explicit_calls": 1
+  },
+  {
+    "name": "PairwiseBucketDistanceProvider::BatchQueryDistance",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 295,
+    "end": 303,
+    "page": "ivf_build.md",
+    "anchor": "L295",
+    "sha256": "babb1ed7a610ba31b093de0393b0c53db1115063798286dc43f9fed229cd6a10",
+    "explicit_calls": 1
+  },
+  {
+    "name": "PairwiseBucketDistanceProvider::PairwiseDistance",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 305,
+    "end": 310,
+    "page": "ivf_build.md",
+    "anchor": "L305",
+    "sha256": "7ae2e78a605cf22b4ce48e16d5a01e5178c08c76003c51eb8b604b6d33847479",
+    "explicit_calls": 1
+  },
+  {
+    "name": "PairwiseBucketDistanceProvider::FactoryComputerById",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 312,
+    "end": 316,
+    "page": "ivf_build.md",
+    "anchor": "L312",
+    "sha256": "59f6c6d07c405a7d3a56ed107521d4cc12e3393b706d217534e9bd197cc73c93",
+    "explicit_calls": 1
+  },
+  {
+    "name": "IVF::build_bucket_graphs",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 324,
+    "end": 404,
+    "page": "ivf_build.md",
+    "anchor": "L324",
+    "sha256": "e1002e95efb3569923fe6c2b6be3ceab644f04186ec2966690fb810f0f2848de",
+    "explicit_calls": 30
+  },
+  {
+    "name": "IVF::fill_location_map",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 405,
+    "end": 440,
+    "page": "ivf_build.md",
+    "anchor": "L405",
+    "sha256": "45c07b3c3c79743f792725cea85504b90eccb0887eb5e44349bb188d760605a4",
+    "explicit_calls": 11
+  },
+  {
+    "name": "IVF::RebuildBucketGraphs",
+    "path": "src/algorithm/ivf/ivf_build.cpp",
+    "line": 442,
+    "end": 466,
+    "page": "ivf_build.md",
+    "anchor": "L442",
+    "sha256": "f0707ea5a542f942be0400bf1dc57341a864fa7fed04ceb9f63fe7a913b6cce9",
+    "explicit_calls": 8
+  },
+  {
+    "name": "IVF::Remove",
+    "path": "src/algorithm/ivf/ivf_modify.cpp",
+    "line": 22,
+    "end": 31,
+    "page": "ivf_modify.md",
+    "anchor": "L22",
+    "sha256": "91edea499a59a77ef40ed47ca678b9b9ee94230ba27b1664cb4075080da8c3b9",
+    "explicit_calls": 1
+  },
+  {
+    "name": "IVF::UpdateAttribute",
+    "path": "src/algorithm/ivf/ivf_modify.cpp",
+    "line": 33,
+    "end": 38,
+    "page": "ivf_modify.md",
+    "anchor": "L33",
+    "sha256": "15d99844bf4407b165f729303d1965d03c22313191c87c29e95bff304a48817c",
+    "explicit_calls": 3
+  },
+  {
+    "name": "IVF::UpdateAttribute",
+    "path": "src/algorithm/ivf/ivf_modify.cpp",
+    "line": 40,
+    "end": 45,
+    "page": "ivf_modify.md",
+    "anchor": "L40",
+    "sha256": "f871bd909dcaea058371d988b3ca73eb64791045053c354be24a0ed2d0b44142",
+    "explicit_calls": 3
+  },
+  {
+    "name": "compute_centroid_dots",
+    "path": "src/algorithm/ivf/ivf_nearest_partition.cpp",
+    "line": 51,
+    "end": 67,
+    "page": "ivf_nearest_partition.md",
+    "anchor": "L51",
+    "sha256": "2c3d46e1c89195df05325b4b9536e90e9fb22256c56d87e3f5dc3a3e1be27bb7",
+    "explicit_calls": 1
+  },
+  {
+    "name": "IVFNearestPartition::IVFNearestPartition",
+    "path": "src/algorithm/ivf/ivf_nearest_partition.cpp",
+    "line": 79,
+    "end": 89,
+    "page": "ivf_nearest_partition.md",
+    "anchor": "L79",
+    "sha256": "b7ec3e923ec258ee5ccb50f9390542808b80cc0508c5d05fc1734a82e6555418",
+    "explicit_calls": 1
+  },
+  {
+    "name": "IVFNearestPartition::Train",
+    "path": "src/algorithm/ivf/ivf_nearest_partition.cpp",
+    "line": 91,
+    "end": 155,
+    "page": "ivf_nearest_partition.md",
+    "anchor": "L91",
+    "sha256": "12741a54a2f754783e4b429361b3d46b79519502770f4c7f15bd2f4d7ddd088f",
+    "explicit_calls": 38
+  },
+  {
+    "name": "IVFNearestPartition::ClassifyDatas",
+    "path": "src/algorithm/ivf/ivf_nearest_partition.cpp",
+    "line": 157,
+    "end": 225,
+    "page": "ivf_nearest_partition.md",
+    "anchor": "L157",
+    "sha256": "0a5c2e85adce4bcc3a2a32c83ccbc5e4d3943d18486fe9b3588f346e1331625f",
+    "explicit_calls": 24
+  },
+  {
+    "name": "IVFNearestPartition::Serialize",
+    "path": "src/algorithm/ivf/ivf_nearest_partition.cpp",
+    "line": 227,
+    "end": 238,
+    "page": "ivf_nearest_partition.md",
+    "anchor": "L227",
+    "sha256": "8e18ec2100eecdf156b57cac285cee64d15c0a8856115e1eab10ba108efe606b",
+    "explicit_calls": 5
+  },
+  {
+    "name": "IVFNearestPartition::Deserialize",
+    "path": "src/algorithm/ivf/ivf_nearest_partition.cpp",
+    "line": 239,
+    "end": 274,
+    "page": "ivf_nearest_partition.md",
+    "anchor": "L239",
+    "sha256": "5690225ffc14699310c8e062b3b637ca5184e654550db8c6c403a62271a56d07",
+    "explicit_calls": 17
+  },
+  {
+    "name": "IVFNearestPartition::factory_router_index",
+    "path": "src/algorithm/ivf/ivf_nearest_partition.cpp",
+    "line": 275,
+    "end": 285,
+    "page": "ivf_nearest_partition.md",
+    "anchor": "L275",
+    "sha256": "197da9af5e0c1644aa4c3a3940f9089ed223c8b11f7c5950e5cfc73ee2a6370b",
+    "explicit_calls": 5
+  },
+  {
+    "name": "IVFNearestPartition::GetCentroid",
+    "path": "src/algorithm/ivf/ivf_nearest_partition.cpp",
+    "line": 286,
+    "end": 301,
+    "page": "ivf_nearest_partition.md",
+    "anchor": "L286",
+    "sha256": "f16486b83ed3e2a6939330d55c573e79b074810d50b53dca8b917b8cd9b9df15",
+    "explicit_calls": 7
+  },
+  {
+    "name": "IVFNearestPartition::GetMemoryUsage",
+    "path": "src/algorithm/ivf/ivf_nearest_partition.cpp",
+    "line": 303,
+    "end": 312,
+    "page": "ivf_nearest_partition.md",
+    "anchor": "L303",
+    "sha256": "5d2dd5c366f423c567df4a242138c66d2e1e47c38eb5019580e230b7ccb9b285",
+    "explicit_calls": 3
+  },
+  {
+    "name": "IVFNearestPartition::classify_datas_by_scan",
+    "path": "src/algorithm/ivf/ivf_nearest_partition.cpp",
+    "line": 313,
+    "end": 390,
+    "page": "ivf_nearest_partition.md",
+    "anchor": "L313",
+    "sha256": "f89e3252d38732faed4da784ad955a21dca1e8c0f1da3a74c65f8fbc54db3d16",
+    "explicit_calls": 26
+  },
+  {
+    "name": "IVFParameter::FromJson",
+    "path": "src/algorithm/ivf/ivf_parameter.cpp",
+    "line": 28,
+    "end": 119,
+    "page": "ivf_parameter.md",
+    "anchor": "L28",
+    "sha256": "fab75dfe6f28b4920c0096003023e8abb98e555fdd168e60051130feb410a49d",
+    "explicit_calls": 34
+  },
+  {
+    "name": "IVFParameter::ToJson",
+    "path": "src/algorithm/ivf/ivf_parameter.cpp",
+    "line": 121,
+    "end": 132,
+    "page": "ivf_parameter.md",
+    "anchor": "L121",
+    "sha256": "edc89b9232492892ff8c063ab45f1bc5f1dbd4d08074f9e6af7c64f00e3aef1a",
+    "explicit_calls": 9
+  },
+  {
+    "name": "IVFParameter::CheckCompatibility",
+    "path": "src/algorithm/ivf/ivf_parameter.cpp",
+    "line": 133,
+    "end": 148,
+    "page": "ivf_parameter.md",
+    "anchor": "L133",
+    "sha256": "73eb86c8be86d8f373b88cd8683d52ea09bb77edf065b6f45fc624b4e68fe6c1",
+    "explicit_calls": 8
+  },
+  {
+    "name": "IVFSearchParameters::FromJson",
+    "path": "src/algorithm/ivf/ivf_parameter.cpp",
+    "line": 150,
+    "end": 187,
+    "page": "ivf_parameter.md",
+    "anchor": "L150",
+    "sha256": "164d8d1b865d3d374f690208b35039aab7edfea6af05e568eb59e7a2dccdb842",
+    "explicit_calls": 15
+  },
+  {
+    "name": "IVFParameter::IVFParameter",
+    "path": "src/algorithm/ivf/ivf_parameter.h",
+    "line": 35,
+    "end": 35,
+    "page": "ivf_parameter_h.md",
+    "anchor": "L35",
+    "sha256": "a574db76402c2d46b654cb57470907f48fcc1f114d8fb217a8fc90a9a7f5ae01",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVFSearchParameters::IVFSearchParameters",
+    "path": "src/algorithm/ivf/ivf_parameter.h",
+    "line": 67,
+    "end": 69,
+    "page": "ivf_parameter_h.md",
+    "anchor": "L67",
+    "sha256": "c6edfac2a09cdb1100f0b61c0b899ebdc1d89dd99efb723ee188f0bbea771bb6",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVFPartitionStrategy::GetResidual",
+    "path": "src/algorithm/ivf/ivf_partition_strategy.cpp",
+    "line": 22,
+    "end": 36,
+    "page": "ivf_partition_strategy.md",
+    "anchor": "L22",
+    "sha256": "fd9daaf74d19479f6e2bbd2b92d17119d5cba4b211a6debbc6f2eed033b948de",
+    "explicit_calls": 2
+  },
+  {
+    "name": "IVFPartitionStrategy::Clone",
+    "path": "src/algorithm/ivf/ivf_partition_strategy.h",
+    "line": 37,
+    "end": 45,
+    "page": "ivf_partition_strategy_h.md",
+    "anchor": "L37",
+    "sha256": "65ba18c9d1909ad2d8eba7953745d274d014a54bed79f9c952ef6e6866912944",
+    "explicit_calls": 3
+  },
+  {
+    "name": "IVFPartitionStrategy::IVFPartitionStrategy",
+    "path": "src/algorithm/ivf/ivf_partition_strategy.h",
+    "line": 48,
+    "end": 53,
+    "page": "ivf_partition_strategy_h.md",
+    "anchor": "L48",
+    "sha256": "4f85b9103623f576be1fbdc550f6e303747dedee5c667532b42c6f3099962f8f",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVFPartitionStrategy::ClassifyDatasForSearch",
+    "path": "src/algorithm/ivf/ivf_partition_strategy.h",
+    "line": 64,
+    "end": 70,
+    "page": "ivf_partition_strategy_h.md",
+    "anchor": "L64",
+    "sha256": "6152d828a7cc0c0db7038123d60a51dd20ce4bb25db6482e706159f4444437d5",
+    "explicit_calls": 2
+  },
+  {
+    "name": "IVFPartitionStrategy::Serialize",
+    "path": "src/algorithm/ivf/ivf_partition_strategy.h",
+    "line": 75,
+    "end": 80,
+    "page": "ivf_partition_strategy_h.md",
+    "anchor": "L75",
+    "sha256": "009a30ad9f1b985696153f0c7bdea03d9d97c8274445aa8245969421071452f2",
+    "explicit_calls": 3
+  },
+  {
+    "name": "IVFPartitionStrategy::Deserialize",
+    "path": "src/algorithm/ivf/ivf_partition_strategy.h",
+    "line": 82,
+    "end": 87,
+    "page": "ivf_partition_strategy_h.md",
+    "anchor": "L82",
+    "sha256": "1be3dbe6fb035d53688d63565c1aa8b55a7a0616ba2bd6c91febd6bf7d4483dc",
+    "explicit_calls": 3
+  },
+  {
+    "name": "IVFPartitionStrategy::GetMemoryUsage",
+    "path": "src/algorithm/ivf/ivf_partition_strategy.h",
+    "line": 93,
+    "end": 96,
+    "page": "ivf_partition_strategy_h.md",
+    "anchor": "L93",
+    "sha256": "f39a730b4cbc61b79cc17f1f19496fc0f52201a8dd0ae91cd20b41244139e06b",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVFPartitionStrategyParameters::IVFPartitionStrategyParameters",
+    "path": "src/algorithm/ivf/ivf_partition_strategy_parameter.cpp",
+    "line": 28,
+    "end": 28,
+    "page": "ivf_partition_strategy_parameter.md",
+    "anchor": "L28",
+    "sha256": "ca6bf1224cc2c38255e9d013fbf6618f1a8f97d7872109673bb17131b205bc6f",
+    "explicit_calls": 0
+  },
+  {
+    "name": "IVFPartitionStrategyParameters::FromJson",
+    "path": "src/algorithm/ivf/ivf_partition_strategy_parameter.cpp",
+    "line": 30,
+    "end": 70,
+    "page": "ivf_partition_strategy_parameter.md",
+    "anchor": "L30",
+    "sha256": "70b77dd29d33772216fe9d41aca0a476c5bbdfb24722ee13834eb6c08f449c94",
+    "explicit_calls": 19
+  },
+  {
+    "name": "IVFPartitionStrategyParameters::ToJson",
+    "path": "src/algorithm/ivf/ivf_partition_strategy_parameter.cpp",
+    "line": 72,
+    "end": 93,
+    "page": "ivf_partition_strategy_parameter.md",
+    "anchor": "L72",
+    "sha256": "2690a2c0d21210cf7ab31678db53ed06de7c697d461c0aec50c0bd3779204dbf",
+    "explicit_calls": 9
+  },
+  {
+    "name": "IVFPartitionStrategyParameters::CheckCompatibility",
+    "path": "src/algorithm/ivf/ivf_partition_strategy_parameter.cpp",
+    "line": 95,
+    "end": 105,
+    "page": "ivf_partition_strategy_parameter.md",
+    "anchor": "L95",
+    "sha256": "264ce434f09ac38364686309c82fbd8bfaa78e5992009c54bd7a5d0ddb896543",
+    "explicit_calls": 5
+  },
+  {
+    "name": "IVF::KnnSearch",
+    "path": "src/algorithm/ivf/ivf_search.cpp",
+    "line": 51,
+    "end": 66,
+    "page": "ivf_search.md",
+    "anchor": "L51",
+    "sha256": "1eb514cee0cc92f1552a9c01ce98e4e1df253759b801f7d501657bbc29177272",
+    "explicit_calls": 2
+  },
+  {
+    "name": "IVF::RangeSearch",
+    "path": "src/algorithm/ivf/ivf_search.cpp",
+    "line": 68,
+    "end": 84,
+    "page": "ivf_search.md",
+    "anchor": "L68",
+    "sha256": "a8948cc884e84cfd0dbeb12eb73717a18f0972aee261cd1e411aadc722940c56",
+    "explicit_calls": 1
+  },
+  {
+    "name": "IVF::create_search_param",
+    "path": "src/algorithm/ivf/ivf_search.cpp",
+    "line": 86,
+    "end": 108,
+    "page": "ivf_search.md",
+    "anchor": "L86",
+    "sha256": "aa62e6d62287d21e9b15b053f85c263c04e872515032f063999ce4cb9248d991",
+    "explicit_calls": 5
+  },
+  {
+    "name": "IVF::route_buckets_only",
+    "path": "src/algorithm/ivf/ivf_search.cpp",
+    "line": 110,
+    "end": 181,
+    "page": "ivf_search.md",
+    "anchor": "L110",
+    "sha256": "5cf7ee4babdb1cf4cb371a5258bd21acd158bc039ada5dc37c71c638d79f7834",
+    "explicit_calls": 21
+  },
+  {
+    "name": "IVF::reorder",
+    "path": "src/algorithm/ivf/ivf_search.cpp",
+    "line": 183,
+    "end": 196,
+    "page": "ivf_search.md",
+    "anchor": "L183",
+    "sha256": "1fda37a3ab21a84dd3c3aa0990a4b52712fdfef92c71d7eba68bb49e0a009b80",
+    "explicit_calls": 2
+  },
+  {
+    "name": "IVF::search",
+    "path": "src/algorithm/ivf/ivf_search.cpp",
+    "line": 199,
+    "end": 332,
+    "page": "ivf_search.md",
+    "anchor": "L199",
+    "sha256": "c6d771208ab23d518589034caa172d2858ca9a86d73f88b8d364f39928e103b5",
+    "explicit_calls": 43
+  },
+  {
+    "name": "IVF::search_with_custom_distance",
+    "path": "src/algorithm/ivf/ivf_search.cpp",
+    "line": 334,
+    "end": 490,
+    "page": "ivf_search.md",
+    "anchor": "L334",
+    "sha256": "fea2bd3cb6531f23dc25dc5ebdb69ac7a24759e1a3b5e9079a3ef92507e97b8f",
+    "explicit_calls": 62
+  },
+  {
+    "name": "IVF::SearchWithRequest",
+    "path": "src/algorithm/ivf/ivf_search.cpp",
+    "line": 492,
+    "end": 797,
+    "page": "ivf_search.md",
+    "anchor": "L492",
+    "sha256": "1176479c016bdd3782a9eeeb4bcec23aec8dc71015c18fa32b43ac035e6582aa",
+    "explicit_calls": 189
+  },
+  {
+    "name": "IVF::AttachReasoningReport",
+    "path": "src/algorithm/ivf/ivf_search.cpp",
+    "line": 799,
+    "end": 819,
+    "page": "ivf_search.md",
+    "anchor": "L799",
+    "sha256": "0da10567c92cd7a517d6278928b1d06da1adcfe04a74aa5ca41f11311b028c9a",
+    "explicit_calls": 8
+  },
+  {
+    "name": "get_ivf_graph_param",
+    "path": "src/algorithm/ivf/ivf_serialize.cpp",
+    "line": 38,
+    "end": 60,
+    "page": "ivf_serialize.md",
+    "anchor": "L38",
+    "sha256": "07a467f2bd78b5c8ae775b084419db9d42af634dd181b787afa463c091edec11",
+    "explicit_calls": 11
+  },
+  {
+    "name": "serialize_ivf_graph_param",
+    "path": "src/algorithm/ivf/ivf_serialize.cpp",
+    "line": 62,
+    "end": 67,
+    "page": "ivf_serialize.md",
+    "anchor": "L62",
+    "sha256": "7e7c1ce87f7a893856a55782c685e40caba5249999ea5a16b57f16fccadbfbfd",
+    "explicit_calls": 2
+  },
+  {
+    "name": "has_any_fresh_bucket_graph",
+    "path": "src/algorithm/ivf/ivf_serialize.cpp",
+    "line": 69,
+    "end": 79,
+    "page": "ivf_serialize.md",
+    "anchor": "L69",
+    "sha256": "e5ebe0cdc306523069fe75329ac9658e981b50cf689f130897e7a01afe621256",
+    "explicit_calls": 3
+  },
+  {
+    "name": "IVF::Serialize",
+    "path": "src/algorithm/ivf/ivf_serialize.cpp",
+    "line": 88,
+    "end": 154,
+    "page": "ivf_serialize.md",
+    "anchor": "L88",
+    "sha256": "9e07f27b1e8b2f0cfc83453075fec21f2a901f093ea36231127adb2af090a0ad",
+    "explicit_calls": 39
+  },
+  {
+    "name": "IVF::collect_streaming_header",
+    "path": "src/algorithm/ivf/ivf_serialize.cpp",
+    "line": 156,
+    "end": 216,
+    "page": "ivf_serialize.md",
+    "anchor": "L156",
+    "sha256": "2eaa754c7e1106d453368be2b1c652c2ff284c1857e3a8f4224b8957c3a1734c",
+    "explicit_calls": 36
+  },
+  {
+    "name": "IVF::serialize_streaming_body",
+    "path": "src/algorithm/ivf/ivf_serialize.cpp",
+    "line": 218,
+    "end": 277,
+    "page": "ivf_serialize.md",
+    "anchor": "L218",
+    "sha256": "9fa7935e89bea5630ce68faedeee2f01535b015269072efad8f395f3811a4431",
+    "explicit_calls": 30
+  },
+  {
+    "name": "IVF::deserialize_streaming_body",
+    "path": "src/algorithm/ivf/ivf_serialize.cpp",
+    "line": 279,
+    "end": 282,
+    "page": "ivf_serialize.md",
+    "anchor": "L279",
+    "sha256": "96cfb2e139b8b22ffaa4ea975bbe446a0c10a95a0589115f9c811cb3fb90e57b",
+    "explicit_calls": 1
+  },
+  {
+    "name": "IVF::load_streaming_body",
+    "path": "src/algorithm/ivf/ivf_serialize.cpp",
+    "line": 284,
+    "end": 289,
+    "page": "ivf_serialize.md",
+    "anchor": "L284",
+    "sha256": "754fadf7eb814abc0c7ead8303e80412644861e848a38140ef15a87559f60b68",
+    "explicit_calls": 1
+  },
+  {
+    "name": "IVF::read_streaming_body",
+    "path": "src/algorithm/ivf/ivf_serialize.cpp",
+    "line": 291,
+    "end": 519,
+    "page": "ivf_serialize.md",
+    "anchor": "L291",
+    "sha256": "8685cdaddc5ba1fbc6fd4fe0dec7467de93b316949a9e329210c193464b18e6b",
+    "explicit_calls": 85
+  },
+  {
+    "name": "IVF::Deserialize",
+    "path": "src/algorithm/ivf/ivf_serialize.cpp",
+    "line": 526,
+    "end": 661,
+    "page": "ivf_serialize.md",
+    "anchor": "L526",
+    "sha256": "69cc998a10058b7731ee3294fe579661a9be2f379d81c50a9be75ef20ecb82fc",
+    "explicit_calls": 73
+  },
+  {
+    "name": "AdjustBucketReadCacheParam",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 36,
+    "end": 52,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L36",
+    "sha256": "9aeb629a32eb31b8fbe9723f9ed1b1c270133fa52eed62ae7cf8dfc05c342217",
+    "explicit_calls": 5
+  },
+  {
+    "name": "BucketDataCell::ScanBucketById",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 63,
+    "end": 69,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L63",
+    "sha256": "2df190652c50a9f7a6dfe560b2426428dc9671f489e98a6ce82133449de77312",
+    "explicit_calls": 2
+  },
+  {
+    "name": "BucketDataCell::QueryOneById",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 71,
+    "end": 77,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L71",
+    "sha256": "77a7d1f7d598cf1697b4380f88650e644b53c50221b9d1158b1d216065004884",
+    "explicit_calls": 2
+  },
+  {
+    "name": "BucketDataCell::Query",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 82,
+    "end": 96,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L82",
+    "sha256": "5323c69cc0a06c3ac09007a7e702987140070da509fb641110bf0b7b3b836a18",
+    "explicit_calls": 4
+  },
+  {
+    "name": "BucketDataCell::GetInnerIds",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 120,
+    "end": 124,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L120",
+    "sha256": "dd4e04edcc8d2e8b1f6709bbeaf32728e10a817f61a68857ba6c89db61e671dd",
+    "explicit_calls": 2
+  },
+  {
+    "name": "BucketDataCell::Prefetch",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 126,
+    "end": 130,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L126",
+    "sha256": "0fd83194e9240dce5547ff385eadc45d1ad445666432b25ce66b1edec4a3e634",
+    "explicit_calls": 2
+  },
+  {
+    "name": "BucketDataCell::Package",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 132,
+    "end": 137,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L132",
+    "sha256": "9d33668205995442d7611e3e776cc321d3b9b0a077e04c8793a76727b99b61d3",
+    "explicit_calls": 2
+  },
+  {
+    "name": "BucketDataCell::Unpack",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 139,
+    "end": 144,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L139",
+    "sha256": "589d3c679dbf37bc25c62f974a475e44e56882baf5b42bdb59427cb334480178",
+    "explicit_calls": 2
+  },
+  {
+    "name": "BucketDataCell::InitIO",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 158,
+    "end": 168,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L158",
+    "sha256": "ec83d08aee7897a0f6c88993ab597b8e42251bd157d6f0a843fae204575989dc",
+    "explicit_calls": 3
+  },
+  {
+    "name": "BucketDataCell::GetQuantizerName",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 170,
+    "end": 173,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L170",
+    "sha256": "9823575b3293abd0e550bbdaa4421a6778a77f818b1396183349aade5cced4d4",
+    "explicit_calls": 1
+  },
+  {
+    "name": "BucketDataCell::GetMetricType",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 175,
+    "end": 178,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L175",
+    "sha256": "4f057e5d71f23d553cb50b753fb0d0941bfbbf6f38742271558bbc7cc1815f7d",
+    "explicit_calls": 0
+  },
+  {
+    "name": "BucketDataCell::GetBucketSize",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 180,
+    "end": 184,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L180",
+    "sha256": "c882f11da6c390501839df3911398f6efb3bb4955da6f0f1b6f6d6f5bad8d2b3",
+    "explicit_calls": 1
+  },
+  {
+    "name": "BucketDataCell::GetMemoryUsage",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 189,
+    "end": 199,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L189",
+    "sha256": "d5297db27e56acb418895bbc20013b81563a5e5c03aa60a5ab4433c7836ecd5f",
+    "explicit_calls": 3
+  },
+  {
+    "name": "BucketDataCell::init_shared_read_cache_io",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 202,
+    "end": 236,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L202",
+    "sha256": "f6c2a7b6a1ba1b607bbffd2ced14a02de5531b10b9f962d7292669a6df59d11d",
+    "explicit_calls": 9
+  },
+  {
+    "name": "BucketDataCell::get_page_count",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 238,
+    "end": 242,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L238",
+    "sha256": "872321435af175564566494892ac8f49b150fa6d456960a4ee099795d2f4553d",
+    "explicit_calls": 0
+  },
+  {
+    "name": "BucketDataCell::check_valid_bucket_id",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 244,
+    "end": 249,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L244",
+    "sha256": "2352ef3e6389d9b0546922c5cfb4f17615bde87d468067eb6e0914c48496e8cd",
+    "explicit_calls": 1
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::BucketDataCell",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 312,
+    "end": 338,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L312",
+    "sha256": "97322d4d1f42ccc5d5e7d0f3bc5bf10623e30a32f40f95a85207d48ea932b760",
+    "explicit_calls": 4
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::query_one_by_id",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 341,
+    "end": 377,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L341",
+    "sha256": "f21a2c1faf962cb37d433dfdd888861f82396d586533a6cdd460cdae19f31183",
+    "explicit_calls": 14
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::query",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 380,
+    "end": 519,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L380",
+    "sha256": "909da7c03c767c7c8f32445515ad917085fed5e57ef828803b980ca404345f20",
+    "explicit_calls": 49
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::scan_bucket_by_id",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 522,
+    "end": 563,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L522",
+    "sha256": "74c8389cd147596fbd4ecade8fec0d355768cd51fe1732da5c0f2cd7de4a6e1f",
+    "explicit_calls": 15
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::FactoryComputer",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 566,
+    "end": 583,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L566",
+    "sha256": "84604631578f07f99bd1a7671caf3d4c194063a282ccd1b9bac31336b6a644d4",
+    "explicit_calls": 12
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::Train",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 586,
+    "end": 610,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L586",
+    "sha256": "118f1785f966d93ffa20f4fa51c3869b766ba1c6f3b59f93c27162298927b79f",
+    "explicit_calls": 10
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::encode_vector",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 613,
+    "end": 642,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L613",
+    "sha256": "302a0799e1ab7ae4ed29686c6da2bdec9709bd525283d1a95a32b05356b7583d",
+    "explicit_calls": 25
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::check_valid_bucket_capacity",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 645,
+    "end": 657,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L645",
+    "sha256": "3faacc05ecfce0953bc9811fc398480af350180e0b787bf7bac0d5a3ffe89e09",
+    "explicit_calls": 4
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::InsertVector",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 660,
+    "end": 700,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L660",
+    "sha256": "0d7a16c9ad258e6826d7041a4a4e61c953e90cdb677786b6440b7992ec373fda",
+    "explicit_calls": 12
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::BatchInsertVector",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 703,
+    "end": 815,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L703",
+    "sha256": "957ff28264cdee2a216ab13d2ceafd0616166002dd8e4687b0389c9ef8619909",
+    "explicit_calls": 26
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::InsertVectorWithOffset",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 818,
+    "end": 880,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L818",
+    "sha256": "67652b0cd3be744144003cc8e69e56cad8593045ed9806b1b75afe2f109f6a94",
+    "explicit_calls": 17
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::Serialize",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 883,
+    "end": 895,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L883",
+    "sha256": "2c6e76b41aa3f14b39a7e2c27252bd804ed8b6aab202dd77b912eff2b3c72cb2",
+    "explicit_calls": 6
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::Deserialize",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 898,
+    "end": 931,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L898",
+    "sha256": "97c4ed30bf4af6dfd5de340836651b18fc0a2516d160e254a3b8f8de7452a67c",
+    "explicit_calls": 15
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::package_fastscan",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 934,
+    "end": 955,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L934",
+    "sha256": "8fcfdef1e30ea508257727ce870a98b3c7f7902fb38cf60cb953fafbeba8b798",
+    "explicit_calls": 4
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::unpack_fastscan",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 958,
+    "end": 976,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L958",
+    "sha256": "6131a942bcb6cab3e507c1a93753b29bc65535a405a97a7ae84c4497e4009614",
+    "explicit_calls": 4
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::ExportModel",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 979,
+    "end": 991,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L979",
+    "sha256": "73d6035393eca8474808c39d2f9343b6c75166cb84b5ec56469bba2b18a0b432",
+    "explicit_calls": 5
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::MergeOther",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 994,
+    "end": 1014,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L994",
+    "sha256": "cec9aa31ff27511b76ba36646bebe570ca67bfd858e5a7123705fbc465217b66",
+    "explicit_calls": 7
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::GetCodesById",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 1017,
+    "end": 1032,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L1017",
+    "sha256": "64f41968565cb3d08e8d1ab3e894eee6e2822475731207702626089bb44a57f1",
+    "explicit_calls": 5
+  },
+  {
+    "name": "BucketDataCell<QuantTmpl, IOTmpl>::ComputePairVectors",
+    "path": "src/datacell/bucket_datacell.h",
+    "line": 1035,
+    "end": 1075,
+    "page": "bucket_datacell_h.md",
+    "anchor": "L1035",
+    "sha256": "835c19d1960e8d19ae8e5c50a825568629f6519017795abf7d8056d0722c5a1d",
+    "explicit_calls": 12
+  },
+  {
+    "name": "BucketInterface::MakeInstance",
+    "path": "src/datacell/bucket_interface.cpp",
+    "line": 24,
+    "end": 50,
+    "page": "bucket_interface.md",
+    "anchor": "L24",
+    "sha256": "a05bf2b9bd732e9b8c82d52b37c5a16f4028cd5a72c3ebfb45e51aadff6b3193",
+    "explicit_calls": 9
+  },
+  {
+    "name": "BucketReorder::Reorder",
+    "path": "src/impl/reorder/bucket_reorder.cpp",
+    "line": 28,
+    "end": 95,
+    "page": "bucket_reorder.md",
+    "anchor": "L28",
+    "sha256": "df9fbb46848fef2a0ce5bbf2a2851f78c3a5c85513f9c71c900c5607442c38f4",
+    "explicit_calls": 25
+  },
+  {
+    "name": "FlattenReorder::QueryFusedLowerBound",
+    "path": "src/impl/reorder/flatten_reorder.cpp",
+    "line": 34,
+    "end": 75,
+    "page": "flatten_reorder.md",
+    "anchor": "L34",
+    "sha256": "d30a17b06518a6ded36d128813dc08365968dc24cea6023ac9c924ad9e21182a",
+    "explicit_calls": 8
+  },
+  {
+    "name": "FlattenReorder::QueryFusedFullWithHint",
+    "path": "src/impl/reorder/flatten_reorder.cpp",
+    "line": 77,
+    "end": 126,
+    "page": "flatten_reorder.md",
+    "anchor": "L77",
+    "sha256": "312d870cc0585ddd83afbdbc25553bb6d438ae12d3a3f17c812698c8eceff9e5",
+    "explicit_calls": 11
+  },
+  {
+    "name": "add_reorder_distance_count",
+    "path": "src/impl/reorder/flatten_reorder.cpp",
+    "line": 130,
+    "end": 136,
+    "page": "flatten_reorder.md",
+    "anchor": "L130",
+    "sha256": "25ccec9d1aaf25fab6f612554d2f033088c392078bd74fe9cdd16b6a6a1495eb",
+    "explicit_calls": 1
+  },
+  {
+    "name": "add_reorder_candidate_count",
+    "path": "src/impl/reorder/flatten_reorder.cpp",
+    "line": 138,
+    "end": 144,
+    "page": "flatten_reorder.md",
+    "anchor": "L138",
+    "sha256": "5536386af2796a039557bebb49d1ed434251794b379231f65d3651272c474fb2",
+    "explicit_calls": 1
+  },
+  {
+    "name": "add_reorder_lower_bound_probe_count",
+    "path": "src/impl/reorder/flatten_reorder.cpp",
+    "line": 146,
+    "end": 152,
+    "page": "flatten_reorder.md",
+    "anchor": "L146",
+    "sha256": "0e4a08237c6a89b046ab50cbd732466fc5af06162374714d1ede5fd79af928fc",
+    "explicit_calls": 1
+  },
+  {
+    "name": "FlattenReorder::Reorder",
+    "path": "src/impl/reorder/flatten_reorder.cpp",
+    "line": 156,
+    "end": 417,
+    "page": "flatten_reorder.md",
+    "anchor": "L156",
+    "sha256": "c5d600017ff59ddde5348a47539337d926a73c6b859522055993a1acf2888cd6",
+    "explicit_calls": 99
+  },
+  {
+    "name": "FlattenReorder::ReorderFused",
+    "path": "src/impl/reorder/flatten_reorder.cpp",
+    "line": 419,
+    "end": 775,
+    "page": "flatten_reorder.md",
+    "anchor": "L419",
+    "sha256": "56ceca3cec82d61e398448d61a7746d7e28473b0cb049854b8bcc0a2eed0bc13",
+    "explicit_calls": 106
+  },
+  {
+    "name": "ComputerInterface::ComputerInterface",
+    "path": "src/quantization/computer.h",
+    "line": 31,
+    "end": 31,
+    "page": "computer_h.md",
+    "anchor": "L31",
+    "sha256": "3152951d614e206afc3114a807cca6907da0fdf521a6e301c18324038405bdb1",
+    "explicit_calls": 0
+  },
+  {
+    "name": "ComputerInterface::~ComputerInterface",
+    "path": "src/quantization/computer.h",
+    "line": 33,
+    "end": 33,
+    "page": "computer_h.md",
+    "anchor": "L33",
+    "sha256": "08eea72bd759f599a78030062c545c3c9fdbbf372c490da76de3b8ab23695b5d",
+    "explicit_calls": 0
+  },
+  {
+    "name": "Computer::Computer",
+    "path": "src/quantization/computer.h",
+    "line": 39,
+    "end": 40,
+    "page": "computer_h.md",
+    "anchor": "L39",
+    "sha256": "fed43c8d14f2410d08a67d22950078c8ac36f4fe23e38d2786c7cab670d85831",
+    "explicit_calls": 0
+  },
+  {
+    "name": "Computer::~Computer",
+    "path": "src/quantization/computer.h",
+    "line": 42,
+    "end": 46,
+    "page": "computer_h.md",
+    "anchor": "L42",
+    "sha256": "d7872812cd38da6b1f0cb6084e278b786ae2b3201f5de814176c354180e7ccdb",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer::SetQuery",
+    "path": "src/quantization/computer.h",
+    "line": 48,
+    "end": 51,
+    "page": "computer_h.md",
+    "anchor": "L48",
+    "sha256": "cc762b6ee3f69245554919c418eec498e9174995d1e2dc93b46e666973c1c17b",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer::ComputeDist",
+    "path": "src/quantization/computer.h",
+    "line": 53,
+    "end": 56,
+    "page": "computer_h.md",
+    "anchor": "L53",
+    "sha256": "3a8407c7d560d45f1d2b8ffa02b0932c961e3cb5ab0314e8c245320842db1f16",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer::ComputeDistWithThreshold",
+    "path": "src/quantization/computer.h",
+    "line": 58,
+    "end": 61,
+    "page": "computer_h.md",
+    "anchor": "L58",
+    "sha256": "a938187f42fbc316b9e5377e553bb5fb23c1dbb7d0ac075d85f6dcd70a25f180",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer::ComputeDistWithLowerBound",
+    "path": "src/quantization/computer.h",
+    "line": 63,
+    "end": 66,
+    "page": "computer_h.md",
+    "anchor": "L63",
+    "sha256": "2d8039dd66ef8648542c5c2050ec64cc94f9bdf6cc0c5606e8e215b557bae049",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer::ScanBatchDists",
+    "path": "src/quantization/computer.h",
+    "line": 68,
+    "end": 71,
+    "page": "computer_h.md",
+    "anchor": "L68",
+    "sha256": "79c0a09aa9765b5501e2c812c1f141a5329f08ac6abdb7a58d12a1a5fe8f76bd",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer::ScanBatchDistsWithThreshold",
+    "path": "src/quantization/computer.h",
+    "line": 73,
+    "end": 79,
+    "page": "computer_h.md",
+    "anchor": "L73",
+    "sha256": "a4eb63debec465dd9750b50043673e7922b626a91620f4e4008752966d387351",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer::ComputeDistsBatch4",
+    "path": "src/quantization/computer.h",
+    "line": 81,
+    "end": 92,
+    "page": "computer_h.md",
+    "anchor": "L81",
+    "sha256": "06d6df3ce9a89203da4a56994a0bb94f6019d90efadc7dc29ebeb5d02bb9eb02",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer<TransformQuantizer<QuantImpl, metric>>::Computer",
+    "path": "src/quantization/computer.h",
+    "line": 107,
+    "end": 113,
+    "page": "computer_h.md",
+    "anchor": "L107",
+    "sha256": "dbad1291ce701d2d6e15083a199b4bea2b9a3c0278a3ef1100399ff3d4eda35d",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer<TransformQuantizer<QuantImpl, metric>>::~Computer",
+    "path": "src/quantization/computer.h",
+    "line": 115,
+    "end": 120,
+    "page": "computer_h.md",
+    "anchor": "L115",
+    "sha256": "417a55233bc551abbf7ba2a2987cfc52fbb67f500404f28a4f624df106a83bb4",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer<TransformQuantizer<QuantImpl, metric>>::SetQuery",
+    "path": "src/quantization/computer.h",
+    "line": 122,
+    "end": 125,
+    "page": "computer_h.md",
+    "anchor": "L122",
+    "sha256": "cc762b6ee3f69245554919c418eec498e9174995d1e2dc93b46e666973c1c17b",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer<TransformQuantizer<QuantImpl, metric>>::ComputeDist",
+    "path": "src/quantization/computer.h",
+    "line": 127,
+    "end": 130,
+    "page": "computer_h.md",
+    "anchor": "L127",
+    "sha256": "3a8407c7d560d45f1d2b8ffa02b0932c961e3cb5ab0314e8c245320842db1f16",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer<TransformQuantizer<QuantImpl, metric>>::ComputeDistWithThreshold",
+    "path": "src/quantization/computer.h",
+    "line": 132,
+    "end": 135,
+    "page": "computer_h.md",
+    "anchor": "L132",
+    "sha256": "a938187f42fbc316b9e5377e553bb5fb23c1dbb7d0ac075d85f6dcd70a25f180",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer<TransformQuantizer<QuantImpl, metric>>::ComputeDistWithLowerBound",
+    "path": "src/quantization/computer.h",
+    "line": 137,
+    "end": 140,
+    "page": "computer_h.md",
+    "anchor": "L137",
+    "sha256": "2d8039dd66ef8648542c5c2050ec64cc94f9bdf6cc0c5606e8e215b557bae049",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer<TransformQuantizer<QuantImpl, metric>>::ScanBatchDists",
+    "path": "src/quantization/computer.h",
+    "line": 142,
+    "end": 145,
+    "page": "computer_h.md",
+    "anchor": "L142",
+    "sha256": "79c0a09aa9765b5501e2c812c1f141a5329f08ac6abdb7a58d12a1a5fe8f76bd",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer<TransformQuantizer<QuantImpl, metric>>::ScanBatchDistsWithThreshold",
+    "path": "src/quantization/computer.h",
+    "line": 147,
+    "end": 153,
+    "page": "computer_h.md",
+    "anchor": "L147",
+    "sha256": "a4eb63debec465dd9750b50043673e7922b626a91620f4e4008752966d387351",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Computer<TransformQuantizer<QuantImpl, metric>>::ComputeDistsBatch4",
+    "path": "src/quantization/computer.h",
+    "line": 155,
+    "end": 166,
+    "page": "computer_h.md",
+    "anchor": "L155",
+    "sha256": "06d6df3ce9a89203da4a56994a0bb94f6019d90efadc7dc29ebeb5d02bb9eb02",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Quantizer::Quantizer<QuantT>",
+    "path": "src/quantization/quantizer.h",
+    "line": 37,
+    "end": 38,
+    "page": "quantizer_h.md",
+    "anchor": "L37",
+    "sha256": "fb839222921f812c6b5bd5b2fc3fd206766b9f1ba7aa1ad6b99eec44be5e3a03",
+    "explicit_calls": 0
+  },
+  {
+    "name": "Quantizer::~Quantizer",
+    "path": "src/quantization/quantizer.h",
+    "line": 40,
+    "end": 40,
+    "page": "quantizer_h.md",
+    "anchor": "L40",
+    "sha256": "80f86ee661b20706d209ede315eccc868aa7675248d0632017a3a40ca514b3e6",
+    "explicit_calls": 0
+  },
+  {
+    "name": "Quantizer::Train",
+    "path": "src/quantization/quantizer.h",
+    "line": 49,
+    "end": 55,
+    "page": "quantizer_h.md",
+    "anchor": "L49",
+    "sha256": "d2b0f6c7b3b91d804f9f93b9df5b8b7296ba0569238e17d7543cb4e624e00dbc",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::ReTrain",
+    "path": "src/quantization/quantizer.h",
+    "line": 64,
+    "end": 68,
+    "page": "quantizer_h.md",
+    "anchor": "L64",
+    "sha256": "3ece3ab42fb6069a1f2c72a73953030ec47fbf8751df62631c74fb106d180843",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::EncodeOne",
+    "path": "src/quantization/quantizer.h",
+    "line": 77,
+    "end": 80,
+    "page": "quantizer_h.md",
+    "anchor": "L77",
+    "sha256": "db38c845bde3d628e94aa82953d8ed4fedb91593b3b979478b26caa7088ab2ae",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::EncodeBatch",
+    "path": "src/quantization/quantizer.h",
+    "line": 90,
+    "end": 93,
+    "page": "quantizer_h.md",
+    "anchor": "L90",
+    "sha256": "83847dbbbfc194f7256023cb691147a31e85151a689498c7f0f9eda51dd6b4f7",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::EncodeBatchImpl",
+    "path": "src/quantization/quantizer.h",
+    "line": 99,
+    "end": 107,
+    "page": "quantizer_h.md",
+    "anchor": "L99",
+    "sha256": "55094bf40ecccb6eb2edef3274f352a8034e05aa84e7e9ed16fd1852a88e807b",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::DecodeOne",
+    "path": "src/quantization/quantizer.h",
+    "line": 116,
+    "end": 119,
+    "page": "quantizer_h.md",
+    "anchor": "L116",
+    "sha256": "d96f94af3f096cda6df9cb0246021be852685e40065d32ca76ac57e1bf84bf25",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::DecodeBatch",
+    "path": "src/quantization/quantizer.h",
+    "line": 129,
+    "end": 132,
+    "page": "quantizer_h.md",
+    "anchor": "L129",
+    "sha256": "1d7fd87a4f994857395f8ae98c2e1ea0fa537f90e9b8784588385471d719f808",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::DecodeBatchImpl",
+    "path": "src/quantization/quantizer.h",
+    "line": 138,
+    "end": 146,
+    "page": "quantizer_h.md",
+    "anchor": "L138",
+    "sha256": "d77bce0f162c43902d37e17037165db459abb13781af6d33b4fb256a0801279d",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::Compute",
+    "path": "src/quantization/quantizer.h",
+    "line": 156,
+    "end": 159,
+    "page": "quantizer_h.md",
+    "anchor": "L156",
+    "sha256": "8644305dcefb58dd2a75c61b60947328f3039cd0d7496ad6de4859ad9046f57c",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::Serialize",
+    "path": "src/quantization/quantizer.h",
+    "line": 161,
+    "end": 168,
+    "page": "quantizer_h.md",
+    "anchor": "L161",
+    "sha256": "f1937bdcac6820e30e458d6fe12697f643ab47d131a5ba3112b4b230624a1773",
+    "explicit_calls": 6
+  },
+  {
+    "name": "Quantizer::Deserialize",
+    "path": "src/quantization/quantizer.h",
+    "line": 170,
+    "end": 177,
+    "page": "quantizer_h.md",
+    "anchor": "L170",
+    "sha256": "5160e6487d916f61e115a1fb87292a91ec657bc68828a3b6438f2e584fb4936f",
+    "explicit_calls": 6
+  },
+  {
+    "name": "Quantizer::FactoryComputer",
+    "path": "src/quantization/quantizer.h",
+    "line": 179,
+    "end": 182,
+    "page": "quantizer_h.md",
+    "anchor": "L179",
+    "sha256": "df0f075e1a2227d87fd8f2fc2f7a13dfce95f4a040fdf3e802ff70eb7752c463",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Quantizer::ProcessQuery",
+    "path": "src/quantization/quantizer.h",
+    "line": 184,
+    "end": 187,
+    "page": "quantizer_h.md",
+    "anchor": "L184",
+    "sha256": "0f86d071ccfc06610528643429abc25b2b2c2b56c69486ff4b4a5748ea431286",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::ComputeDist",
+    "path": "src/quantization/quantizer.h",
+    "line": 189,
+    "end": 192,
+    "page": "quantizer_h.md",
+    "anchor": "L189",
+    "sha256": "9018e9d6f9684555395567e2b5058ee1043428525e303af84e353ebbcf7f5fa3",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::ComputeDistWithThreshold",
+    "path": "src/quantization/quantizer.h",
+    "line": 194,
+    "end": 205,
+    "page": "quantizer_h.md",
+    "anchor": "L194",
+    "sha256": "c1a2fe013dd1b6534536277c0908f9ffce2d6f68becfdb07e2a2925803fb01f6",
+    "explicit_calls": 4
+  },
+  {
+    "name": "Quantizer::ComputeDistWithLowerBound",
+    "path": "src/quantization/quantizer.h",
+    "line": 207,
+    "end": 221,
+    "page": "quantizer_h.md",
+    "anchor": "L207",
+    "sha256": "1c58bec714731e3f3e31affd9f947a10e983add10723d6f996b7beea4771f24a",
+    "explicit_calls": 5
+  },
+  {
+    "name": "Quantizer::ComputeDist",
+    "path": "src/quantization/quantizer.h",
+    "line": 223,
+    "end": 228,
+    "page": "quantizer_h.md",
+    "anchor": "L223",
+    "sha256": "283081b246570e38882f01d7efce9a168bff602439af1c793e5c89164461a6c7",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::ScanBatchDists",
+    "path": "src/quantization/quantizer.h",
+    "line": 230,
+    "end": 236,
+    "page": "quantizer_h.md",
+    "anchor": "L230",
+    "sha256": "a74d89ea84c0788fde336ba1011c8d2dcf1339fef23ba4596b2907cc2a8d1c85",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::ScanBatchDistsWithThreshold",
+    "path": "src/quantization/quantizer.h",
+    "line": 238,
+    "end": 247,
+    "page": "quantizer_h.md",
+    "anchor": "L238",
+    "sha256": "33f5f97bc43d2a570a5a007e983a8591fd84d9e5e28ced646b0c89fe93fc3613",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Quantizer::ComputeDistsBatch4",
+    "path": "src/quantization/quantizer.h",
+    "line": 249,
+    "end": 268,
+    "page": "quantizer_h.md",
+    "anchor": "L249",
+    "sha256": "969ca9a7f1fca1a3dbf956693e67b1f791b38a09ccbf92cc07fe5a5ef2a29f16",
+    "explicit_calls": 10
+  },
+  {
+    "name": "Quantizer::ReleaseComputer",
+    "path": "src/quantization/quantizer.h",
+    "line": 270,
+    "end": 273,
+    "page": "quantizer_h.md",
+    "anchor": "L270",
+    "sha256": "d8287a3651d6b2261120e18a470b116f490170d5bc8c77540783d71ac3f341c7",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::ReleaseComputerImpl",
+    "path": "src/quantization/quantizer.h",
+    "line": 279,
+    "end": 282,
+    "page": "quantizer_h.md",
+    "anchor": "L279",
+    "sha256": "d03b74a21d4459b219bbcb6b8e02925aefe584b2e9c7577e7fc9274b5e1832b3",
+    "explicit_calls": 1
+  },
+  {
+    "name": "Quantizer::ScanBatchDistImpl",
+    "path": "src/quantization/quantizer.h",
+    "line": 290,
+    "end": 298,
+    "page": "quantizer_h.md",
+    "anchor": "L290",
+    "sha256": "69a0c4c825d9f2feaa6acaa8d01aba21bd48dd377cd536fde02251d768dd5651",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::Name",
+    "path": "src/quantization/quantizer.h",
+    "line": 300,
+    "end": 303,
+    "page": "quantizer_h.md",
+    "anchor": "L300",
+    "sha256": "8afd1787eb830d11cc3a42cdd3a29fec25240a5e735970655a535888214487b9",
+    "explicit_calls": 2
+  },
+  {
+    "name": "Quantizer::Metric",
+    "path": "src/quantization/quantizer.h",
+    "line": 305,
+    "end": 308,
+    "page": "quantizer_h.md",
+    "anchor": "L305",
+    "sha256": "e6e4f1db29ad2eafa99b9d7fac4757472c5ac5d6717a49e3c672b23b9883e119",
+    "explicit_calls": 0
+  },
+  {
+    "name": "Quantizer::HoldMolds",
+    "path": "src/quantization/quantizer.h",
+    "line": 309,
+    "end": 312,
+    "page": "quantizer_h.md",
+    "anchor": "L309",
+    "sha256": "3485f8ccac5c744af30f256bd9aeedbdbf7467411d1058e14966c8a91f4be78d",
+    "explicit_calls": 0
+  },
+  {
+    "name": "Quantizer::GetCodeSize",
+    "path": "src/quantization/quantizer.h",
+    "line": 325,
+    "end": 328,
+    "page": "quantizer_h.md",
+    "anchor": "L325",
+    "sha256": "25573b047bdfab024658a39b1dbef791401a8fc95200196c371813f9e088b93d",
+    "explicit_calls": 0
+  },
+  {
+    "name": "Quantizer::GetQueryCodeSize",
+    "path": "src/quantization/quantizer.h",
+    "line": 330,
+    "end": 333,
+    "page": "quantizer_h.md",
+    "anchor": "L330",
+    "sha256": "a1ab1523971bce157957e96dff5baecac26edac2d34591ae870b9e9f9e14b182",
+    "explicit_calls": 0
+  },
+  {
+    "name": "Quantizer::GetDim",
+    "path": "src/quantization/quantizer.h",
+    "line": 340,
+    "end": 343,
+    "page": "quantizer_h.md",
+    "anchor": "L340",
+    "sha256": "1c723dd990515584fc0b0f31d0314a812cb843d9809829545727cd0236afc9f5",
+    "explicit_calls": 0
+  },
+  {
+    "name": "Quantizer::& cast",
+    "path": "src/quantization/quantizer.h",
+    "line": 346,
+    "end": 349,
+    "page": "quantizer_h.md",
+    "anchor": "L346",
+    "sha256": "01f015546919ec2c8d25b2efbf66670628e1c0f3225311bddc267046ec1e0f67",
+    "explicit_calls": 0
+  },
+  {
+    "name": "Quantizer::& cast",
+    "path": "src/quantization/quantizer.h",
+    "line": 351,
+    "end": 354,
+    "page": "quantizer_h.md",
+    "anchor": "L351",
+    "sha256": "192c0c17817ae2450b3f09d492334a00c84e6b85680db42b091626633d16a9ee",
+    "explicit_calls": 0
+  },
+  {
+    "name": "FP32Quantizer<metric>::FP32Quantizer",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 25,
+    "end": 30,
+    "page": "fp32_quantizer.md",
+    "anchor": "L25",
+    "sha256": "67d4c0f3bd16a598b9c46199edf731421bde35428f808e2b72b57ec973c68ab0",
+    "explicit_calls": 0
+  },
+  {
+    "name": "FP32Quantizer<metric>::FP32Quantizer",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 33,
+    "end": 40,
+    "page": "fp32_quantizer.md",
+    "anchor": "L33",
+    "sha256": "40bab5b965fedab30c35427a1a4363e02406851122a0d2570c8e3e5f79de0fc1",
+    "explicit_calls": 0
+  },
+  {
+    "name": "FP32Quantizer<metric>::FP32Quantizer",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 43,
+    "end": 47,
+    "page": "fp32_quantizer.md",
+    "anchor": "L43",
+    "sha256": "76a71bf70e696d0f3a04b883aace249d593981f7e716e2502e03003d57b352db",
+    "explicit_calls": 0
+  },
+  {
+    "name": "FP32Quantizer<metric>::TrainImpl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 50,
+    "end": 54,
+    "page": "fp32_quantizer.md",
+    "anchor": "L50",
+    "sha256": "40fa6d37da184ac8fd6aac39e41c58b0ca807c30ebc6536b7b25f6264890204e",
+    "explicit_calls": 0
+  },
+  {
+    "name": "FP32Quantizer<metric>::EncodeOneImpl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 57,
+    "end": 73,
+    "page": "fp32_quantizer.md",
+    "anchor": "L57",
+    "sha256": "f58a757db55e3affc837387c6c474d3570c0903444a439ebd13c420b3c743a45",
+    "explicit_calls": 6
+  },
+  {
+    "name": "FP32Quantizer<metric>::EncodeBatchImpl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 76,
+    "end": 82,
+    "page": "fp32_quantizer.md",
+    "anchor": "L76",
+    "sha256": "a452327222b20ab5ea406b0f1f1e5e0dd4b8acf87ef64157f30fbe01885441b3",
+    "explicit_calls": 1
+  },
+  {
+    "name": "FP32Quantizer<metric>::DecodeOneImpl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 85,
+    "end": 89,
+    "page": "fp32_quantizer.md",
+    "anchor": "L85",
+    "sha256": "3f45b8d74ba7a1fd84726d8e8fe1dcb787ceefb6559e404d5196fec733cd3a80",
+    "explicit_calls": 1
+  },
+  {
+    "name": "FP32Quantizer<metric>::DecodeBatchImpl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 92,
+    "end": 102,
+    "page": "fp32_quantizer.md",
+    "anchor": "L92",
+    "sha256": "d18b34b3668357a9f60890caffc5e927dec0c81e8e119db839b52bcc5257ff93",
+    "explicit_calls": 2
+  },
+  {
+    "name": "FP32Quantizer<metric>::ComputeImpl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 105,
+    "end": 129,
+    "page": "fp32_quantizer.md",
+    "anchor": "L105",
+    "sha256": "b7a7d70dee830c125b911b75389f49e015544c39b3e05f3250705f542517e0d8",
+    "explicit_calls": 3
+  },
+  {
+    "name": "FP32Quantizer<metric>::ScanBatchDistImpl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 132,
+    "end": 141,
+    "page": "fp32_quantizer.md",
+    "anchor": "L132",
+    "sha256": "bb7d662a1d0b6066fa754e5a8013b9cd2896339624fdcb68f9f8ef5b5da0477a",
+    "explicit_calls": 1
+  },
+  {
+    "name": "FP32Quantizer<metric>::ProcessQueryImpl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 144,
+    "end": 161,
+    "page": "fp32_quantizer.md",
+    "anchor": "L144",
+    "sha256": "eb78316898b4038fa55564a5b1b95a0f7b57090cb581177b41539508adbe5c43",
+    "explicit_calls": 4
+  },
+  {
+    "name": "FP32Quantizer<metric>::ComputeDistImpl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 164,
+    "end": 188,
+    "page": "fp32_quantizer.md",
+    "anchor": "L164",
+    "sha256": "8a0e9ab67c4975b90f34c2382322acbf1cf73dbc3a35487915353d25fb80a914",
+    "explicit_calls": 3
+  },
+  {
+    "name": "FP32Quantizer<metric>::ComputeDistsBatch4Impl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 191,
+    "end": 258,
+    "page": "fp32_quantizer.md",
+    "anchor": "L191",
+    "sha256": "cb629bd3380c154914d3b7752f6369af32964e5adbcb006ce851d4d9d274367f",
+    "explicit_calls": 3
+  },
+  {
+    "name": "FP32Quantizer<metric>::ReleaseComputerImpl",
+    "path": "src/quantization/fp32_quantizer.cpp",
+    "line": 261,
+    "end": 264,
+    "page": "fp32_quantizer.md",
+    "anchor": "L261",
+    "sha256": "42339abe083b68feefbdf9d5ffae2d68e49a27b16ee5e4af6b2e21d3f58802ba",
+    "explicit_calls": 1
+  },
+  {
+    "name": "KMeansCluster::KMeansCluster",
+    "path": "src/impl/cluster/kmeans_cluster.cpp",
+    "line": 34,
+    "end": 39,
+    "page": "kmeans_cluster.md",
+    "anchor": "L34",
+    "sha256": "98f768a0ecfd58626734ec8432cc8134e54dbad49e64940a29c6f99a42e6fcab",
+    "explicit_calls": 1
+  },
+  {
+    "name": "KMeansCluster::~KMeansCluster",
+    "path": "src/impl/cluster/kmeans_cluster.cpp",
+    "line": 41,
+    "end": 46,
+    "page": "kmeans_cluster.md",
+    "anchor": "L41",
+    "sha256": "c09e92f00e7bc475e0562eff1e232c248c7a714901cf9985897ac7dca0a21ec0",
+    "explicit_calls": 1
+  },
+  {
+    "name": "KMeansCluster::Run",
+    "path": "src/impl/cluster/kmeans_cluster.cpp",
+    "line": 48,
+    "end": 228,
+    "page": "kmeans_cluster.md",
+    "anchor": "L48",
+    "sha256": "938ea487e58e3e6440fa0f38d39be32ea09ddde0982a9f9f0cc1428b96e83a97",
+    "explicit_calls": 51
+  },
+  {
+    "name": "KMeansCluster::find_nearest_one_with_hgraph",
+    "path": "src/impl/cluster/kmeans_cluster.cpp",
+    "line": 230,
+    "end": 288,
+    "page": "kmeans_cluster.md",
+    "anchor": "L230",
+    "sha256": "44e09b1bbede4b7670a829112c3e54939c42c0841701edd9397e9487032253fd",
+    "explicit_calls": 29
+  },
+  {
+    "name": "KMeansCluster::select_initial_centroids_random",
+    "path": "src/impl/cluster/kmeans_cluster.cpp",
+    "line": 290,
+    "end": 303,
+    "page": "kmeans_cluster.md",
+    "anchor": "L290",
+    "sha256": "089a354b72eb95e6975106279adf59fa56d5372364f8d9dae5bb7cfd60011f2a",
+    "explicit_calls": 1
+  },
+  {
+    "name": "KMeansCluster::select_initial_centroids_kmeans_plus_plus",
+    "path": "src/impl/cluster/kmeans_cluster.cpp",
+    "line": 305,
+    "end": 358,
+    "page": "kmeans_cluster.md",
+    "anchor": "L305",
+    "sha256": "8f96e95f18fc0e024d0568e0d9a647d04769a337023e954328b69ebcf5c645d3",
+    "explicit_calls": 5
+  },
+  {
+    "name": "NearestCentroidAssign",
+    "path": "src/impl/cluster/nearest_centroid_assign.cpp",
+    "line": 39,
+    "end": 168,
+    "page": "nearest_centroid_assign.md",
+    "anchor": "L39",
+    "sha256": "3a0dedad7eb4c40bf94ee13a6e6692ff5a7f78b76587357796970f8071fc1774",
+    "explicit_calls": 24
+  },
+  {
+    "name": "DistanceProviderForGraph::~DistanceProviderForGraph",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 33,
+    "end": 33,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L33",
+    "sha256": "25361d3a505a851c472e568b995278058acd4e951b1ee11356207ffa78438e75",
+    "explicit_calls": 0
+  },
+  {
+    "name": "DistanceProviderForGraph::BatchQueryDistance",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 38,
+    "end": 46,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L38",
+    "sha256": "7a0a02ac8ea71c6dc191eac68dc000c481db4be03afb61a39a082a2e174b4a8c",
+    "explicit_calls": 1
+  },
+  {
+    "name": "DistanceProviderForGraph::SupportsComputerById",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 56,
+    "end": 59,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L56",
+    "sha256": "35430a90d8a6531697bdebab953afa0381e6cdddc0a48d36efb8199652f4d9ee",
+    "explicit_calls": 0
+  },
+  {
+    "name": "DistanceProviderForGraph::Prefetch",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 61,
+    "end": 63,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L61",
+    "sha256": "5853de5350904776cc60d07e856a4f4f521db4ba4ff651428910338f59da63de",
+    "explicit_calls": 0
+  },
+  {
+    "name": "DistanceProviderForGraph::OriginalId",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 65,
+    "end": 68,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L65",
+    "sha256": "05edc7aa41d02af5dff3ae4b5bb9828d6c802bf76ec04a835affcd7cf5910bdb",
+    "explicit_calls": 0
+  },
+  {
+    "name": "DistanceProviderForGraph::IsValid",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 70,
+    "end": 73,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L70",
+    "sha256": "ba0e218e8dbdd55e06e02094a49934d0330c7031846771223601282045851f5a",
+    "explicit_calls": 0
+  },
+  {
+    "name": "FlattenDistanceProvider::FlattenDistanceProvider",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 78,
+    "end": 80,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L78",
+    "sha256": "9ff7cba086119089b2353e0f9efd418cd2fb075bd404abf56b0d3a848091f1bf",
+    "explicit_calls": 0
+  },
+  {
+    "name": "FlattenDistanceProvider::QueryDistance",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 82,
+    "end": 87,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L82",
+    "sha256": "63cac808e584642b6d360326827ee35345790d76462374a425f37e766dbbc359",
+    "explicit_calls": 1
+  },
+  {
+    "name": "FlattenDistanceProvider::BatchQueryDistance",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 89,
+    "end": 95,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L89",
+    "sha256": "2328084a0ce4dd892074a0aa8bbce5fda43a78bd9842834cf4633c619004eb52",
+    "explicit_calls": 1
+  },
+  {
+    "name": "FlattenDistanceProvider::PairwiseDistance",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 97,
+    "end": 100,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L97",
+    "sha256": "37cfbc3854516ba944a786f808d2b586d72e6c70625d942c43a778b563a27f63",
+    "explicit_calls": 1
+  },
+  {
+    "name": "FlattenDistanceProvider::FactoryComputerById",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 102,
+    "end": 106,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L102",
+    "sha256": "5c4e1b4e6f786f4c9363e18a840fb467930a88016092e3d2d5f4f2477d59bda9",
+    "explicit_calls": 1
+  },
+  {
+    "name": "FlattenDistanceProvider::Prefetch",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 108,
+    "end": 111,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L108",
+    "sha256": "07eae214d1d62a897a293bcc40ab617fbf12732dc10068d2b1704967b2e4f8c7",
+    "explicit_calls": 1
+  },
+  {
+    "name": "FlattenIdDistanceProvider::FlattenIdDistanceProvider",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 120,
+    "end": 122,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L120",
+    "sha256": "670cd1731a46880d02431fe49baf309b864f15ca1bb92b23f0aa56a334788528",
+    "explicit_calls": 0
+  },
+  {
+    "name": "BucketDistanceProvider::SupportsComputerById",
+    "path": "src/impl/distance_provider_for_graph.h",
+    "line": 184,
+    "end": 187,
+    "page": "distance_provider_for_graph_h.md",
+    "anchor": "L184",
+    "sha256": "e09fa48e6234e2edebcba28d384341360c42fd13362f42fa3e900ec1b12b1cef",
+    "explicit_calls": 0
+  },
+  {
+    "name": "BasicSearcher::BasicSearcher",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 35,
+    "end": 37,
+    "page": "basic_searcher.md",
+    "anchor": "L35",
+    "sha256": "ad8a84cfcca6141ce8e43bcdf27040ddc4122642dde59114b71d5bdbafb8c59d",
+    "explicit_calls": 0
+  },
+  {
+    "name": "BasicSearcher::BasicSearcher",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 39,
+    "end": 41,
+    "page": "basic_searcher.md",
+    "anchor": "L39",
+    "sha256": "5b822a94793ae8a3bf9cbd7cc96c15fed97476231d1487a08683eb016123cbfe",
+    "explicit_calls": 0
+  },
+  {
+    "name": "BasicSearcher::visit",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 43,
+    "end": 74,
+    "page": "basic_searcher.md",
+    "anchor": "L43",
+    "sha256": "04ee0bacb85b6b18750fc1d34a77da3b1ca99e6a6355be380aad5ed4b768a1a2",
+    "explicit_calls": 9
+  },
+  {
+    "name": "BasicSearcher::Search",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 76,
+    "end": 105,
+    "page": "basic_searcher.md",
+    "anchor": "L76",
+    "sha256": "2aaba1d42ce0c9fc0db2052636fbabf1c1cfd78b53e181e84396e7d21c34c80b",
+    "explicit_calls": 2
+  },
+  {
+    "name": "BasicSearcher::SearchWithPresetComputer",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 107,
+    "end": 137,
+    "page": "basic_searcher.md",
+    "anchor": "L107",
+    "sha256": "a2b61b713b0fc529c60bcefc5acef9d172aa43c077d89d1a933d36b0e8cc7db9",
+    "explicit_calls": 2
+  },
+  {
+    "name": "BasicSearcher::Search",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 139,
+    "end": 156,
+    "page": "basic_searcher.md",
+    "anchor": "L139",
+    "sha256": "ad1fd1c25beda4c9cd34e64ee29a58161a3a09eec9f7267642b5d4f7c6dae77d",
+    "explicit_calls": 1
+  },
+  {
+    "name": "BasicSearcher::Search",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 158,
+    "end": 171,
+    "page": "basic_searcher.md",
+    "anchor": "L158",
+    "sha256": "8331b0d32ab00689439a3f631acd83a7b0603fef40df1c2de839044aa1835199",
+    "explicit_calls": 2
+  },
+  {
+    "name": "BasicSearcher::search_impl",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 174,
+    "end": 319,
+    "page": "basic_searcher.md",
+    "anchor": "L174",
+    "sha256": "f028c691dae624cecc4222ffc8bc8feb4bdfbb564639485e6dae77b8ea8bcf5a",
+    "explicit_calls": 79
+  },
+  {
+    "name": "BasicSearcher::search_impl",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 322,
+    "end": 548,
+    "page": "basic_searcher.md",
+    "anchor": "L322",
+    "sha256": "3f4d00f64a0ba5e4349b9c3a4519dff7aafc56727dd5314215e2d104198b70c1",
+    "explicit_calls": 102
+  },
+  {
+    "name": "BasicSearcher::search_impl",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 551,
+    "end": 936,
+    "page": "basic_searcher.md",
+    "anchor": "L551",
+    "sha256": "aa98c1678310c717415069215a4a28ff1fd6369546f1a7f659a8551ad6a65ce9",
+    "explicit_calls": 146
+  },
+  {
+    "name": "BasicSearcher::SetRuntimeParameters",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 938,
+    "end": 949,
+    "page": "basic_searcher.md",
+    "anchor": "L938",
+    "sha256": "7e23b2f0b0050c3da6f6232d7c55bad0fe347614d11c93e4df3fd3bf49b38b75",
+    "explicit_calls": 3
+  },
+  {
+    "name": "BasicSearcher::SetMockParameters",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 951,
+    "end": 964,
+    "page": "basic_searcher.md",
+    "anchor": "L951",
+    "sha256": "f19ebfe4f7055400c53c141be81e9f14055667fd8288ecd1e67a98f4b7788eb9",
+    "explicit_calls": 0
+  },
+  {
+    "name": "BasicSearcher::MockRun",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 966,
+    "end": 995,
+    "page": "basic_searcher.md",
+    "anchor": "L966",
+    "sha256": "797139cd60a7544be9ead91e09a1bf51a3c1360a673c84361a33078be0f65dc0",
+    "explicit_calls": 15
+  },
+  {
+    "name": "BasicSearcher::SetMutexArray",
+    "path": "src/impl/searcher/basic_searcher.cpp",
+    "line": 997,
+    "end": 1001,
+    "page": "basic_searcher.md",
+    "anchor": "L997",
+    "sha256": "9a368397705e561d7c58971b6e4d7b5f41ba9f0590f30d6da9e88680fe8cc0b9",
+    "explicit_calls": 2
+  },
+  {
+    "name": "InnerIndexInterface::create_search_filter",
+    "path": "src/algorithm/inner_index_interface.cpp",
+    "line": 1108,
+    "end": 1138,
+    "page": "inner_index_interface.md",
+    "anchor": "L1108",
+    "sha256": "32e7e1725a14aca59ad80dcda583f703ecdfc6fbe05e941e90241d0009b16d6e",
+    "explicit_calls": 6
+  },
+  {
+    "name": "InnerIndexInterface::pack_knn_result",
+    "path": "src/algorithm/inner_index_interface.cpp",
+    "line": 1140,
+    "end": 1154,
+    "page": "inner_index_interface.md",
+    "anchor": "L1140",
+    "sha256": "8ba2d750dc18ffed72e3f791031c2ea46b02daccb730c98d07097c7048b34bb3",
+    "explicit_calls": 9
+  },
+  {
+    "name": "InnerIndexInterface::filter_search_result_by_threshold",
+    "path": "src/algorithm/inner_index_interface.cpp",
+    "line": 1156,
+    "end": 1175,
+    "page": "inner_index_interface.md",
+    "anchor": "L1156",
+    "sha256": "9a69c8bf7a33567f607eb414db623dc6d04981d2a998526d466da0f318f246dd",
+    "explicit_calls": 10
+  },
+  {
+    "name": "IndexImpl::Build",
+    "path": "src/index/index_impl.h",
+    "line": 94,
+    "end": 99,
+    "page": "index_impl_h.md",
+    "anchor": "L94",
+    "sha256": "7760c1597c7db7f7a1df9465f7c8dbe0d07e9e639f1e7d73082ae45f30802831",
+    "explicit_calls": 2
+  },
+  {
+    "name": "IndexImpl::KnnSearch",
+    "path": "src/index/index_impl.h",
+    "line": 308,
+    "end": 322,
+    "page": "index_impl_h.md",
+    "anchor": "L308",
+    "sha256": "fabc8ad2a8023967b9a90b7ec71004a072eedbdd04e4074d846d7f7d3ff816cd",
+    "explicit_calls": 8
+  },
+  {
+    "name": "IndexImpl::KnnSearch",
+    "path": "src/index/index_impl.h",
+    "line": 324,
+    "end": 338,
+    "page": "index_impl_h.md",
+    "anchor": "L324",
+    "sha256": "ca0511a7a79dce1f07b3d78da45c464c7f16e91607a91477522b785b11601fdc",
+    "explicit_calls": 8
+  },
+  {
+    "name": "IndexImpl::KnnSearch",
+    "path": "src/index/index_impl.h",
+    "line": 340,
+    "end": 354,
+    "page": "index_impl_h.md",
+    "anchor": "L340",
+    "sha256": "002044111dea317681ad36c63288129ca3c96724afa26a3f2b1246a85afc2f6f",
+    "explicit_calls": 8
+  },
+  {
+    "name": "IndexImpl::KnnSearch",
+    "path": "src/index/index_impl.h",
+    "line": 356,
+    "end": 622,
+    "page": "index_impl_h.md",
+    "anchor": "L356",
+    "sha256": "4b4f076b0574004e416955562a87e7b4d98b10182d66f8faafa1ddddb136b34a",
+    "explicit_calls": 102
+  },
+  {
+    "name": "IndexImpl::KnnSearch",
+    "path": "src/index/index_impl.h",
+    "line": 380,
+    "end": 397,
+    "page": "index_impl_h.md",
+    "anchor": "L380",
+    "sha256": "16cbfd686e8519057986f435efd5d5871fdd5682b1b7882c5944f542911dd37a",
+    "explicit_calls": 8
+  },
+  {
+    "name": "IndexImpl::SearchWithRequest",
+    "path": "src/index/index_impl.h",
+    "line": 505,
+    "end": 564,
+    "page": "index_impl_h.md",
+    "anchor": "L505",
+    "sha256": "f2cbcc0c00c92d99194e4c91cd7cdf2cf8236b00f6ce428bf192a41634967015",
+    "explicit_calls": 39
+  },
+  {
+    "name": "select_k_numbers",
+    "path": "src/utils/util_functions.cpp",
+    "line": 43,
+    "end": 60,
+    "page": "util_functions.md",
+    "anchor": "L43",
+    "sha256": "a868afcd1c123be0a673dc12d1afa958233947376bd96b4d0ce5cdbed1db5f24",
+    "explicit_calls": 7
+  },
+  {
+    "name": "sample_train_data",
+    "path": "src/utils/util_functions.cpp",
+    "line": 234,
+    "end": 307,
+    "page": "util_functions.md",
+    "anchor": "L234",
+    "sha256": "1509a5c75e705854b0e6881e9902e38804aa28f380dc00b4b0a1fd5809096412",
+    "explicit_calls": 36
+  },
+  {
+    "name": "PairwiseDistanceComputer::PairwiseDistanceComputer",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 29,
+    "end": 32,
+    "page": "pruning_strategy.md",
+    "anchor": "L29",
+    "sha256": "d95b47aaddddbb3e61984182f84cdf76fb8e5b52a409c0a0e73a8e15f25ad8d2",
+    "explicit_calls": 0
+  },
+  {
+    "name": "PairwiseDistanceComputer::PairwiseDistanceComputer",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 34,
+    "end": 34,
+    "page": "pruning_strategy.md",
+    "anchor": "L34",
+    "sha256": "68dcd12a0ebd9935d8a61bd1a43104728e71016159f956fad1015afd27a4bf97",
+    "explicit_calls": 0
+  },
+  {
+    "name": "PairwiseDistanceComputer::& operator=",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 35,
+    "end": 36,
+    "page": "pruning_strategy.md",
+    "anchor": "L35",
+    "sha256": "a6ec5d276ee898bd7a8c39e75686bfa09cd40347339534951ae6741fb41d559f",
+    "explicit_calls": 0
+  },
+  {
+    "name": "PairwiseDistanceComputer::PairwiseDistanceComputer",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 37,
+    "end": 37,
+    "page": "pruning_strategy.md",
+    "anchor": "L37",
+    "sha256": "c7e10e0e0643507d3dcedc70795999aa0246980a1f1cf164b43061785f54a4d3",
+    "explicit_calls": 0
+  },
+  {
+    "name": "PairwiseDistanceComputer::& operator=",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 38,
+    "end": 39,
+    "page": "pruning_strategy.md",
+    "anchor": "L38",
+    "sha256": "de34c16832a1daf8781cdaae3c5806d9007cdd8e72d74be9e006481b9e86f537",
+    "explicit_calls": 0
+  },
+  {
+    "name": "PairwiseDistanceComputer::PairwiseDistance",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 41,
+    "end": 51,
+    "page": "pruning_strategy.md",
+    "anchor": "L41",
+    "sha256": "980d4e06c4e1ddb4c17be7bf890a9927ab78ad62f1321ab64c8c7b775e4b5247",
+    "explicit_calls": 4
+  },
+  {
+    "name": "select_edges_by_heuristic",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 61,
+    "end": 82,
+    "page": "pruning_strategy.md",
+    "anchor": "L61",
+    "sha256": "94be007877e3372fda1df1d073f26f5d27fe91f8c3f72fb2a9742f1b3205524b",
+    "explicit_calls": 9
+  },
+  {
+    "name": "select_edges_by_heuristic",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 84,
+    "end": 127,
+    "page": "pruning_strategy.md",
+    "anchor": "L84",
+    "sha256": "b6cc2a48926ea2e91f0ae511a44c30496dac98d6970ae53a2a6620bf8b618394",
+    "explicit_calls": 14
+  },
+  {
+    "name": "mutually_connect_new_element",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 129,
+    "end": 203,
+    "page": "pruning_strategy.md",
+    "anchor": "L129",
+    "sha256": "717c2fd6466879d3830573efa64346981e2c86323b2491ec7da278ef87ad3a4e",
+    "explicit_calls": 28
+  },
+  {
+    "name": "select_edges_by_heuristic",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 205,
+    "end": 214,
+    "page": "pruning_strategy.md",
+    "anchor": "L205",
+    "sha256": "2c5c63e3e4e9a0105e48d7d53a50bdac39daf144f00ad381436c5bfb4fcd62ac",
+    "explicit_calls": 1
+  },
+  {
+    "name": "select_edges_by_heuristic",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 216,
+    "end": 224,
+    "page": "pruning_strategy.md",
+    "anchor": "L216",
+    "sha256": "8f346f0a5c6e1112d566adcde6ac6150eff4971f92b2b144bf6ff3935a41ae05",
+    "explicit_calls": 1
+  },
+  {
+    "name": "mutually_connect_new_element",
+    "path": "src/impl/pruning_strategy.cpp",
+    "line": 226,
+    "end": 237,
+    "page": "pruning_strategy.md",
+    "anchor": "L226",
+    "sha256": "680939323d27bff7e8130a6c8a6126107ae864037a745a27dc0aad6d3cca8151",
+    "explicit_calls": 1
+  },
+  {
+    "name": "LabelTable::TryGetIdByLabel",
+    "path": "src/impl/label_table/label_table.cpp",
+    "line": 96,
+    "end": 114,
+    "page": "label_table.md",
+    "anchor": "L96",
+    "sha256": "9d9c220c9bc32889a96c2afe29fb46b80ef7ce85bd66cdd501a3dea189d90c10",
+    "explicit_calls": 3
+  },
+  {
+    "name": "LabelTable::GetIdByLabel",
+    "path": "src/impl/label_table/label_table.cpp",
+    "line": 116,
+    "end": 124,
+    "page": "label_table.md",
+    "anchor": "L116",
+    "sha256": "04114548eb70036b17cbaf58e9b0db0a88eb304ba02b1632696e5ead57b135f6",
+    "explicit_calls": 3
+  },
+  {
+    "name": "LabelTable::MarkRemove",
+    "path": "src/impl/label_table/label_table.cpp",
+    "line": 126,
+    "end": 149,
+    "page": "label_table.md",
+    "anchor": "L126",
+    "sha256": "759b4245382fc345125e5847f494617cb94ea7abd69216adf375b44c9a59bcfa",
+    "explicit_calls": 6
+  },
+  {
+    "name": "InnerIdWrapperFilter::InnerIdWrapperFilter",
+    "path": "src/impl/filter/inner_id_wrapper_filter.h",
+    "line": 25,
+    "end": 26,
+    "page": "inner_id_wrapper_filter_h.md",
+    "anchor": "L25",
+    "sha256": "9b35491b95720d5bed2e4dcad07ce3e200a53a05876273fdb9ca7afe5fff126a",
+    "explicit_calls": 0
+  },
+  {
+    "name": "InnerIdWrapperFilter::CheckValid",
+    "path": "src/impl/filter/inner_id_wrapper_filter.h",
+    "line": 28,
+    "end": 31,
+    "page": "inner_id_wrapper_filter_h.md",
+    "anchor": "L28",
+    "sha256": "d7d2effa8a0fecc3e5cd4508b3bdb0aa315fa3530f13cfb77fc17c022d45bca3",
+    "explicit_calls": 2
+  },
+  {
+    "name": "InnerIdWrapperFilter::ValidRatio",
+    "path": "src/impl/filter/inner_id_wrapper_filter.h",
+    "line": 33,
+    "end": 36,
+    "page": "inner_id_wrapper_filter_h.md",
+    "anchor": "L33",
+    "sha256": "55959a17a252afede2ac49f02066fbce741a3b3bb666061f170734064a3564f9",
+    "explicit_calls": 1
+  },
+  {
+    "name": "InnerIdWrapperFilter::FilterDistribution",
+    "path": "src/impl/filter/inner_id_wrapper_filter.h",
+    "line": 38,
+    "end": 41,
+    "page": "inner_id_wrapper_filter_h.md",
+    "anchor": "L38",
+    "sha256": "29b8eec03cdb1d44d0028399c610717ed923a1298bdd631587bb0fe11185cb0f",
+    "explicit_calls": 1
+  },
+  {
+    "name": "InnerIdWrapperFilter::GetValidIds",
+    "path": "src/impl/filter/inner_id_wrapper_filter.h",
+    "line": 43,
+    "end": 46,
+    "page": "inner_id_wrapper_filter_h.md",
+    "anchor": "L43",
+    "sha256": "fa5ef0f7ef1682f032f41f6a51b7a35c69baa77660da5ca3e578974d5b85bff5",
+    "explicit_calls": 1
+  },
+  {
+    "name": "CombinedFilter::CombinedFilter",
+    "path": "src/impl/filter/combined_filter.h",
+    "line": 25,
+    "end": 25,
+    "page": "combined_filter_h.md",
+    "anchor": "L25",
+    "sha256": "9716ee009aaa15f23e4c31826b695380f2b2b0f2276e399e5ffcd3ee38dc317c",
+    "explicit_calls": 0
+  },
+  {
+    "name": "CombinedFilter::~CombinedFilter",
+    "path": "src/impl/filter/combined_filter.h",
+    "line": 27,
+    "end": 27,
+    "page": "combined_filter_h.md",
+    "anchor": "L27",
+    "sha256": "ed2e54413fdb2c9e480f3bea679c31be1e07a87d461e6051af63d32aaf784760",
+    "explicit_calls": 0
+  },
+  {
+    "name": "CombinedFilter::AppendFilter",
+    "path": "src/impl/filter/combined_filter.h",
+    "line": 29,
+    "end": 35,
+    "page": "combined_filter_h.md",
+    "anchor": "L29",
+    "sha256": "4ac7979d7d15d124f1a72b7749757e211623bd53d59bc5e9fc476af595aecadd",
+    "explicit_calls": 1
+  },
+  {
+    "name": "CombinedFilter::CheckValid",
+    "path": "src/impl/filter/combined_filter.h",
+    "line": 37,
+    "end": 45,
+    "page": "combined_filter_h.md",
+    "anchor": "L37",
+    "sha256": "703fa4863a30a448ce358ae212f8e3dcf2159605a05245d60f2d45a9944d71a3",
+    "explicit_calls": 1
+  },
+  {
+    "name": "CombinedFilter::ValidRatio",
+    "path": "src/impl/filter/combined_filter.h",
+    "line": 47,
+    "end": 54,
+    "page": "combined_filter_h.md",
+    "anchor": "L47",
+    "sha256": "dc212c703457700acf539566967c6a1cfbfe2f9f909a6d846d673607da11e26e",
+    "explicit_calls": 1
+  },
+  {
+    "name": "CombinedFilter::IsEmpty",
+    "path": "src/impl/filter/combined_filter.h",
+    "line": 56,
+    "end": 59,
+    "page": "combined_filter_h.md",
+    "anchor": "L56",
+    "sha256": "4bd64260c642762c8dd7b070cf38dac5d048777aef6b52219830cd11cccc6d9e",
+    "explicit_calls": 1
+  }
+]
