@@ -66,6 +66,16 @@ Dataset::GetInt64Metadata(const std::string& name) const {
     return nullptr;
 }
 
+DatasetPtr
+Dataset::ClearStringMetadata(const std::string& name) {
+    auto* dataset = dynamic_cast<DatasetImpl*>(this);
+    if (dataset == nullptr) {
+        throw VsagException(ErrorType::UNSUPPORTED_INDEX_OPERATION,
+                            "This Dataset implementation cannot clear string metadata");
+    }
+    return dataset->ClearStringMetadata(name);
+}
+
 bool
 Dataset::GetPaths(const std::string& hierarchy_name,
                   std::vector<std::vector<std::string>>& paths) const {
@@ -580,8 +590,6 @@ DatasetImpl::~DatasetImpl() {  // NOLINT
             if (const auto* paths = std::get_if<const std::string*>(&value)) {
                 release_strings(*paths);
             }
-        } else if (IsStringMetadataKey(key)) {
-            release_strings(std::get<const std::string*>(value));
         }
     }
     for (const auto* paths : retired_paths_) {
@@ -686,11 +694,9 @@ DatasetImpl::DeepCopy(Allocator* allocator) const {
         }
     }
     for (const auto& [key, value] : this->data_) {
-        const auto* values = std::get_if<const std::string*>(&value);
-        if (IsStringMetadataKey(key) and values != nullptr and *values != nullptr) {
-            copy_dataset->StringMetadata(
-                StringMetadataNameFromKey(key),
-                allocate_and_copy_strings(*values, static_cast<uint64_t>(num_elements)));
+        if (IsStringMetadataKey(key)) {
+            copy_dataset->StringMetadata(StringMetadataNameFromKey(key),
+                                         std::get<std::vector<std::string>>(value));
         }
     }
 
@@ -804,7 +810,7 @@ DatasetImpl::Append(const DatasetPtr& other) {
 
     std::vector<std::string> string_metadata_keys;
     for (const auto& [key, value] : this->data_) {
-        if (not IsStringMetadataKey(key) || std::get<const std::string*>(value) == nullptr) {
+        if (not IsStringMetadataKey(key)) {
             continue;
         }
         const auto name = StringMetadataNameFromKey(key);
@@ -816,7 +822,7 @@ DatasetImpl::Append(const DatasetPtr& other) {
     }
     if (other_impl != nullptr) {
         for (const auto& [key, value] : other_impl->data_) {
-            if (not IsStringMetadataKey(key) || std::get<const std::string*>(value) == nullptr) {
+            if (not IsStringMetadataKey(key)) {
                 continue;
             }
             const auto name = StringMetadataNameFromKey(key);
@@ -1067,11 +1073,10 @@ DatasetImpl::Append(const DatasetPtr& other) {
         }
     }
     for (const auto& key : string_metadata_keys) {
-        auto iter = this->data_.find(key);
-        const auto name = StringMetadataNameFromKey(key);
-        this->StringMetadata(name,
-                             append_strings(std::get<const std::string*>(iter->second),
-                                            other->GetStringMetadata(name)));
+        auto values = *GetStringMetadata(StringMetadataNameFromKey(key));
+        const auto* added = other->GetStringMetadata(StringMetadataNameFromKey(key));
+        values.insert(values.end(), added->begin(), added->end());
+        data_[key] = std::move(values);
     }
 
     // append source-id

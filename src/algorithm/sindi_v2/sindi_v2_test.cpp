@@ -316,7 +316,7 @@ TEST_CASE("SINDIV2 immutable host filter routes", "[ut][SINDIV2][host_filter]") 
                     ->NumElements(vectors.size())
                     ->SparseVectors(vectors.data())
                     ->Ids(labels.data())
-                    ->StringMetadata("host", hosts.data())
+                    ->StringMetadata("host", std::vector<std::string>(hosts.begin(), hosts.end()))
                     ->Owner(false);
 
     auto parameter = std::make_shared<SINDIV2Parameter>();
@@ -335,7 +335,7 @@ TEST_CASE("SINDIV2 immutable host filter routes", "[ut][SINDIV2][host_filter]") 
     auto query = Dataset::Make()
                      ->NumElements(1)
                      ->SparseVectors(&query_vector)
-                     ->StringMetadata("host", &query_host)
+                     ->StringMetadata("host", {query_host})
                      ->Owner(false);
     const std::string search_parameters = R"({"sindi_v2": {"n_candidate": 3}})";
 
@@ -346,13 +346,17 @@ TEST_CASE("SINDIV2 immutable host filter routes", "[ut][SINDIV2][host_filter]") 
                 ->GetDim() == 0);
 
     query_host = "sparse.example";
+
+    query->StringMetadata("host", {query_host});
     auto window_result = index.KnnSearch(query, 2, search_parameters, nullptr);
     REQUIRE(window_result->GetDim() == 2);
     REQUIRE(window_result->GetIds()[0] == 10);
     REQUIRE(window_result->GetIds()[1] == 20);
     query_host = "";
+    query->StringMetadata("host", {query_host});
     REQUIRE(index.KnnSearch(query, 2, search_parameters, nullptr)->GetDim() == 0);
     query_host = "unknown.example";
+    query->StringMetadata("host", {query_host});
     REQUIRE(index.KnnSearch(query, 2, search_parameters, nullptr)->GetDim() == 0);
 }
 
@@ -407,7 +411,8 @@ TEST_CASE("SINDIV2 host filter supports mutable immutable and reorder modes",
                         ->NumElements(vectors.size())
                         ->SparseVectors(vectors.data())
                         ->Ids(labels.data())
-                        ->StringMetadata("host", hosts.data())
+                        ->StringMetadata("host",
+                        std::vector<std::string>(hosts.begin(), hosts.end()))
                         ->Owner(false);
 
         auto parameter = std::make_shared<SINDIV2Parameter>();
@@ -426,7 +431,7 @@ TEST_CASE("SINDIV2 host filter supports mutable immutable and reorder modes",
         auto query = Dataset::Make()
                          ->NumElements(1)
                          ->SparseVectors(&query_vector)
-                         ->StringMetadata("host", &query_host)
+                         ->StringMetadata("host", {query_host})
                          ->Owner(false);
         const std::string search_parameters = R"({"sindi_v2": {"n_candidate": 3}})";
         auto result = index.KnnSearch(query, 2, search_parameters, nullptr);
@@ -445,6 +450,8 @@ TEST_CASE("SINDIV2 host filter supports mutable immutable and reorder modes",
         query_vector.ids_ = &term;
 
         query_host = "host-b";
+
+        query->StringMetadata("host", {query_host});
         result = index.KnnSearch(query, 2, search_parameters, nullptr);
         REQUIRE(result->GetDim() == 2);
         REQUIRE(result->GetIds()[0] == 10);
@@ -466,10 +473,12 @@ TEST_CASE("SINDIV2 host filter supports mutable immutable and reorder modes",
                              ->NumElements(added_vectors.size())
                              ->SparseVectors(added_vectors.data())
                              ->Ids(added_labels.data())
-                             ->StringMetadata("host", added_hosts.data())
+                             ->StringMetadata("host",
+                        std::vector<std::string>(added_hosts.begin(), added_hosts.end()))
                              ->Owner(false);
             REQUIRE(index.Add(added).empty());
             query_host = "";
+            query->StringMetadata("host", {query_host});
             result = index.KnnSearch(query, 2, search_parameters, nullptr);
             REQUIRE(result->GetDim() == 2);
             REQUIRE(result->GetIds()[0] == 50);
@@ -485,7 +494,9 @@ TEST_CASE("SINDIV2 host filter supports mutable immutable and reorder modes",
                                     ->NumElements(second_added_vectors.size())
                                     ->SparseVectors(second_added_vectors.data())
                                     ->Ids(second_added_labels.data())
-                                    ->StringMetadata("host", second_added_hosts.data())
+                                    ->StringMetadata("host",
+                        std::vector<std::string>(second_added_hosts.begin(),
+                                                 second_added_hosts.end()))
                                     ->Owner(false);
             REQUIRE(index.Add(second_added).empty());
             result = index.KnnSearch(query, 3, search_parameters, nullptr);
@@ -532,7 +543,7 @@ TEST_CASE("SINDIV2 legacy deserialize clears host metadata",
     auto query = Dataset::Make()
                      ->NumElements(1)
                      ->SparseVectors(&query_vector)
-                     ->StringMetadata("host", &query_host)
+                     ->StringMetadata("host", {query_host})
                      ->Owner(false);
     const std::string search_parameters = R"({"sindi_v2": {"n_candidate": 3}})";
     auto expected = legacy_source.KnnSearch(query, 3, search_parameters, nullptr);
@@ -544,7 +555,8 @@ TEST_CASE("SINDIV2 legacy deserialize clears host metadata",
 
     std::array<std::string, 3> hosts{"host-a", "host-b", "host-a"};
     SINDIV2 restored(parameter, common_param);
-    REQUIRE(restored.Build(base->StringMetadata("host", hosts.data())).empty());
+    REQUIRE(restored.Build(base->StringMetadata("host",
+                        std::vector<std::string>(hosts.begin(), hosts.end()))).empty());
     REQUIRE(restored.KnnSearch(query, 3, search_parameters, nullptr)->GetDim() == 0);
 
     legacy_stream.seekg(0, std::ios::beg);
@@ -580,7 +592,8 @@ TEST_CASE("SINDIV2 host serialization supports mutable and immutable",
                         ->NumElements(vectors.size())
                         ->SparseVectors(vectors.data())
                         ->Ids(labels.data())
-                        ->StringMetadata("host", hosts.data())
+                        ->StringMetadata("host",
+                        std::vector<std::string>(hosts.begin(), hosts.end()))
                         ->Owner(false);
 
         auto parameter = std::make_shared<SINDIV2Parameter>();
@@ -602,7 +615,8 @@ TEST_CASE("SINDIV2 host serialization supports mutable and immutable",
                              ->NumElements(added_vectors.size())
                              ->SparseVectors(added_vectors.data())
                              ->Ids(added_labels.data())
-                             ->StringMetadata("host", added_hosts.data())
+                             ->StringMetadata("host",
+                        std::vector<std::string>(added_hosts.begin(), added_hosts.end()))
                              ->Owner(false);
             REQUIRE(index.Add(added).empty());
         }
@@ -613,7 +627,7 @@ TEST_CASE("SINDIV2 host serialization supports mutable and immutable",
         auto query = Dataset::Make()
                          ->NumElements(1)
                          ->SparseVectors(&query_vector)
-                         ->StringMetadata("host", &query_host)
+                         ->StringMetadata("host", {query_host})
                          ->Owner(false);
         const std::string search_parameters = R"({"sindi_v2": {"n_candidate": 4}})";
         auto expected = index.KnnSearch(query, 4, search_parameters, nullptr);
@@ -665,10 +679,11 @@ TEST_CASE("SINDIV2 host serialization supports mutable and immutable",
                              ->NumElements(1)
                              ->SparseVectors(&added_vector)
                              ->Ids(&added_label)
-                             ->StringMetadata("host", &added_host)
+                             ->StringMetadata("host", {added_host})
                              ->Owner(false);
             REQUIRE(restored.Add(added).empty());
             query_host = added_host;
+            query->StringMetadata("host", {query_host});
             auto added_result = restored.KnnSearch(query, 4, search_parameters, nullptr);
             REQUIRE(added_result->GetDim() == 1);
             REQUIRE(added_result->GetIds()[0] == added_label);
@@ -706,7 +721,7 @@ TEST_CASE("SINDIV2 host filter preserves term prune candidates at window boundar
                     ->NumElements(vectors.size())
                     ->SparseVectors(vectors.data())
                     ->Ids(labels.data())
-                    ->StringMetadata("host", hosts.data())
+                    ->StringMetadata("host", std::vector<std::string>(hosts.begin(), hosts.end()))
                     ->Owner(false);
 
     auto parameter = std::make_shared<SINDIV2Parameter>();
@@ -725,7 +740,7 @@ TEST_CASE("SINDIV2 host filter preserves term prune candidates at window boundar
     auto query = Dataset::Make()
                      ->NumElements(1)
                      ->SparseVectors(&query_vector)
-                     ->StringMetadata("host", &query_host)
+                     ->StringMetadata("host", {query_host})
                      ->Owner(false);
     const auto query_prune_ratio = GENERATE(0.0F, 0.2F);
     const auto search_parameters = fmt::format(R"({{
@@ -763,7 +778,8 @@ TEST_CASE("SINDIV2 publish time and host filtering routes and serializes",
                     ->NumElements(vectors.size())
                     ->SparseVectors(vectors.data())
                     ->Ids(labels.data())
-                    ->StringMetadata(SINDI_HOST_METADATA_NAME, hosts.data())
+                    ->StringMetadata(SINDI_HOST_METADATA_NAME,
+                        std::vector<std::string>(hosts.begin(), hosts.end()))
                     ->Int64Metadata(SINDI_PUBLISH_TIME_METADATA_NAME, timestamps.data())
                     ->Owner(false);
 
@@ -805,7 +821,7 @@ TEST_CASE("SINDIV2 publish time and host filtering routes and serializes",
              std::set<int64_t>{20, 30}));
 
     std::string host = "host-b";
-    query->StringMetadata(SINDI_HOST_METADATA_NAME, &host);
+    query->StringMetadata(SINDI_HOST_METADATA_NAME, {host});
     auto combined = index.KnnSearch(query, 3, search_parameters, nullptr);
     REQUIRE(combined->GetDim() == 1);
     REQUIRE(combined->GetIds()[0] == 20);
@@ -813,7 +829,7 @@ TEST_CASE("SINDIV2 publish time and host filtering routes and serializes",
     auto host_query = Dataset::Make()
                           ->NumElements(1)
                           ->SparseVectors(&query_vector)
-                          ->StringMetadata(SINDI_HOST_METADATA_NAME, &host)
+                          ->StringMetadata(SINDI_HOST_METADATA_NAME, {host})
                           ->Owner(false);
     auto host_only = index.KnnSearch(host_query, 3, search_parameters, nullptr);
     REQUIRE(host_only->GetDim() == 2);
@@ -891,14 +907,14 @@ TEST_CASE("SINDIV2 publish time and host filtering routes and serializes",
                              ->NumElements(1)
                              ->SparseVectors(&added_vector)
                              ->Ids(&added_label)
-                             ->StringMetadata(SINDI_HOST_METADATA_NAME, &added_host)
+                             ->StringMetadata(SINDI_HOST_METADATA_NAME, {added_host})
                              ->Int64Metadata(SINDI_PUBLISH_TIME_METADATA_NAME, &added_timestamp)
                              ->Owner(false);
         auto untimed_add = Dataset::Make()
                                ->NumElements(1)
                                ->SparseVectors(&added_vector)
                                ->Ids(&added_label)
-                               ->StringMetadata(SINDI_HOST_METADATA_NAME, &added_host)
+                               ->StringMetadata(SINDI_HOST_METADATA_NAME, {added_host})
                                ->Owner(false);
         REQUIRE(index.Add(timed_add).empty());
         auto added_query = query->Int64Metadata(SINDI_PUBLISH_TIME_METADATA_NAME, &added_timestamp);
@@ -2321,4 +2337,156 @@ TEST_CASE("SINDI V2 timeout triggers is_timeout", "[ut][SINDIV2][timeout]") {
         REQUIRE(range->GetIds()[i] == normal_range->GetIds()[i]);
         REQUIRE(range->GetDistances()[i] == normal_range->GetDistances()[i]);
     }
+}
+
+TEST_CASE("SINDIV2 multi host queries", "[ut][SINDIV2][multi_host]") {
+    IndexCommonParam common;
+    common.allocator_ = SafeAllocator::FactoryDefaultAllocator();
+    common.metric_ = MetricType::METRIC_TYPE_IP;
+    const bool timed = GENERATE(false, true);
+    auto parameter = std::make_shared<SINDIV2Parameter>();
+    parameter->term_id_limit = 8;
+    parameter->window_size = 10000;
+    parameter->immutable = GENERATE(false, true);
+    parameter->use_reorder = GENERATE(false, true);
+    parameter->term_io_parameter = std::make_shared<MemoryIOParameter>();
+    parameter->rerank_io_parameter = std::make_shared<MemoryBlockIOParameter>();
+    uint32_t term = 1;
+    std::array<float, 4> values{4.0F, 3.0F, 2.0F, 1.0F};
+    std::array<int64_t, 4> labels{10, 20, 30, 40};
+    std::array<std::string, 4> hosts{"a", "b", "c", "a"};
+    constexpr int64_t day = SINDI_SECONDS_PER_DAY;
+    std::array<int64_t, 4> times{day, 2 * day, 2 * day, 0};
+    std::array<SparseVector, 4> vectors{};
+    for (uint64_t i = 0; i < vectors.size(); ++i) {
+        vectors[i] = SparseVector{1, &term, &values[i]};
+    }
+    auto base = Dataset::Make()
+                    ->NumElements(4)
+                    ->SparseVectors(vectors.data())
+                    ->Ids(labels.data())
+                    ->StringMetadata("host", std::vector<std::string>(hosts.begin(), hosts.end()))
+                    ->Owner(false);
+    if (timed) {
+        base->Int64Metadata("publish_time_stamp", times.data());
+    }
+    SINDIV2 index(parameter, common);
+    SINDIV2 invalid_base_index(parameter, common);
+    auto invalid_base = Dataset::Make()
+                            ->NumElements(1)
+                            ->SparseVectors(vectors.data())
+                            ->Ids(labels.data())
+                            ->StringMetadata("host",
+                                             std::vector<std::string>{"a", "b"})
+                            ->Owner(false);
+    REQUIRE_THROWS(invalid_base_index.Build(invalid_base));
+    REQUIRE(index.Build(base).empty());
+    float weight = 1.0F;
+    SparseVector vector{1, &term, &weight};
+    std::vector<std::string> selection{"a", "c", "a", "unknown"};
+    auto query = Dataset::Make()
+                     ->NumElements(1)
+                     ->SparseVectors(&vector)
+                     ->StringMetadata("host", selection)
+                     ->Owner(false);
+    const auto check = [&](SINDIV2& target, const std::set<int64_t>& expected) {
+        auto result = target.KnnSearch(query, 4, R"({"sindi_v2":{}})", nullptr);
+        std::set<int64_t> actual;
+        for (int64_t i = 0; i < result->GetDim(); ++i) {
+            actual.insert(result->GetIds()[i]);
+        }
+        REQUIRE(actual == expected);
+        REQUIRE(result->GetDim() == static_cast<int64_t>(expected.size()));
+    };
+    check(index, {10, 30, 40});
+    auto filtered = index.KnnSearch(
+        query, 4, R"({"sindi_v2":{}})", std::make_shared<AllowLabelFilter>(30));
+    REQUIRE(filtered->GetDim() == 1);
+    REQUIRE(filtered->GetIds()[0] == 30);
+    int64_t begin = 2 * day;
+    int64_t end = 3 * day;
+    if (timed) {
+        query->Int64Metadata("publish_time_stamp_begin", &begin)
+            ->Int64Metadata("publish_time_stamp_end", &end);
+        check(index, {30});
+    }
+    std::stringstream stream;
+    IOStreamWriter writer(stream);
+    index.Serialize(writer);
+    stream.seekg(0);
+    SINDIV2 restored(parameter, common);
+    restored.Deserialize(stream);
+    check(restored, timed ? std::set<int64_t>{30} : std::set<int64_t>{10, 30, 40});
+    auto disk_json = parameter->ToJson();
+    disk_json["term_io"].SetJson(JsonType::Parse(R"({"type":"reader_io"})"));
+    auto disk_parameter = std::make_shared<SINDIV2Parameter>();
+    disk_parameter->FromJson(disk_json);
+    SINDIV2 disk(disk_parameter, common);
+    std::stringstream disk_stream(stream.str());
+    disk.Deserialize(disk_stream);
+    check(disk, timed ? std::set<int64_t>{30} : std::set<int64_t>{10, 30, 40});
+    std::stringstream streaming;
+    index.SerializeStreaming(streaming);
+    SINDIV2 streaming_restored(parameter, common);
+    streaming_restored.DeserializeStreaming(streaming);
+    check(streaming_restored,
+          timed ? std::set<int64_t>{30} : std::set<int64_t>{10, 30, 40});
+    query->StringMetadata("host", std::vector<std::string>{});
+    check(index, {});
+    query->StringMetadata("host", std::vector<std::string>{"unknown"});
+    check(index, {});
+    std::string literal = R"(["a"])";
+    query->StringMetadata("host", {literal});
+    check(index, {});  // A scalar is always a literal host, never an encoded list.
+    std::string single = "a";
+    query->StringMetadata("host", {single});
+    check(index, timed ? std::set<int64_t>{} : std::set<int64_t>{10, 40});
+    query->StringMetadata("host", std::vector<std::string>{"a"});
+    check(index, timed ? std::set<int64_t>{} : std::set<int64_t>{10, 40});
+    query->ClearStringMetadata("host");
+    check(index, timed ? std::set<int64_t>{20, 30} : std::set<int64_t>{10, 20, 30, 40});
+
+}
+
+TEST_CASE("SINDI multi host routes merge intervals across Add batches",
+          "[ut][SINDIV2][multi_host]") {
+    auto allocator = SafeAllocator::FactoryDefaultAllocator();
+    SindiMetadataFilter metadata(allocator.get());
+    const bool timed = GENERATE(false, true);
+    std::array<std::string, 6> hosts{"a", "a", "b", "b", "c", "c"};
+    std::array<int64_t, 6> times{};
+    times.fill(10 * SINDI_SECONDS_PER_DAY);
+    auto base = Dataset::Make()->NumElements(6)->StringMetadata("host",
+                        std::vector<std::string>(hosts.begin(), hosts.end()))->Owner(false);
+    if (timed) {
+        base->Int64Metadata("publish_time_stamp", times.data());
+    }
+    for (uint32_t batch = 0; batch < 2; ++batch) {
+        auto plan = metadata.PrepareBuild(base, batch * 6, 2);
+        for (uint32_t i = 0; i < 6; ++i) {
+            plan.RecordSuccess(i);
+        }
+        metadata.CommitBuild(std::move(plan), batch * 6, batch * 6 + 6);
+    }
+    std::vector<std::string> selection{"c", "a", "a"};
+    auto query = Dataset::Make()->NumElements(1)->StringMetadata("host", selection)->Owner(false);
+    const auto route = metadata.Classify(query, 2);
+    REQUIRE(route.kind == SindiHostRouteKind::WINDOW);
+    FilterPtr filter;
+    metadata.ApplyFilter(route, filter);
+    REQUIRE(filter != nullptr);
+    REQUIRE_FALSE(filter->CheckValid(-1));
+    REQUIRE_FALSE(filter->CheckValid(12));
+    REQUIRE_FALSE(filter->CheckValid(std::numeric_limits<int64_t>::max()));
+
+    for (int64_t id = 0; id < 12; ++id) {
+        REQUIRE(filter->CheckValid(id) == (id % 6 < 2 or id % 6 >= 4));
+    }
+    REQUIRE(metadata.NextMatchingWindow(route, 2, 1, 5) == 2);
+    REQUIRE(metadata.NextMatchingWindow(route, 2, 4, 5) == 5);
+    REQUIRE_FALSE(metadata.RequiresFullTermScan(route, 0, 2));
+    REQUIRE(metadata.RequiresFullTermScan(route, 0, 4));
+    query->StringMetadata("host", std::vector<std::string>{"a", "b", "c"});
+    const auto all = metadata.Classify(query, 2);
+    REQUIRE_FALSE(metadata.RequiresFullTermScan(all, 0, 4));
 }

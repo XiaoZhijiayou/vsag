@@ -164,14 +164,14 @@ host-aware `Build()` or mutable `Add()` batch. Use an empty string for a documen
 base->NumElements(n)
     ->SparseVectors(sparse_vectors)
     ->Ids(ids)
-    ->StringMetadata("host", base_hosts)
+    ->StringMetadata("host", std::vector<std::string>(std::begin(base_hosts), std::end(base_hosts)))
     ->Owner(false);
 index->Build(base);
 
 std::string query_host = "example.com";
 query->NumElements(1)
     ->SparseVectors(&query_vec)
-    ->StringMetadata("host", &query_host)
+    ->StringMetadata("host", {query_host})
     ->Owner(false);
 ```
 
@@ -414,3 +414,16 @@ Serial requests need no preparation. VSAG does not read VecBase online policy JS
 
 
 Each independent SearchResource synchronously creates its own worker group during construction. Hosts with several index groups should set `max_background_workers` explicitly and reuse a shared SearchResource where appropriate; VSAG does not enforce a process-wide thread budget across independent groups.
+
+### Multiple-host queries
+
+Use the same `host` field and a one-dimensional string vector for single- or multiple-host KNN queries:
+
+```cpp
+query->StringMetadata("host", {"a.com"});
+query->StringMetadata("host", {"a.com", "b.com"});
+```
+
+The vector is owned by Dataset regardless of `Owner()`, and a new assignment replaces the previous value. Hosts are combined with OR and intersected with date conditions and the user Filter. Duplicates are removed and unknown hosts are ignored; an empty vector or all-unknown selection returns no results on a host-aware index. Empty strings retain their existing semantics. Build datasets must provide exactly one host per document. Indexes without host metadata do not apply host filtering. The persisted format is unchanged, so existing indexes need no rebuild.
+
+`StringMetadata` now takes a vector by value; migrate pointer-array callers to a vector. `GetStringMetadata` returns a pointer to a read-only vector, or `nullptr` when absent. This is a public C++ API change and clients must rebuild.

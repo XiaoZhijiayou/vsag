@@ -149,3 +149,16 @@ SINDI V2 会根据构建阶段的 `doc_prune_ratio` 与检索阶段的 `query_pr
 例如，在索引构建参数中设置 `"term_prune_ratio": 0.2, "term_retain_threshold": 0`，可删除每个窗口内各倒排列表中权重最低的 20% postings。
 
 倒排缓存仅存在于运行时，重新加载或绑定 IO 时清空。容量统计包括驻留的解析后 buffer 和估算的条目开销。查询持有的 buffer 可在淘汰后继续存活，因此进程内存可能暂时超过该预算。此缓存不缓存重排向量。
+
+### 多 host 查询
+
+单 host 和多 host 的 KNN 查询统一使用 `host` 字段及一维字符串 vector：
+
+```cpp
+query->StringMetadata("host", {"a.com"});
+query->StringMetadata("host", {"a.com", "b.com"});
+```
+
+vector 由 Dataset 持有，不受 `Owner()` 影响，重复赋值替换原值。多个 host 之间为 OR，再与日期条件及用户 Filter 取交集。重复值去重，未知 host 忽略；在启用 host metadata 的索引上，空 vector 或全部未知时返回空结果。空字符串保持原有语义。构建时必须提供与文档数相等的 host 数量，每条文档一个 host。未启用 host metadata 的索引不执行 host 过滤。持久化格式不变，已有索引无需重建。
+
+`StringMetadata` 改为按值接收 vector，原指针数组调用需迁移为 vector；`GetStringMetadata` 返回只读 vector 的指针，字段不存在时返回 `nullptr`。这是公共 C++ 接口变更，调用方需要重新编译。

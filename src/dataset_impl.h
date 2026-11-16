@@ -47,7 +47,8 @@ class DatasetImpl : public Dataset, public SearchMetricsDatasetAccessor {
                              const AttributeSet*,
                              const uint32_t*,
                              const MultiVector*,
-                             MultiPaths>;
+                             MultiPaths,
+                             std::vector<std::string>>;
 
 public:
     DatasetImpl() = default;
@@ -291,17 +292,23 @@ public:
     }
 
     DatasetPtr
-    StringMetadata(const std::string& name, const std::string* values) override {
-        this->data_[StringMetadataKey(name)] = values;
+    StringMetadata(const std::string& name, std::vector<std::string> values) override {
+        this->data_[StringMetadataKey(name)] = std::move(values);
         return shared_from_this();
     }
 
-    const std::string*
+    const std::vector<std::string>*
     GetStringMetadata(const std::string& name) const override {
         if (auto iter = this->data_.find(StringMetadataKey(name)); iter != this->data_.end()) {
-            return std::get<const std::string*>(iter->second);
+            return &std::get<std::vector<std::string>>(iter->second);
         }
         return nullptr;
+    }
+
+    DatasetPtr
+    ClearStringMetadata(const std::string& name) {
+        data_.erase(StringMetadataKey(name));
+        return shared_from_this();
     }
 
     DatasetPtr

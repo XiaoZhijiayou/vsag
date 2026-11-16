@@ -30,32 +30,51 @@ namespace {
 
 class InnerIdHostFilter : public Filter {
 public:
-    InnerIdHostFilter(const Vector<SindiHostRange>* ranges,
-                      uint32_t range_begin,
-                      uint32_t range_end,
-                      FilterPtr filter)
-        : ranges_(ranges),
-          range_begin_(range_begin),
-          range_end_(range_end),
-          filter_(std::move(filter)) {
+    // A single host is simply a one-element set; both query paths use the same resolution.
+    static std::vector<uint32_t>
+    ResolveHosts(const std::vector<std::string>* hosts, const SindiHostDictionary& dictionary) {
+        std::vector<uint32_t> ids;
+        if (hosts == nullptr) {
+            return ids;
+        }
+        for (const auto& host : *hosts) {
+            uint32_t id = 0;
+            if (dictionary.Lookup(host, id)) {
+                ids.push_back(id);
+            }
+        }
+        std::sort(ids.begin(), ids.end());
+        ids.erase(std::unique(ids.begin(), ids.end()), ids.end());
+        return ids;
+    }
+
+    InnerIdHostFilter(std::vector<SindiHostRange> ranges, FilterPtr filter)
+        : ranges_(std::move(ranges)), filter_(std::move(filter)) {
+    }
+
+    // Classify also needs the union to skip windows before evaluating any candidates.
+    static void
+    NormalizeRanges(std::vector<SindiHostRange>& ranges) {
+        std::sort(ranges.begin(), ranges.end(), [](const auto& lhs, const auto& rhs) {
+            return lhs.begin < rhs.begin;
+        });
+        uint64_t count = 0;
+        for (const auto range : ranges) {
+            if (range.begin >= range.end) {
+                continue;
+            }
+            if (count > 0 and range.begin <= ranges[count - 1].end) {
+                ranges[count - 1].end = std::max(ranges[count - 1].end, range.end);
+            } else {
+                ranges[count++] = range;
+            }
+        }
+        ranges.resize(count);
     }
 
     [[nodiscard]] bool
     CheckValid(int64_t id) const override {
-        if (id < 0) {
-            return false;
-        }
-        const auto inner_id = static_cast<uint64_t>(id);
-        const auto range_begin = ranges_->begin() + range_begin_;
-        const auto range_end = ranges_->begin() + range_end_;
-        const auto range = std::upper_bound(
-            range_begin, range_end, inner_id, [](uint64_t value, const SindiHostRange& candidate) {
-                return value < static_cast<uint64_t>(candidate.begin);
-            });
-        if (range == range_begin or inner_id >= std::prev(range)->end) {
-            return false;
-        }
-        return filter_ == nullptr or filter_->CheckValid(id);
+        return Contains(id) and CheckAdditionalFilter(id);
     }
 
     void
@@ -75,10 +94,28 @@ public:
         return filter_ == nullptr ? Distribution::NONE : filter_->FilterDistribution();
     }
 
+protected:
+    [[nodiscard]] bool
+    Contains(int64_t id) const {
+        if (id < 0 or id > std::numeric_limits<uint32_t>::max()) {
+            return false;
+        }
+        const auto inner_id = static_cast<uint32_t>(id);
+        const auto range = std::upper_bound(
+            ranges_.begin(), ranges_.end(), inner_id,
+            [](uint32_t value, const SindiHostRange& candidate) {
+                return value < candidate.begin;
+            });
+        return range != ranges_.begin() and inner_id < std::prev(range)->end;
+    }
+
+    [[nodiscard]] bool
+    CheckAdditionalFilter(int64_t id) const {
+        return filter_ == nullptr or filter_->CheckValid(id);
+    }
+
 private:
-    const Vector<SindiHostRange>* ranges_;
-    uint32_t range_begin_;
-    uint32_t range_end_;
+    std::vector<SindiHostRange> ranges_;
     FilterPtr filter_;
 };
 
@@ -270,6 +307,9 @@ SindiHostFilter::PrepareBuild(const DatasetPtr& base, uint64_t current_element_c
     CHECK_ARGUMENT(base->GetUInt32Metadata(SINDI_LEGACY_HOST_METADATA_NAME) == nullptr,
                    "numeric SINDI host_id metadata is unsupported; use string metadata host");
     const auto* source_hosts = base->GetStringMetadata(SINDI_HOST_METADATA_NAME);
+    CHECK_ARGUMENT(source_hosts == nullptr or
+                       source_hosts->size() == static_cast<uint64_t>(base->GetNumElements()),
+                   "SINDI build requires one host per document");
     if (source_hosts == nullptr) {
         CHECK_ARGUMENT(not this->HasMetadata(), "SINDI host-aware Add requires host metadata");
         return plan;
@@ -285,8 +325,10 @@ SindiHostFilter::PrepareBuild(const DatasetPtr& base, uint64_t current_element_c
                    "SINDI host-filtered build exceeds uint32_t document capacity");
 
     plan.enabled_ = true;
-    host_dictionary_.Encode(
-        source_hosts, static_cast<uint64_t>(data_num), plan.source_host_ids_, plan.new_hosts_);
+    host_dictionary_.Encode(source_hosts->data(),
+                            static_cast<uint64_t>(data_num),
+                            plan.source_host_ids_,
+                            plan.new_hosts_);
     const auto* source_host_ids = plan.source_host_ids_.data();
     plan.order_.resize(static_cast<uint64_t>(data_num));
     std::iota(plan.order_.begin(), plan.order_.end(), 0);
@@ -398,25 +440,30 @@ SindiHostSearchRoute
 SindiHostFilter::Classify(const DatasetPtr& query) const {
     CHECK_ARGUMENT(query->GetUInt32Metadata(SINDI_LEGACY_HOST_METADATA_NAME) == nullptr,
                    "numeric SINDI host_id metadata is unsupported; use string metadata host");
-    const auto* query_host = query->GetStringMetadata(SINDI_HOST_METADATA_NAME);
-    if (host_ids_.empty() or query_host == nullptr) {
+    const auto* hosts = query->GetStringMetadata(SINDI_HOST_METADATA_NAME);
+    if (host_ids_.empty() or hosts == nullptr) {
         return {};
     }
-    uint32_t query_host_id = 0;
-    if (not host_dictionary_.Lookup(query_host[0], query_host_id)) {
-        return {SindiHostRouteKind::EMPTY, 0, 0};
+    SindiHostSearchRoute route;
+    for (const auto id : InnerIdHostFilter::ResolveHosts(hosts, host_dictionary_)) {
+        const auto host = std::lower_bound(host_ids_.begin(), host_ids_.end(), id);
+        if (host == host_ids_.end() or *host != id) {
+            continue;
+        }
+        const auto index = static_cast<uint64_t>(host - host_ids_.begin());
+        route.ranges.insert(route.ranges.end(),
+                            host_ranges_.begin() + host_range_offsets_[index],
+                            host_ranges_.begin() + host_range_offsets_[index + 1]);
     }
-    const auto host = std::lower_bound(host_ids_.begin(), host_ids_.end(), query_host_id);
-    if (host == host_ids_.end() or *host != query_host_id) {
-        return {SindiHostRouteKind::EMPTY, 0, 0};
+    InnerIdHostFilter::NormalizeRanges(route.ranges);
+    if (route.ranges.empty()) {
+        route.kind = SindiHostRouteKind::EMPTY;
+    } else {
+        route.kind = SindiHostRouteKind::WINDOW;
+        route.begin = route.ranges.front().begin;
+        route.end = route.ranges.back().end;
     }
-    const auto host_index = static_cast<uint32_t>(host - host_ids_.begin());
-    const auto range_begin = host_range_offsets_[host_index];
-    const auto range_end = host_range_offsets_[host_index + 1];
-    return {SindiHostRouteKind::WINDOW,
-            host_ranges_[range_begin].begin,
-            host_ranges_[range_end - 1].end,
-            host_index};
+    return route;
 }
 
 void
@@ -424,10 +471,7 @@ SindiHostFilter::ApplyFilter(const SindiHostSearchRoute& route, FilterPtr& filte
     if (route.kind != SindiHostRouteKind::WINDOW) {
         return;
     }
-    filter = std::make_shared<InnerIdHostFilter>(&host_ranges_,
-                                                 host_range_offsets_[route.host_index],
-                                                 host_range_offsets_[route.host_index + 1],
-                                                 std::move(filter));
+    filter = std::make_shared<InnerIdHostFilter>(route.ranges, std::move(filter));
 }
 
 void
@@ -451,10 +495,8 @@ SindiHostFilter::NextMatchingWindow(const SindiHostSearchRoute& route,
         return current_window_id;
     }
 
-    const auto range_begin = host_range_offsets_[route.host_index];
-    const auto range_end = host_range_offsets_[route.host_index + 1];
-    const auto first = host_ranges_.begin() + range_begin;
-    const auto last = host_ranges_.begin() + range_end;
+    const auto first = route.ranges.begin();
+    const auto last = route.ranges.end();
     const auto window_begin = static_cast<uint64_t>(current_window_id) * window_size;
     const auto range = std::upper_bound(
         first, last, window_begin, [](uint64_t value, const SindiHostRange& candidate) {
@@ -480,15 +522,12 @@ SindiHostFilter::RequiresFullTermScan(const SindiHostSearchRoute& route,
     }
     const auto window_begin = static_cast<uint64_t>(window_id) * window_size;
     const auto window_end = window_begin + window_size;
-    const auto range_begin = host_range_offsets_[route.host_index];
-    const auto range_end = host_range_offsets_[route.host_index + 1];
-    const auto range = std::upper_bound(host_ranges_.begin() + range_begin,
-                                        host_ranges_.begin() + range_end,
-                                        window_begin,
-                                        [](uint64_t value, const SindiHostRange& candidate) {
-                                            return value < static_cast<uint64_t>(candidate.begin);
-                                        });
-    if (range == host_ranges_.begin() + range_begin) {
+    const auto range = std::upper_bound(
+        route.ranges.begin(), route.ranges.end(), window_begin,
+        [](uint64_t value, const SindiHostRange& candidate) {
+            return value < static_cast<uint64_t>(candidate.begin);
+        });
+    if (range == route.ranges.begin()) {
         return true;
     }
     const auto& candidate = *std::prev(range);
@@ -769,11 +808,16 @@ SindiTimeFilter::PrepareBuild(const DatasetPtr& base, uint32_t window_size) cons
                    "SINDI time-filtered build exceeds uint32_t document capacity");
 
     const auto* source_hosts = base->GetStringMetadata(SINDI_HOST_METADATA_NAME);
+    CHECK_ARGUMENT(source_hosts == nullptr or
+                       source_hosts->size() == static_cast<uint64_t>(base->GetNumElements()),
+                   "SINDI build requires one host per document");
     plan.enabled_ = true;
     plan.has_host_metadata_ = source_hosts != nullptr;
     if (source_hosts != nullptr) {
-        host_dictionary_.Encode(
-            source_hosts, static_cast<uint64_t>(data_num), plan.source_host_ids_, plan.new_hosts_);
+        host_dictionary_.Encode(source_hosts->data(),
+                                static_cast<uint64_t>(data_num),
+                                plan.source_host_ids_,
+                                plan.new_hosts_);
     }
     const auto* source_host_ids = plan.has_host_metadata_ ? plan.source_host_ids_.data() : nullptr;
     plan.order_.resize(static_cast<uint64_t>(data_num));
@@ -980,10 +1024,10 @@ SindiTimeFilter::Classify(const DatasetPtr& query, uint32_t window_size) const {
         route.query_end = to_day(query_end[0]);
     }
 
-    const auto* query_host = query->GetStringMetadata(SINDI_HOST_METADATA_NAME);
-    const bool use_host = has_host_metadata_ and query_host != nullptr;
-    uint32_t query_host_id = 0;
-    if (use_host and not host_dictionary_.Lookup(query_host[0], query_host_id)) {
+    const auto* hosts = query->GetStringMetadata(SINDI_HOST_METADATA_NAME);
+    const bool use_host = has_host_metadata_ and hosts != nullptr;
+    const auto query_host_ids = InnerIdHostFilter::ResolveHosts(hosts, host_dictionary_);
+    if (use_host and query_host_ids.empty()) {
         route.kind = SindiHostRouteKind::EMPTY;
         return route;
     }
@@ -1011,19 +1055,21 @@ SindiTimeFilter::Classify(const DatasetPtr& query, uint32_t window_size) const {
             if (route.has_time and partition.min_day > route.query_end) {
                 break;
             }
-            uint32_t begin = partition.begin;
-            uint32_t end = partition.end;
             if (use_host) {
-                const auto host = std::lower_bound(
-                    partition.host_ids.begin(), partition.host_ids.end(), query_host_id);
-                if (host == partition.host_ids.end() or *host != query_host_id) {
-                    continue;
+                for (const auto query_host_id : query_host_ids) {
+                    const auto host = std::lower_bound(
+                        partition.host_ids.begin(), partition.host_ids.end(), query_host_id);
+                    if (host == partition.host_ids.end() or *host != query_host_id) {
+                        continue;
+                    }
+                    const auto index = static_cast<uint64_t>(host - partition.host_ids.begin());
+                    append_merged_range(route.inner_ranges,
+                                        partition.begin + partition.host_offsets[index],
+                                        partition.begin + partition.host_offsets[index + 1]);
                 }
-                const auto host_index = static_cast<uint64_t>(host - partition.host_ids.begin());
-                begin += partition.host_offsets[host_index];
-                end = partition.begin + partition.host_offsets[host_index + 1];
+            } else {
+                append_merged_range(route.inner_ranges, partition.begin, partition.end);
             }
-            append_merged_range(route.inner_ranges, begin, end);
         }
     }
 

@@ -178,7 +178,13 @@ named `host` for host filtering and int64 metadata named `publish_time_stamp` fo
 filtering. A time range on a one-element query dataset uses `publish_time_stamp_begin` and
 `publish_time_stamp_end`. For SINDI and SINDI_V2 base datasets, `publish_time_stamp == 0` is
 reserved for a missing timestamp and never matches a time selector. These arrays have one value
-per dataset element and follow the normal Dataset ownership, deep-copy, and append rules.
+per dataset element and follow the normal Dataset ownership, deep-copy, and append rules, except
+that string metadata is now stored as an owned `std::vector<std::string>` regardless of `Owner()`.
+The getter returns a pointer to the read-only vector. For a single SINDI/SINDI_V2 query, the `host`
+vector contains all allowed hosts: `query->StringMetadata("host", {"a.com", "b.com"})`.
+This changes the public C++ string-metadata API; migrate pointer-array callers and rebuild clients.
+
+`ClearStringMetadata(name)` removes a string field and makes its getter return `nullptr`, including after deep copy. Clearing a missing field is a no-op. For host-aware SINDI queries, an absent `host` means no host restriction; an explicitly empty vector means no allowed hosts. This preserves the distinction previously expressed with null pointer metadata. Vector subranges replace pointer-offset slices and own their contents independently. String metadata fields initialized from the same input vector also own independent copies.
 
 ## See also
 

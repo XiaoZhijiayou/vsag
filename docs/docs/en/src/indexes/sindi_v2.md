@@ -159,3 +159,16 @@ The index creation parameters also accept `term_prune_ratio` (float in `[0, 1)`,
 For example, set `"term_prune_ratio": 0.2, "term_retain_threshold": 0` inside the index's build parameters to remove the lowest-weight 20% of each posting list per window.
 
 The posting cache is runtime-only and is cleared on reload or IO rebinding. Its budget covers resident parsed buffers and estimated entry overhead. Query-held buffers can outlive eviction, so process memory can temporarily exceed this budget. It does not cache rerank vectors.
+
+### Multiple-host queries
+
+Use the same `host` field and a one-dimensional string vector for single- or multiple-host KNN queries:
+
+```cpp
+query->StringMetadata("host", {"a.com"});
+query->StringMetadata("host", {"a.com", "b.com"});
+```
+
+The vector is owned by Dataset regardless of `Owner()`, and a new assignment replaces the previous value. Hosts are combined with OR and intersected with date conditions and the user Filter. Duplicates are removed and unknown hosts are ignored; an empty vector or all-unknown selection returns no results on a host-aware index. Empty strings retain their existing semantics. Build datasets must provide exactly one host per document. Indexes without host metadata do not apply host filtering. The persisted format is unchanged, so existing indexes need no rebuild.
+
+`StringMetadata` now takes a vector by value; migrate pointer-array callers to a vector. `GetStringMetadata` returns a pointer to a read-only vector, or `nullptr` when absent. This is a public C++ API change and clients must rebuild.

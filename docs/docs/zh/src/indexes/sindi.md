@@ -152,14 +152,14 @@ mutable 和 immutable SINDI 及 [SINDI_V2](sindi_v2.md) 索引都可以按来源
 base->NumElements(n)
     ->SparseVectors(sparse_vectors)
     ->Ids(ids)
-    ->StringMetadata("host", base_hosts)
+    ->StringMetadata("host", std::vector<std::string>(std::begin(base_hosts), std::end(base_hosts)))
     ->Owner(false);
 index->Build(base);
 
 std::string query_host = "example.com";
 query->NumElements(1)
     ->SparseVectors(&query_vec)
-    ->StringMetadata("host", &query_host)
+    ->StringMetadata("host", {query_host})
     ->Owner(false);
 ```
 
@@ -368,3 +368,16 @@ granted=1和`sindi_resources_ready=false`。降级结果以显式P1为对照，�
 
 
 每个独立 SearchResource 在构造期间同步创建自己的 worker 组。存在多个索引组的宿主应显式设置 `max_background_workers`，并按需复用共享 SearchResource；VSAG 不跨独立资源组实施进程级线程总预算。
+
+### 多 host 查询
+
+单 host 和多 host 的 KNN 查询统一使用 `host` 字段及一维字符串 vector：
+
+```cpp
+query->StringMetadata("host", {"a.com"});
+query->StringMetadata("host", {"a.com", "b.com"});
+```
+
+vector 由 Dataset 持有，不受 `Owner()` 影响，重复赋值替换原值。多个 host 之间为 OR，再与日期条件及用户 Filter 取交集。重复值去重，未知 host 忽略；在启用 host metadata 的索引上，空 vector 或全部未知时返回空结果。空字符串保持原有语义。构建时必须提供与文档数相等的 host 数量，每条文档一个 host。未启用 host metadata 的索引不执行 host 过滤。持久化格式不变，已有索引无需重建。
+
+`StringMetadata` 改为按值接收 vector，原指针数组调用需迁移为 vector；`GetStringMetadata` 返回只读 vector 的指针，字段不存在时返回 `nullptr`。这是公共 C++ 接口变更，调用方需要重新编译。

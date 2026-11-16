@@ -443,24 +443,33 @@ public:
     /**
      * @brief Sets a named array of string metadata values.
      *
-     * The array contains one value per dataset element. It follows the same ownership rules as
-     * the other pointer-backed Dataset fields.
+     * Values are owned by Dataset regardless of Owner(). For SINDI base data, provide one
+     * host per document; for a single query, provide all allowed hosts.
      *
      * @param name Metadata name.
-     * @param values Pointer to the metadata values.
+     * @param values String values to store, replacing the previous value.
      * @return DatasetPtr A shared pointer to the dataset with updated metadata.
      */
     virtual DatasetPtr
-    StringMetadata(const std::string& name, const std::string* values) = 0;
+    StringMetadata(const std::string& name, std::vector<std::string> values) = 0;
 
     /**
      * @brief Retrieves a named array of string metadata values.
      *
      * @param name Metadata name.
-     * @return const std::string* Pointer to the metadata values, or nullptr when absent.
+     * @return Read-only values, or nullptr when absent. Valid until replacement or destruction.
      */
-    virtual const std::string*
+    virtual const std::vector<std::string>*
     GetStringMetadata(const std::string& name) const = 0;
+
+    /**
+     * @brief Removes named string metadata. Clearing an absent name is a no-op.
+     *
+     * Unlike storing an empty vector, this makes GetStringMetadata return nullptr.
+     * Non-virtual to avoid adding a Dataset vtable entry.
+     */
+    DatasetPtr
+    ClearStringMetadata(const std::string& name);
 
     /**
      * @brief Sets the extra info for the dataset.

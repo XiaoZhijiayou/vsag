@@ -843,53 +843,51 @@ TEST_CASE("Dataset Named Int64 Metadata Test", "[ut][dataset]") {
 }
 
 TEST_CASE("Dataset Named String Metadata Test", "[ut][dataset]") {
-    {
-        auto* shared_metadata = new std::string[2]{"a.example", "b.example"};
-        auto aliased = vsag::Dataset::Make();
-        aliased->NumElements(2)
-            ->Dim(1)
-            ->Paths(shared_metadata)
-            ->StringMetadata("host", shared_metadata)
-            ->StringMetadata("tenant", shared_metadata)
-            ->SourceID(shared_metadata)
-            ->Owner(true);
-    }
-
-    auto* first_hosts = new std::string[2]{"a.example", "b.example"};
-    auto first = vsag::Dataset::Make();
-    first->NumElements(2)->Dim(1)->StringMetadata("host", first_hosts)->Owner(true);
-
-    REQUIRE(first->GetStringMetadata("host") == first_hosts);
+    auto first = vsag::Dataset::Make()->NumElements(2)->Owner(true);
+    std::vector<std::string> hosts{"a.example", "b.example"};
+    first->StringMetadata("host", hosts);
+    hosts[0] = "changed";
+    REQUIRE(first->GetStringMetadata("host")->at(0) == "a.example");
     REQUIRE(first->GetStringMetadata("missing") == nullptr);
-
     auto copy = first->DeepCopy();
-    REQUIRE(copy->GetStringMetadata("host") != first_hosts);
-    REQUIRE(copy->GetStringMetadata("host")[0] == "a.example");
-    REQUIRE(copy->GetStringMetadata("host")[1] == "b.example");
-
-    auto* appended_hosts = new std::string[2]{"c.example", ""};
-    auto appended = vsag::Dataset::Make();
-    appended->NumElements(2)->Dim(1)->StringMetadata("host", appended_hosts)->Owner(true);
+    REQUIRE(copy->GetStringMetadata("host") != first->GetStringMetadata("host"));
+    REQUIRE(*copy->GetStringMetadata("host") == *first->GetStringMetadata("host"));
+    auto appended = vsag::Dataset::Make()->NumElements(2)->Owner(true);
+    appended->StringMetadata("host", {"c.example", ""});
     first->Append(appended);
     REQUIRE(first->GetNumElements() == 4);
-    REQUIRE(first->GetStringMetadata("host")[2] == "c.example");
-    REQUIRE(first->GetStringMetadata("host")[3].empty());
+    REQUIRE(*first->GetStringMetadata("host") ==
+            std::vector<std::string>{"a.example", "b.example", "c.example", ""});
+    const auto* values = first->GetStringMetadata("host");
+    auto slice = vsag::Dataset::Make()->NumElements(2)->Owner(false);
+    slice->StringMetadata(
+        "host", std::vector<std::string>(values->begin() + 1, values->begin() + 3));
+    REQUIRE(*slice->GetStringMetadata("host") ==
+            std::vector<std::string>{"b.example", "c.example"});
+    slice->StringMetadata("host", {"changed", "slice"});
+    REQUIRE(first->GetStringMetadata("host")->at(1) == "b.example");
+    auto missing = vsag::Dataset::Make()->NumElements(1)->Owner(true);
+    REQUIRE_THROWS(first->Append(missing));
+    REQUIRE_THROWS(missing->Append(first));
+    auto query = vsag::Dataset::Make()->NumElements(1)->Owner(false);
+    query->StringMetadata("host", {"a", "b"});
+    REQUIRE(query->GetStringMetadata("host")->size() == 2);
+    query->StringMetadata("host", {"c"});
+    REQUIRE(*query->GetStringMetadata("host") == std::vector<std::string>{"c"});
+    query->StringMetadata("host", {});
+    REQUIRE(query->GetStringMetadata("host") != nullptr);
+    REQUIRE(query->GetStringMetadata("host")->empty());
+    REQUIRE(query->DeepCopy()->GetStringMetadata("host")->empty());
+    query->StringMetadata("tenant", {"keep"});
+    REQUIRE(query->ClearStringMetadata("host") == query);
+    REQUIRE(query->GetStringMetadata("host") == nullptr);
+    auto cleared_copy = query->DeepCopy();
+    REQUIRE(cleared_copy->GetStringMetadata("host") == nullptr);
+    REQUIRE(*cleared_copy->GetStringMetadata("tenant") == std::vector<std::string>{"keep"});
+    REQUIRE_NOTHROW(query->ClearStringMetadata("host"));
+    query->StringMetadata("host", {"restored"});
+    REQUIRE(*query->GetStringMetadata("host") == std::vector<std::string>{"restored"});
 
-    auto slice = vsag::Dataset::Make();
-    slice->NumElements(2)
-        ->Dim(1)
-        ->StringMetadata("host", first->GetStringMetadata("host") + 1)
-        ->Owner(false);
-    REQUIRE(slice->GetStringMetadata("host")[0] == "b.example");
-    REQUIRE(slice->GetStringMetadata("host")[1] == "c.example");
-
-    auto missing_metadata = vsag::Dataset::Make()->NumElements(1)->Dim(1)->Owner(false);
-    REQUIRE_THROWS(first->Append(missing_metadata));
-
-    auto null_metadata = vsag::Dataset::Make();
-    null_metadata->NumElements(2)->StringMetadata("host", nullptr)->Owner(true);
-    auto null_metadata_copy = null_metadata->DeepCopy();
-    REQUIRE(null_metadata_copy->GetStringMetadata("host") == nullptr);
 }
 
 TEST_CASE("Dataset MultiVector Basic Test", "[ut][dataset]") {
@@ -1204,4 +1202,45 @@ TEST_CASE("Dataset MultiVector DeepCopy Test", "[ut][dataset]") {
         REQUIRE(dst_mv[0].vectors_ == nullptr);
         REQUIRE(dst_mv[1].len_ == dataset->GetMultiVectors()[1].len_);
     }
+}
+
+TEST_CASE("Dataset string metadata virtual dispatch and ownership", "[ut][dataset]") {
+    const bool owner = GENERATE(false, true);
+    const bool use_allocator = GENERATE(false, true);
+    auto allocator = use_allocator ? vsag::Engine::CreateDefaultAllocator() : nullptr;
+    vsag::DatasetPtr dataset = vsag::Dataset::Make()->NumElements(1)->Owner(owner, allocator.get());
+    {
+        std::vector<std::string> hosts{"a", "b"};
+        REQUIRE(dataset->StringMetadata("host", hosts) == dataset);
+        hosts.clear();
+    }
+    REQUIRE(*dataset->GetStringMetadata("host") == std::vector<std::string>{"a", "b"});
+    auto copy = dataset->DeepCopy(allocator.get());
+    dataset->StringMetadata("host", {"replacement"});
+    dataset.reset();
+    REQUIRE(*copy->GetStringMetadata("host") == std::vector<std::string>{"a", "b"});
+    REQUIRE(copy->GetStringMetadata("missing") == nullptr);
+}
+
+TEST_CASE("Dataset string metadata survives move and independent fields", "[ut][dataset]") {
+    auto source = std::make_shared<vsag::DatasetImpl>();
+    source->NumElements(2)->Owner(true);
+    std::vector<std::string> values{"a", "b"};
+    source->StringMetadata("host", values);
+    source->StringMetadata("tenant", values);
+    vsag::DatasetImpl moved(std::move(*source));
+    source.reset();
+    REQUIRE(*moved.GetStringMetadata("host") == values);
+    REQUIRE(*moved.GetStringMetadata("tenant") == values);
+    auto copy = moved.DeepCopy(nullptr);
+    copy->StringMetadata("host", {"x", "y"});
+    REQUIRE(*moved.GetStringMetadata("host") == values);
+    REQUIRE(*copy->GetStringMetadata("tenant") == values);
+    auto tail = vsag::Dataset::Make()->NumElements(1)->Owner(true);
+    tail->StringMetadata("host", {"z"});
+    tail->StringMetadata("tenant", {"t"});
+    copy->Append(tail);
+    REQUIRE(*copy->GetStringMetadata("host") == std::vector<std::string>{"x", "y", "z"});
+    REQUIRE(*copy->GetStringMetadata("tenant") == std::vector<std::string>{"a", "b", "t"});
+    REQUIRE(*tail->GetStringMetadata("host") == std::vector<std::string>{"z"});
 }

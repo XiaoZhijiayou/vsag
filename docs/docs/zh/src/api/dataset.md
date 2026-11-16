@@ -173,7 +173,13 @@ metadata 进行 host 过滤，使用名为 `publish_time_stamp` 的 int64 metada
 过滤。单元素查询 Dataset 的时间范围使用 `publish_time_stamp_begin` 与
 `publish_time_stamp_end`。对于 SINDI 和 SINDI_V2 的 base dataset，`publish_time_stamp == 0`
 保留为缺失时间戳，且永远不会匹配时间 selector。这些数组均须为每个 dataset 元素提供一个值，
-并遵循 Dataset 通用的 ownership、深拷贝和 Append 规则。
+整数数组遵循 Dataset 通用的 ownership 规则。字符串 metadata 统一改为 Dataset 持有的
+`std::vector<std::string>`，不受 `Owner()` 影响，getter 返回只读 vector 的指针。
+单条 SINDI/SINDI_V2 查询的 `host` vector 可包含多个允许的 host，例如
+`query->StringMetadata("host", {"a.com", "b.com"})`。字符串 metadata 支持深拷贝和追加。
+此变更修改了公共 C++ 接口，原指针数组调用方需迁移并重新编译。
+
+`ClearStringMetadata(name)` 清除字符串字段，getter 及深拷贝后的 getter 均返回 `nullptr`；清除不存在的字段无副作用。对启用 host 的 SINDI 查询，缺失 `host` 表示不限制 host，显式空 vector 表示没有允许的 host。这保留了原空指针 metadata 与空集合的区别。原指针偏移切片改用 vector 子区间构造，切片独立持有内容；多个字符串字段从同一输入 vector 设置时也各自持有独立副本。
 
 ## 参见
 
